@@ -1,0 +1,25 @@
+{
+	"title": "3 предложения от 100 до 200 рублей",
+	"summary": "",
+	"taxi_list": [{
+		"type": "default",
+		"name": "Uber",
+		"contact": "uber://..",
+		"price": "100",
+		"color": "#CFFCCF"
+	},
+	{
+		"type": "default",
+		"name": "Сатурн",
+		"contact": "+7(383)19-19-19",
+		"price": "150",
+		"color": "#CCCCCC"
+	},
+	{
+		"type": "default",
+		"name": "Яндекс.Такси",
+		"contact": "taxi.yandex.ru",
+		"price": "200",
+		"color": "#ABBAAB"
+	}]
+}
