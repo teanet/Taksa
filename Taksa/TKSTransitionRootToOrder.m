@@ -37,6 +37,7 @@
 
 	} completion:^(BOOL finished) {
 
+		[inputView removeFromSuperview];
 		fromViewController.inputView.hidden = NO;
 		toViewController.inputView.hidden = NO;
 		// Clean up
