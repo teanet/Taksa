@@ -1,23 +1,41 @@
 #import "TKSAPIController.h"
 
-#import "TKSSuggest.h"
-#import "TKSDatabaseObject.h"
-#import "TKSTaxiGroupModel.h"
+@class TKSDatabaseObject;
 
 @interface TKSAPIController (TKSModels)
 
+/*!
+ *	2GIS WebAPI
+ */
+
 /*! \return NSArray<TKSSuggest *> */
-- (RACSignal *)suggestsForString:(NSString *)searchString;
+- (RACSignal *)fetchSuggestsForString:(NSString *)searchString
+							 regionId:(NSString *)regionId;
 
 /*! \sendNext TKSDatabaseObject */
-- (RACSignal *)objectForObjectId:(NSString *)objectId;
+- (RACSignal *)fetchObjectForObjectId:(NSString *)objectId
+							 regionId:(NSString *)regionId;
+
 /*! \sendNext TKSDatabaseObject */
-- (RACSignal *)objectForLocation:(CLLocation *)location;
+- (RACSignal *)fetchObjectForLocation:(CLLocation *)location
+							 regionId:(NSString *)regionId;
+
 /*! \sendNext TKSDatabaseObject */
-- (RACSignal *)objectForSearchString:(NSString *)searchString;
+- (RACSignal *)fetchObjectForSearchString:(NSString *)searchString
+								 regionId:(NSString *)regionId;
+
+/*! \sendNext @[TKSRegion] */
+- (RACSignal *)fetchRegions;
+
+/*! \sendNext TKSRegion */
+- (RACSignal *)fetchCurrentRegionWithLocation:(CLLocation *)location;
+
+/*!
+ *	Taksa™ Server®
+ */
 
 /*! \sendNext @[TKSTaxiGroupModel] */
-- (RACSignal *)taxiListFromObject:(TKSDatabaseObject *)objectFrom
-						 toObject:(TKSDatabaseObject *)objectTo;
+- (RACSignal *)fetchTaxiListFromObject:(TKSDatabaseObject *)objectFrom
+							  toObject:(TKSDatabaseObject *)objectTo;
 
 @end

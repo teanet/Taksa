@@ -1,6 +1,6 @@
 #import "TKSSearchVM.h"
 
-#import "TKSAPIController+TKSModels.h"
+#import "TKSDataProvider.h"
 
 @interface TKSSearchVM ()
 
@@ -30,7 +30,7 @@
 		}]
 		throttle:0.3]
 		flattenMap:^RACStream *(NSString *inputText) {
-			return [[TKSAPIController sharedController] suggestsForString:inputText];
+			return [[TKSDataProvider sharedProvider] fetchSuggestsForString:inputText];
 		}];
 
 	[[RACSignal merge:@[suggestListClearSignal, suggestListFillSignal]]

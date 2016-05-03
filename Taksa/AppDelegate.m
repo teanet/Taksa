@@ -3,10 +3,6 @@
 
 #import "UIColor+DGSCustomColor.h"
 
-@interface AppDelegate ()
-
-@end
-
 @implementation AppDelegate
 
 
@@ -24,7 +20,6 @@
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	self.window.rootViewController = navigationController;
 	[self.window makeKeyAndVisible];
-
 }
 
 @end
