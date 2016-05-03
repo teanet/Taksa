@@ -1,5 +1,8 @@
 #import "TKSInputView.h"
 
+#import "TKSTextField.h"
+#import "UIColor+DGSCustomColor.h"
+
 @interface TKSInputView ()
 <UITextFieldDelegate>
 
@@ -17,7 +20,10 @@
 
 	_inputVM = inputVM;
 	
-	_fromTF = [[UITextField alloc] init];
+	_fromTF = [[TKSTextField alloc] init];
+	_fromTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:inputVM.fromSearchVM.placeHolder attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:0.0 alpha:0.3]}];
+	_fromTF.delegate = self;
+	_fromTF.letter = @"A";
 	[[_fromTF.rac_textSignal
 		throttle:0.3]
 		subscribeNext:^(NSString *text) {
@@ -25,11 +31,12 @@
 
 			self.inputVM.fromSearchVM.text = text;
 		}];
-	_fromTF.backgroundColor = [UIColor redColor];
-	_fromTF.delegate = self;
 	[self addSubview:_fromTF];
 
-	_toTF = [[UITextField alloc] init];
+	_toTF = [[TKSTextField alloc] init];
+	_toTF.placeholder = inputVM.toSearchVM.placeHolder;
+	_toTF.delegate = self;
+	_toTF.letter = @"B";
 	[[_toTF.rac_textSignal
 		throttle:0.3]
 		subscribeNext:^(NSString *text) {
@@ -37,8 +44,6 @@
 
 			self.inputVM.toSearchVM.text = text;
 		}];
-	_toTF.backgroundColor = [UIColor redColor];
-	_toTF.delegate = self;
 	[self addSubview:_toTF];
 
 	return self;
@@ -55,15 +60,15 @@
 	{
 		[self.fromTF mas_makeConstraints:^(MASConstraintMaker *make) {
 			make.top.equalTo(self).with.offset(8.0);
-			make.leading.equalTo(self).with.offset(8.0);
-			make.trailing.equalTo(self).with.offset(-8.0);
-			make.height.equalTo(@44.0);
+			make.leading.equalTo(self).with.offset(16.0);
+			make.trailing.equalTo(self).with.offset(-16.0);
+			make.height.equalTo(@48.0);
 		}];
 		[self.toTF mas_makeConstraints:^(MASConstraintMaker *make) {
 			make.top.equalTo(self.fromTF.mas_bottom).with.offset(8.0);
-			make.leading.equalTo(self).with.offset(8.0);
-			make.trailing.equalTo(self).with.offset(-8.0);
-			make.height.equalTo(@44.0);
+			make.leading.equalTo(self).with.offset(16.0);
+			make.trailing.equalTo(self).with.offset(-16.0);
+			make.height.equalTo(@48.0);
 			make.bottom.equalTo(self).with.offset(-8.0);
 		}];
 		self.costraintsCreated = YES;
