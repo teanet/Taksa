@@ -22,4 +22,13 @@
 	return self;
 }
 
+- (void)setCurrentSearchVM:(TKSSearchVM *)currentSearchVM
+{
+	if (_currentSearchVM == currentSearchVM) return;
+	
+	_currentSearchVM.active = NO;
+	_currentSearchVM = currentSearchVM;
+	_currentSearchVM.active = YES;
+}
+
 @end

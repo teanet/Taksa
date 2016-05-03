@@ -8,8 +8,6 @@
 @property (nonatomic, strong, readonly) TKSTextField *fromTF;
 @property (nonatomic, strong, readonly) TKSTextField *toTF;
 
-- (instancetype)initWithViewModel:(TKSInputVM *)inputVM;
-- (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
-- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_UNAVAILABLE;
+- (instancetype)initWithVM:(TKSInputVM *)inputVM;
 
 @end

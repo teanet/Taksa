@@ -18,6 +18,7 @@
 
 	_taxiListVM = [[TKSTaxiListVM alloc] init];
 	_suggestListModel = [[TKSSuggestListModel alloc] init];
+	_inputVM = [[TKSInputVM alloc] init];
 
 	return self;
 }

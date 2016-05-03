@@ -24,12 +24,12 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 
 @implementation TKSOrderVC
 
-- (instancetype)init
+- (instancetype)initWithVM:(TKSOrderVM *)orderVM
 {
 	self = [super init];
 	if (self == nil) return nil;
 
-	_viewModel = [[TKSOrderVM alloc] init];
+	_viewModel = orderVM;
 	self.orderMode = TKSOrderModeSearch;
 
 	return self;
@@ -54,8 +54,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	[self.viewModel registerTaxiTableView:self.taxiTableView];
 	[self.viewModel registerSuggestTableView:self.suggestTableView];
 
-	TKSInputVM *inputVM = [[TKSInputVM alloc] init];
-	[[RACObserve(inputVM, currentSearchVM.suggests)
+	[[RACObserve(self.viewModel.inputVM, currentSearchVM.suggests)
 		ignore:nil]
 		subscribeNext:^(NSArray *suggests) {
 			@strongify(self);
@@ -63,7 +62,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 			self.viewModel.suggestListModel.suggests = suggests;
 			[self.suggestTableView reloadData];
 		}];
-	[inputVM.didBecomeEditingSignal subscribeNext:^(id x) {
+	[self.viewModel.inputVM.didBecomeEditingSignal subscribeNext:^(id x) {
 		@strongify(self);
 
 		self.orderMode = TKSOrderModeSearch;
@@ -76,7 +75,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	[nameLabel sizeToFit];
 	self.navigationItem.titleView = nameLabel;
 	
-	_inputView = [[TKSInputView alloc] initWithViewModel:inputVM];
+	_inputView = [[TKSInputView alloc] initWithVM:self.viewModel.inputVM];
 	[self.view addSubview:_inputView];
 	[_inputView mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.top.mas_equalTo(self.view);

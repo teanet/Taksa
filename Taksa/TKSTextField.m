@@ -10,13 +10,18 @@
 
 @implementation TKSTextField
 
-- (instancetype)init
+- (instancetype)initWithVM:(TKSSearchVM *)searchVM
 {
 	self = [super init];
 	if (self == nil) return nil;
+	@weakify(self);
+
+	_searchVM = searchVM;
 
 	self.backgroundColor = [UIColor whiteColor];
 	self.clearButtonMode = UITextFieldViewModeWhileEditing;
+	self.autocapitalizationType = UITextAutocapitalizationTypeNone;
+	self.autocorrectionType = UITextAutocorrectionTypeNo;
 
 	_letterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 24.0, 24.0)];
 	_letterLabel.layer.cornerRadius = 12.0;
@@ -30,13 +35,30 @@
 	self.leftView = leftView;
 	self.leftViewMode = UITextFieldViewModeAlways;
 
-	return self;
-}
+	_letterLabel.text = searchVM.letter;
+	self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:searchVM.placeHolder attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:0.0 alpha:0.3]}];
 
-- (void)setLetter:(NSString *)letter
-{
-	_letter = letter;
-	_letterLabel.text = letter;
+	[self.rac_textSignal
+		subscribeNext:^(NSString *text) {
+			@strongify(self);
+
+			self.searchVM.text = text;
+		}];
+
+	[RACObserve(searchVM, active) subscribeNext:^(NSNumber *active) {
+		@strongify(self);
+
+		if (active.boolValue)
+		{
+			[self becomeFirstResponder];
+		}
+		else
+		{
+			[self resignFirstResponder];
+		}
+	}];
+
+	return self;
 }
 
 @end
