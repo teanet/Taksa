@@ -76,8 +76,14 @@ static NSString *const kTKS2GISWebAPIKey = @"ruczoy1743";
 - (RACSignal *)fetchCurrentRegion
 {
 	@weakify(self);
+	[self.locationManager start];
 
-	return [[self.apiController fetchCurrentRegionWithLocation:self.locationManager.location]
+	return [[[[self.locationManager.locationSignal
+		ignore:nil]
+		take:1]
+		flattenMap:^RACStream *(CLLocation *location) {
+			return [self.apiController fetchCurrentRegionWithLocation:location];
+		}]
 		doNext:^(TKSRegion *region) {
 			@strongify(self);
 

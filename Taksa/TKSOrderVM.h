@@ -4,8 +4,10 @@
 
 @interface TKSOrderVM : NSObject
 
-@property (nonatomic, strong) TKSInputVM *inputVM;
+@property (nonatomic, strong, readonly) TKSInputVM *inputVM;
 @property (nonatomic, strong, readonly) TKSSuggestListModel *suggestListModel;
+
+- (instancetype)initWithInputVM:(TKSInputVM *)inputVM;
 
 - (void)registerTaxiTableView:(UITableView *)tableView;
 - (void)registerSuggestTableView:(UITableView *)tableView;

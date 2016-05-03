@@ -37,5 +37,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Нужно для того чтобы определить куда подавать такси</string>
 </dict>
 </plist>
