@@ -1,6 +1,5 @@
 #import "TKSAPIController.h"
 
-#import "TKSAPIController+Private.h"
 #import <AFNetworking/AFNetworking.h>
 
 static NSString *const kTKS2GISWebAPIBaseURLString = @"http://catalog.api.2gis.ru/2.0/";
@@ -13,22 +12,12 @@ static NSString *const kTKS2GISWebAPIBaseURLString = @"http://catalog.api.2gis.r
 
 @implementation TKSAPIController
 
-+ (instancetype)sharedController
-{
-	static TKSAPIController *controller = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		controller = [[TKSAPIController alloc] init];
-	});
-
-	return controller;
-}
-
-- (instancetype)init
+- (instancetype)initWithWebAPIKey:(NSString *)webAPIKey
 {
 	self = [super init];
 	if (self == nil) return nil;
 
+	_webAPIKey = [webAPIKey copy];
 	_requestManagerWebApi = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:kTKS2GISWebAPIBaseURLString]];
 	_requestManagerWebApi.requestSerializer = [AFJSONRequestSerializer serializer];
 	_requestManagerWebApi.requestSerializer.timeoutInterval = 10.0;
@@ -39,7 +28,7 @@ static NSString *const kTKS2GISWebAPIBaseURLString = @"http://catalog.api.2gis.r
 
 
 // MARK: TKSAPIController+Private
-- (RACSignal *)GET:(NSString *)method server:(TKSService)service params:(NSDictionary *)params
+- (RACSignal *)GET:(NSString *)method service:(TKSService)service params:(NSDictionary *)params
 {
 	@weakify(self);
 	return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {

@@ -1,8 +1,10 @@
 #import "TKSSelectCityVC.h"
 
+#import "TKSDataProvider.h"
+
 @interface TKSSelectCityVC ()
 
-@property (nonatomic, strong, readonly) NSArray *cities;
+@property (nonatomic, strong) NSArray<TKSRegion *> *regions;
 
 @end
 
@@ -13,17 +15,28 @@
 	self = [super init];
 	if (self == nil) return nil;
 
-	_cities = @[
-		@"Новосибирск",
-		@"Омск",
-	];
+	[self setupReactiveStuff];
 
 	return self;
+}
+
+- (void)setupReactiveStuff
+{
+	@weakify(self);
+
+	[[[TKSDataProvider sharedProvider] fetchRegions]
+		subscribeNext:^(NSArray<TKSRegion *> *regions) {
+			@strongify(self);
+
+			self.regions = regions;
+		}];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+	@weakify(self);
 
 	self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
 	self.tableView.tableFooterView = [UIView new];
@@ -34,6 +47,13 @@
 	[self.tableView setSeparatorInset:tableSeparatorInsets];
 	[self.tableView setLayoutMargins:tableSeparatorInsets];
 	[self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+
+	[RACObserve(self, regions)
+		subscribeNext:^(id _) {
+			@strongify(self);
+
+			[self.tableView reloadData];
+		}];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -43,14 +63,22 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return self.cities.count;
+	return self.regions.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-	cell.textLabel.text = self.cities[indexPath.row];
+	TKSRegion *region = self.regions[indexPath.row];
+	cell.textLabel.text = region.name;
 	return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+	[TKSDataProvider sharedProvider].currentRegion = self.regions[indexPath.row];
 }
 
 @end
