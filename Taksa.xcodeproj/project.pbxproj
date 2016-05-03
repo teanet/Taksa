@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		730F64351CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F64341CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m */; };
+		730F64381CD8A18F00A34A33 /* TKSTransitionRootToOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F64371CD8A18F00A34A33 /* TKSTransitionRootToOrder.m */; };
+		730F643B1CD8B1F400A34A33 /* TKSTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F643A1CD8B1F400A34A33 /* TKSTextField.m */; };
 		734895E41CD5FE6800B218CB /* TKSOrderVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 734895E31CD5FE6800B218CB /* TKSOrderVM.m */; };
 		734898E21CD60D3600B218CB /* TKSTaxiSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 734898E11CD60D3600B218CB /* TKSTaxiSection.m */; };
 		734898E51CD60D7A00B218CB /* TKSTaxiRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 734898E41CD60D7A00B218CB /* TKSTaxiRow.m */; };
@@ -40,6 +43,12 @@
 /* Begin PBXFileReference section */
 		149E21171269EC904FAD1E28 /* libPods-Taksa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Taksa.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BF070F2BB478594E19CD2CC /* Pods-Taksa.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Taksa.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Taksa/Pods-Taksa.debug.xcconfig"; sourceTree = "<group>"; };
+		730F64331CD8A0E800A34A33 /* TKSNavigationControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSNavigationControllerDelegate.h; sourceTree = "<group>"; };
+		730F64341CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSNavigationControllerDelegate.m; sourceTree = "<group>"; };
+		730F64361CD8A18F00A34A33 /* TKSTransitionRootToOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTransitionRootToOrder.h; sourceTree = "<group>"; };
+		730F64371CD8A18F00A34A33 /* TKSTransitionRootToOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTransitionRootToOrder.m; sourceTree = "<group>"; };
+		730F64391CD8B1F400A34A33 /* TKSTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTextField.h; sourceTree = "<group>"; };
+		730F643A1CD8B1F400A34A33 /* TKSTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTextField.m; sourceTree = "<group>"; };
 		734895E21CD5FE6800B218CB /* TKSOrderVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSOrderVM.h; sourceTree = "<group>"; };
 		734895E31CD5FE6800B218CB /* TKSOrderVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSOrderVM.m; sourceTree = "<group>"; };
 		734898E01CD60D3600B218CB /* TKSTaxiSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiSection.h; sourceTree = "<group>"; };
@@ -118,6 +127,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		730F64321CD8A0C400A34A33 /* Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				730F64331CD8A0E800A34A33 /* TKSNavigationControllerDelegate.h */,
+				730F64341CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m */,
+				730F64361CD8A18F00A34A33 /* TKSTransitionRootToOrder.h */,
+				730F64371CD8A18F00A34A33 /* TKSTransitionRootToOrder.m */,
+			);
+			name = Transitions;
+			sourceTree = "<group>";
+		};
 		734898E61CD60E6500B218CB /* TaxiList */ = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +182,8 @@
 			isa = PBXGroup;
 			children = (
 				73489BF51CD6477D00B218CB /* Cell */,
+				730F64391CD8B1F400A34A33 /* TKSTextField.h */,
+				730F643A1CD8B1F400A34A33 /* TKSTextField.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -221,6 +243,7 @@
 		73BB0F791CCBBB6500E07190 /* Taksa */ = {
 			isa = PBXGroup;
 			children = (
+				730F64321CD8A0C400A34A33 /* Transitions */,
 				73489C0F1CD6561400B218CB /* Networking */,
 				73489C051CD6554900B218CB /* Utils */,
 				73489BF41CD6477500B218CB /* View */,
@@ -413,7 +436,10 @@
 				73489C041CD654AC00B218CB /* TKSTaxiGroupModel.m in Sources */,
 				73BB0F931CCBC01000E07190 /* TKSRootVC.m in Sources */,
 				73489BE71CD6155700B218CB /* TKSSuggestListModel.m in Sources */,
+				730F64351CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m in Sources */,
 				734898E21CD60D3600B218CB /* TKSTaxiSection.m in Sources */,
+				730F64381CD8A18F00A34A33 /* TKSTransitionRootToOrder.m in Sources */,
+				730F643B1CD8B1F400A34A33 /* TKSTextField.m in Sources */,
 				73489BF81CD647AB00B218CB /* TKSTaxiSuggestCell.m in Sources */,
 				73BB126A1CCCA1D400E07190 /* TKSInputView.m in Sources */,
 				73BB12661CCBC6AE00E07190 /* TKSOrderVC.m in Sources */,

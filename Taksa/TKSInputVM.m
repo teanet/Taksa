@@ -11,6 +11,8 @@
 	if (self == nil) return nil;
 
 	_fromSearchVM = [[TKSSearchVM alloc] init];
+	_fromSearchVM.placeHolder = @"Адрес, или название фирмы";
+	
 	_toSearchVM = [[TKSSearchVM alloc] init];
 
 	_didBecomeEditingSignal = [[RACObserve(self, currentSearchVM)

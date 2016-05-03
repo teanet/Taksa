@@ -2,6 +2,7 @@
 
 #import "TKSInputView.h"
 #import "TKSOrderVM.h"
+#import "UIColor+DGSCustomColor.h"
 
 typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	TKSOrderModeSearch = 0,
@@ -47,7 +48,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	@weakify(self);
 
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor brownColor];
 	[self setEdgesForExtendedLayout:UIRectEdgeNone];
 
 	[self.viewModel registerTaxiTableView:self.taxiTableView];
@@ -68,9 +69,16 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 		self.orderMode = TKSOrderModeSearch;
 	}];
 
-	TKSInputView *inputView = [[TKSInputView alloc] initWithViewModel:inputVM];
-	[self.view addSubview:inputView];
-	[inputView mas_makeConstraints:^(MASConstraintMaker *make) {
+	UILabel *nameLabel = [[UILabel alloc] init];
+	nameLabel.text = @"ТАКСА";
+	nameLabel.textColor = [UIColor dgs_colorWithString:@"333333"];
+	nameLabel.font = [UIFont boldSystemFontOfSize:20];
+	[nameLabel sizeToFit];
+	self.navigationItem.titleView = nameLabel;
+	
+	_inputView = [[TKSInputView alloc] initWithViewModel:inputVM];
+	[self.view addSubview:_inputView];
+	[_inputView mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.top.mas_equalTo(self.view);
 		make.leading.equalTo(self.view);
 		make.trailing.equalTo(self.view);
@@ -78,7 +86,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 
 	[self.view addSubview:self.suggestTableView];
 	[self.suggestTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.top.equalTo(inputView.mas_bottom);
+		make.top.equalTo(_inputView.mas_bottom);
 		make.leading.equalTo(self.view);
 		make.trailing.equalTo(self.view);
 		make.bottom.equalTo(self.view);
