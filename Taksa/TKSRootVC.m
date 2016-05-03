@@ -5,6 +5,7 @@
 #import "TKSInputView.h"
 #import "TKSNavigationControllerDelegate.h"
 #import "UIColor+DGSCustomColor.h"
+#import "TKSOrderVM.h"
 
 @interface TKSRootVC ()
 <UITextFieldDelegate>
@@ -55,7 +56,7 @@
 	}];
 
 	TKSInputVM *inputVM = [[TKSInputVM alloc] init];
-	_inputView = [[TKSInputView alloc] initWithViewModel:inputVM];
+	_inputView = [[TKSInputView alloc] initWithVM:inputVM];
 	[self.view addSubview:_inputView];
 	[_inputView mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.top.equalTo(descriptionLabel.mas_bottom).with.offset(22.0);
@@ -104,7 +105,9 @@
 
 - (void)searchAddress
 {
-	TKSOrderVC *orderVC = [[TKSOrderVC alloc] init];
+	TKSOrderVM *orderVM = [[TKSOrderVM alloc] init];
+	orderVM.inputVM = _inputView.inputVM;
+	TKSOrderVC *orderVC = [[TKSOrderVC alloc] initWithVM:orderVM];
 	[self.navigationController setViewControllers:@[ orderVC ] animated:YES];
 }
 

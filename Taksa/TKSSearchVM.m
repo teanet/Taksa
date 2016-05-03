@@ -15,7 +15,10 @@
 	self = [super init];
 	if (self == nil) return nil;
 
-		@weakify(self);
+	@weakify(self);
+	_letter = @" ";
+	_placeHolder = @"";
+	_text = @"";
 
 	RACSignal *suggestListClearSignal = [[[RACObserve(self, text)
 		filter:^BOOL(NSString *text) {

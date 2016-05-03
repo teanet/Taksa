@@ -12,38 +12,19 @@
 
 @implementation TKSInputView
 
-- (instancetype)initWithViewModel:(TKSInputVM *)inputVM
+- (instancetype)initWithVM:(TKSInputVM *)inputVM
 {
 	self = [super initWithFrame:CGRectZero];
 	if (self == nil) return nil;
-	@weakify(self);
 
 	_inputVM = inputVM;
 	
-	_fromTF = [[TKSTextField alloc] init];
-	_fromTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:inputVM.fromSearchVM.placeHolder attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:0.0 alpha:0.3]}];
+	_fromTF = [[TKSTextField alloc] initWithVM:inputVM.fromSearchVM];
 	_fromTF.delegate = self;
-	_fromTF.letter = @"A";
-	[[_fromTF.rac_textSignal
-		throttle:0.3]
-		subscribeNext:^(NSString *text) {
-			@strongify(self);
-
-			self.inputVM.fromSearchVM.text = text;
-		}];
 	[self addSubview:_fromTF];
 
-	_toTF = [[TKSTextField alloc] init];
-	_toTF.placeholder = inputVM.toSearchVM.placeHolder;
+	_toTF = [[TKSTextField alloc] initWithVM:inputVM.toSearchVM];
 	_toTF.delegate = self;
-	_toTF.letter = @"B";
-	[[_toTF.rac_textSignal
-		throttle:0.3]
-		subscribeNext:^(NSString *text) {
-			@strongify(self);
-
-			self.inputVM.toSearchVM.text = text;
-		}];
 	[self addSubview:_toTF];
 
 	return self;
