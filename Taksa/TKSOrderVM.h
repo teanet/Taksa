@@ -14,4 +14,7 @@
 
 - (void)loadDataWithCompletion:(dispatch_block_t)block;
 
+/*! \sendNext @[TKSTaxiSection] */
+- (RACSignal *)searchTaxiSignal;
+
 @end

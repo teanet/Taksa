@@ -45,6 +45,8 @@
 			self.searchVM.text = text;
 		}];
 
+	RAC(self, text) = [RACObserve(self.searchVM, text) distinctUntilChanged];
+
 	[RACObserve(searchVM, active) subscribeNext:^(NSNumber *active) {
 		@strongify(self);
 

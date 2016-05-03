@@ -2,15 +2,15 @@
 
 #import "TKSSuggest.h"
 #import "TKSDatabaseObject.h"
-#import "TKSTaxiGroupModel.h"
+#import "TKSTaxiSection.h"
 #import "TKSRegion.h"
 
 @implementation TKSAPIController (TKSModels)
 
 // MARK: WebAPI Server
 
-- (RACSignal *)fetchSuggestsForString:(NSString *)searchString
-							 regionId:(NSString *)regionId
+- (RACSignal *)fetchSuggestsForSearchString:(NSString *)searchString
+								   regionId:(NSString *)regionId
 {
 	NSCParameterAssert(regionId);
 
@@ -43,6 +43,42 @@
 
 			return returnArray;
 		}];
+}
+
+- (RACSignal *)fetchObjectsForSearchString:(NSString *)searchString
+								  regionId:(NSString *)regionId;
+{
+	NSCParameterAssert(regionId);
+
+	if ((searchString.length == 0) || (regionId.length == 0)) return [RACSignal return:nil];
+
+	NSDictionary *params = @{
+		@"key": self.webAPIKey,
+		@"region_id" : regionId,
+		@"lang" : @"ru",
+		@"output" : @"json",
+		@"q" : searchString,
+		@"type" : @"building",
+		@"fields": @"items.geometry.selection",
+	};
+
+	return [[self GET:@"geo/search" service:TKSServiceWebAPI params:params]
+			map:^NSArray <TKSDatabaseObject *> *(NSDictionary *responseObject) {
+				NSArray <TKSDatabaseObject *> *returnArray = nil;
+
+				if ([responseObject isKindOfClass:[NSDictionary class]])
+				{
+					NSDictionary *resultDictionary = responseObject[@"result"];
+					NSArray<NSDictionary *> *itemDictionaries = resultDictionary[@"items"];
+
+					returnArray = [itemDictionaries.rac_sequence
+								   map:^TKSDatabaseObject *(NSDictionary *objectDictionary) {
+									   return [[TKSDatabaseObject alloc] initWithDictionary:objectDictionary];
+								   }].array;
+				}
+				
+				return returnArray;
+			}];
 }
 
 - (RACSignal *)fetchObjectForObjectId:(NSString *)objectId
@@ -97,44 +133,8 @@
 		@"lang" : @"ru",
 		@"output" : @"json",
 		@"point" : pointString,
-		@"type" : @"street,building",
+		@"type" : @"building",
 		@"radius" : @"1",
-		@"fields": @"items.geometry.selection",
-	};
-
-	return [[self GET:@"geo/search" service:TKSServiceWebAPI params:params]
-		map:^TKSDatabaseObject *(NSDictionary *responseObject) {
-			TKSDatabaseObject *returnObject = nil;
-
-			if ([responseObject isKindOfClass:[NSDictionary class]])
-			{
-				NSDictionary *resultDictionary = responseObject[@"result"];
-				NSArray *itemsDictionaries = resultDictionary[@"items"];
-				NSDictionary *objectDictionary = itemsDictionaries.firstObject;
-				if ([objectDictionary isKindOfClass:[NSDictionary class]])
-				{
-					returnObject = [[TKSDatabaseObject alloc] initWithDictionary:objectDictionary];
-				}
-			}
-			
-			return returnObject;
-		}];
-}
-
-- (RACSignal *)fetchObjectForSearchString:(NSString *)searchString
-								 regionId:(NSString *)regionId;
-{
-	NSCParameterAssert(regionId);
-
-	if ((searchString.length == 0) || (regionId.length == 0)) return [RACSignal return:nil];
-
-	NSDictionary *params = @{
-		@"key": self.webAPIKey,
-		@"region_id" : regionId,
-		@"lang" : @"ru",
-		@"output" : @"json",
-		@"q" : searchString,
-		@"type" : @"street,building",
 		@"fields": @"items.geometry.selection",
 	};
 
@@ -227,7 +227,7 @@
 							  toObject:(TKSDatabaseObject *)objectTo
 {
 #warning Backend required. Переделать на backend.
-	return [RACSignal return:@[[TKSTaxiGroupModel testGroupeSuggest], [TKSTaxiGroupModel testGroupeList]]];
+	return [RACSignal return:@[[TKSTaxiSection testGroupeSuggest], [TKSTaxiSection testGroupeList]]];
 }
 
 @end

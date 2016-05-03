@@ -53,13 +53,17 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	[self.viewModel registerSuggestTableView:self.suggestTableView];
 
 	[[RACObserve(self.viewModel.inputVM, currentSearchVM.suggests)
-		ignore:nil]
-		subscribeNext:^(NSArray *suggests) {
+		combineLatestWith:RACObserve(self.viewModel.inputVM, currentSearchVM.results)]
+		subscribeNext:^(RACTuple *t) {
 			@strongify(self);
 
+			RACTupleUnpack(NSArray<TKSSuggest *> *suggests, NSArray<TKSDatabaseObject *> *results) = t;
 			self.viewModel.suggestListModel.suggests = suggests;
+			self.viewModel.suggestListModel.results = results;
+
 			[self.suggestTableView reloadData];
 		}];
+
 	[self.viewModel.inputVM.didBecomeEditingSignal subscribeNext:^(id x) {
 		@strongify(self);
 
@@ -133,12 +137,13 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	@weakify(self);
 	self.orderMode = TKSOrderModeLoading;
 
-	[self.viewModel loadDataWithCompletion:^{
-		@strongify(self);
-
-		[self.taxiTableView reloadData];
-		self.orderMode = TKSOrderModeTaxiList;
-	}];
+	[[self.viewModel searchTaxiSignal]
+		subscribeNext:^(id x) {
+			@strongify(self);
+			
+			[self.taxiTableView reloadData];
+			self.orderMode = TKSOrderModeTaxiList;
+		}];
 }
 
 @end

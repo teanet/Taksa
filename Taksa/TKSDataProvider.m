@@ -37,10 +37,16 @@ static NSString *const kTKS2GISWebAPIKey = @"ruczoy1743";
 }
 
 // MARK: TKSAPIController+TKSModels
-- (RACSignal *)fetchSuggestsForString:(NSString *)searchString
+- (RACSignal *)fetchSuggestsForSearchString:(NSString *)searchString
 {
-	return [self.apiController fetchSuggestsForString:searchString
-											 regionId:self.currentRegion.id];
+	return [self.apiController fetchSuggestsForSearchString:searchString
+												   regionId:self.currentRegion.id];
+}
+
+- (RACSignal *)fetchObjectsForSearchString:(NSString *)searchString
+{
+	return [self.apiController fetchObjectsForSearchString:searchString
+												  regionId:self.currentRegion.id];
 }
 
 - (RACSignal *)fetchObjectForObjectId:(NSString *)objectId
@@ -53,12 +59,6 @@ static NSString *const kTKS2GISWebAPIKey = @"ruczoy1743";
 {
 	return [self.apiController fetchObjectForLocation:location
 											 regionId:self.currentRegion.id];
-}
-
-- (RACSignal *)fetchObjectForSearchString:(NSString *)searchString
-{
-	return [self.apiController fetchObjectForSearchString:searchString
-												 regionId:self.currentRegion.id];
 }
 
 - (RACSignal *)fetchTaxiListFromObject:(TKSDatabaseObject *)objectFrom
