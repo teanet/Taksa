@@ -15,7 +15,10 @@
 - (void)configureWindow
 {
 	[[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"nav_bg"] forBarMetrics:UIBarMetricsDefault];
-	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:[[TKSRootVC alloc] init]];
+	[[UINavigationBar appearance] setTintColor:[UIColor blackColor]];
+
+	TKSRootVC *rootVC = [[TKSRootVC alloc] initWithVM:[[TKSRootVM alloc] init]];
+	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:rootVC];
 	navigationController.navigationBar.translucent = NO;
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	self.window.rootViewController = navigationController;

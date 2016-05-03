@@ -15,7 +15,6 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 @property (nonatomic, strong, readonly) UITableView *suggestTableView;
 @property (nonatomic, strong, readonly) UITableView *taxiTableView;
 
-@property (nonatomic, strong, readonly) TKSOrderVM *viewModel;
 @property (nonatomic, strong, readonly) UIActivityIndicatorView *spinner;
 
 @property (nonatomic, assign) TKSOrderMode orderMode;
@@ -24,12 +23,11 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 
 @implementation TKSOrderVC
 
-- (instancetype)initWithVM:(TKSOrderVM *)orderVM
+- (instancetype)initWithVM:(id)orderVM
 {
-	self = [super init];
+	self = [super initWithVM:orderVM];
 	if (self == nil) return nil;
 
-	_viewModel = orderVM;
 	self.orderMode = TKSOrderModeSearch;
 
 	return self;

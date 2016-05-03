@@ -11,14 +11,14 @@
 
 @implementation TKSOrderVM
 
-- (instancetype)init
+- (instancetype)initWithInputVM:(TKSInputVM *)inputVM
 {
 	self = [super init];
 	if (self == nil) return nil;
 
 	_taxiListVM = [[TKSTaxiListVM alloc] init];
 	_suggestListModel = [[TKSSuggestListModel alloc] init];
-	_inputVM = [[TKSInputVM alloc] init];
+	_inputVM = inputVM ?: [[TKSInputVM alloc] init];
 
 	return self;
 }

@@ -5,12 +5,6 @@
 #import "TKSInputView.h"
 #import "TKSNavigationControllerDelegate.h"
 #import "UIColor+DGSCustomColor.h"
-#import "TKSOrderVM.h"
-
-@interface TKSRootVC ()
-<UITextFieldDelegate>
-
-@end
 
 @implementation TKSRootVC
 
@@ -55,19 +49,12 @@
 		make.trailing.equalTo(self.view).with.offset(-20.0);
 	}];
 
-	TKSInputVM *inputVM = [[TKSInputVM alloc] init];
-	_inputView = [[TKSInputView alloc] initWithVM:inputVM];
+	_inputView = [[TKSInputView alloc] initWithVM:self.viewModel.inputVM];
 	[self.view addSubview:_inputView];
 	[_inputView mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.top.equalTo(descriptionLabel.mas_bottom).with.offset(22.0);
 		make.leading.equalTo(self.view);
 		make.trailing.equalTo(self.view);
-	}];
-
-	[inputVM.didBecomeEditingSignal subscribeNext:^(id _) {
-		@strongify(self);
-
-		[self searchAddress];
 	}];
 
 	UIView *centerView = [[UIView alloc] init];
@@ -80,35 +67,36 @@
 	}];
 
 	UIButton *selectCity = [[UIButton alloc] init];
-	[selectCity setTitle:@"Новосибирск ∨" forState:UIControlStateNormal];
 	[selectCity setTitleColor:[[UIColor dgs_colorWithString:@"333333"] colorWithAlphaComponent:0.87] forState:UIControlStateNormal];
-
-	[selectCity addTarget:self action:@checkselector0(self, selectCity) forControlEvents:UIControlEventTouchUpInside];
+	[selectCity addTarget:self.viewModel action:@checkselector0(self.viewModel, selectCity) forControlEvents:UIControlEventTouchUpInside];
 	[centerView addSubview:selectCity];
 	[selectCity mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.center.equalTo(centerView);
 	}];
+	[RACObserve(self.viewModel, selectCityButtonTitle) subscribeNext:^(NSString *title) {
+		[selectCity setTitle:title forState:UIControlStateNormal];
+	}];
 
-}
+	[self.viewModel.searchAddressSignal subscribeNext:^(TKSOrderVM *orderVM) {
+		@strongify(self);
 
-- (void)selectCity
-{
-	TKSSelectCityVC *selectCityVC = [[TKSSelectCityVC alloc] init];
-	selectCityVC.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleDone target:self action:@selector(dismiss)];
-	[self presentViewController:[[UINavigationController alloc] initWithRootViewController:selectCityVC] animated:YES completion:nil];
-}
+		TKSOrderVC *orderVC = [[TKSOrderVC alloc] initWithVM:orderVM];
+		[self.navigationController setViewControllers:@[ orderVC ] animated:YES];
+	}];
 
-- (void)dismiss
-{
-	[self dismissViewControllerAnimated:YES completion:nil];
-}
+	[self.viewModel.selectCitySignal subscribeNext:^(TKSSelectCityVM *selectCityVM) {
+		@strongify(self);
 
-- (void)searchAddress
-{
-	TKSOrderVM *orderVM = [[TKSOrderVM alloc] init];
-	orderVM.inputVM = _inputView.inputVM;
-	TKSOrderVC *orderVC = [[TKSOrderVC alloc] initWithVM:orderVM];
-	[self.navigationController setViewControllers:@[ orderVC ] animated:YES];
+		void (^didCloseBlock)(id) = ^void(id _) {
+			@strongify(self);
+			[self dismissViewControllerAnimated:YES completion:nil];
+		};
+		[selectCityVM.didCloseSignal subscribeNext:didCloseBlock];
+		[selectCityVM.didSelectRegionSignal subscribeNext:didCloseBlock];
+
+		TKSSelectCityVC *selectCityVC = [[TKSSelectCityVC alloc] initWithVM:selectCityVM];
+		[self presentViewController:[[UINavigationController alloc] initWithRootViewController:selectCityVC] animated:YES completion:nil];
+	}];
 }
 
 @end

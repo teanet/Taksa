@@ -1,9 +1,9 @@
-@class TKSInputView, TKSOrderVM;
+#import "TKSBaseVC.h"
+#import "TKSOrderVM.h"
+@class TKSInputView;
 
-@interface TKSOrderVC : UIViewController
+@interface TKSOrderVC : TKSBaseVC<TKSOrderVM *>
 
 @property (nonatomic, strong, readonly) TKSInputView *inputView;
-
-- (instancetype)initWithVM:(TKSOrderVM *)orderVM;
 
 @end
