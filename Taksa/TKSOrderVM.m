@@ -137,7 +137,7 @@
 			}];
 
 	RACSignal *objectToSignal = self.objectTo
-		? [RACSignal return:self.objectFrom]
+		? [RACSignal return:self.objectTo]
 		: [[[TKSDataProvider sharedProvider] fetchObjectsForSearchString:self.inputVM.toSearchVM.text]
 		   map:^TKSDatabaseObject *(NSArray<TKSDatabaseObject *> *dbObjects) {
 			   return dbObjects.firstObject;

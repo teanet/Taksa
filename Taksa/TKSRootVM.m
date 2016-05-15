@@ -34,7 +34,7 @@
 	[[RACObserve([TKSDataProvider sharedProvider], currentRegion)
 		takeUntil:self.rac_willDeallocSignal]
 		subscribeNext:^(TKSRegion *currentRegion) {
-			self.selectCityButtonTitle = currentRegion ? [currentRegion.name stringByAppendingString:@" V"] : @"Определяю город...";
+			self.selectCityButtonTitle = currentRegion ? currentRegion.name : @"Определяю город...";
 		}];
 
 	[[[TKSDataProvider sharedProvider] fetchCurrentRegion]

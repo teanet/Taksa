@@ -1,6 +1,8 @@
-//#import "TKSTaxiRow.h"
 #import "TKSSerializableProtocol.h"
 #import "TKSTaxiRow.h"
+#import "TKSRoute.h"
+#import "TKSTaxi.h"
+
 /*
  {
 	"title": "5.5км, 23 минуты",
@@ -23,15 +25,18 @@
 	],
  }
  */
+
 @interface TKSTaxiSection : NSObject <TKSSerializableProtocol>
 
 @property (nonatomic, copy, readonly) NSString *title;
 @property (nonatomic, copy, readonly) NSString *summary;
 @property (nonatomic, copy, readonly) NSArray<TKSTaxiRow *> *rows;
 
-//@property (nonatomic, copy) NSString *title;
-//@property (nonatomic, copy) NSArray<TKSTaxiRow *> *rows;
+@end
 
+@interface TKSTaxiSection (TKSLocalTaxi)
+
+- (instancetype)initWithRoute:(TKSRoute *)route rows:(NSArray<TKSTaxiRow *> *)rows;
 
 @end
 

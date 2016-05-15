@@ -3,6 +3,7 @@
 #import "TKSTaxiSection.h"
 #import "TKSTaxiSuggestCell.h"
 #import "TKSTaxiDefaultCell.h"
+#import "UIFont+DGSCustomFont.h"
 
 @implementation TKSTaxiListVM
 

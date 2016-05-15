@@ -34,8 +34,12 @@
  *	Taksa™ Server®
  */
 
-/*! \sendNext @[TKSTaxiSection] */
-- (RACSignal *)fetchTaxiListFromObject:(TKSDatabaseObject *)objectFrom
-							  toObject:(TKSDatabaseObject *)objectTo;
+/*! \sendNext TKSRoute */
+- (RACSignal *)fetchRouteFromObject:(TKSDatabaseObject *)objectFrom
+						   toObject:(TKSDatabaseObject *)objectTo
+						   regionId:(NSString *)regionId;
+
+/*! \sendNext @[NSDictionary] */
+- (RACSignal *)fetchTaxiDictionariesArray;
 
 @end

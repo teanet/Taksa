@@ -98,6 +98,13 @@
 		TKSSelectCityVC *selectCityVC = [[TKSSelectCityVC alloc] initWithVM:selectCityVM];
 		[self presentViewController:[[UINavigationController alloc] initWithRootViewController:selectCityVC] animated:YES completion:nil];
 	}];
+
+	[self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+	return UIStatusBarStyleLightContent;
 }
 
 @end

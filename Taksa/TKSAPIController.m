@@ -3,29 +3,45 @@
 #import <AFNetworking/AFNetworking.h>
 
 static NSString *const kTKS2GISWebAPIBaseURLString = @"http://catalog.api.2gis.ru/2.0/";
+static NSString *const kTKSDropboxBaseURLString = @"https://dl.dropboxusercontent.com/u/39349894/Taksa/";
 
 @interface TKSAPIController ()
 
 @property (nonatomic, strong) AFHTTPRequestOperationManager *requestManagerWebApi;
+@property (nonatomic, strong) AFHTTPRequestOperationManager *requestManagerDropbox;
 
 @end
 
 @implementation TKSAPIController
 
-- (instancetype)initWithWebAPIKey:(NSString *)webAPIKey
+- (instancetype)initWithWebAPIKey:(NSString *)webAPIKey taxiProvidersFileName:(NSString *)taxiProvidersFileName
 {
 	self = [super init];
 	if (self == nil) return nil;
 
 	_webAPIKey = [webAPIKey copy];
-	_requestManagerWebApi = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:kTKS2GISWebAPIBaseURLString]];
-	_requestManagerWebApi.requestSerializer = [AFJSONRequestSerializer serializer];
-	_requestManagerWebApi.requestSerializer.timeoutInterval = 10.0;
-	_requestManagerWebApi.responseSerializer = [AFJSONResponseSerializer serializer];
+	_taxiProvidersFileName = [taxiProvidersFileName copy];
+	
+	_requestManagerWebApi = [TKSAPIController requestManagerWithURLString:kTKS2GISWebAPIBaseURLString];
+	_requestManagerDropbox = [TKSAPIController requestManagerWithURLString:kTKSDropboxBaseURLString];
 
 	return self;
 }
 
++ (AFHTTPRequestOperationManager *)requestManagerWithURLString:(NSString *)urlString
+{
+	AFHTTPRequestOperationManager *manager =
+		[[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:urlString]];
+
+	manager.requestSerializer = [AFJSONRequestSerializer serializer];
+	manager.requestSerializer.timeoutInterval = 10.0;
+	manager.responseSerializer = [AFJSONResponseSerializer serializer];
+
+	NSSet *typesSet = [NSSet setWithArray:@[@"text/plain", @"application/json"]];
+	[manager.responseSerializer setAcceptableContentTypes:typesSet];
+
+	return manager;
+}
 
 // MARK: TKSAPIController+Private
 - (RACSignal *)GET:(NSString *)method service:(TKSService)service params:(NSDictionary *)params
@@ -59,7 +75,8 @@ static NSString *const kTKS2GISWebAPIBaseURLString = @"http://catalog.api.2gis.r
 {
 	switch (service)
 	{
-		case TKSServiceWebAPI : return self.requestManagerWebApi;
+		case TKSServiceWebAPI	: return self.requestManagerWebApi;
+		case TKSServiceDropbox	: return self.requestManagerDropbox;
 	}
 
 	return nil;

@@ -15,6 +15,7 @@
 	_fromSearchVM.letter = @"A";
 
 	_toSearchVM = [[TKSSearchVM alloc] init];
+	_toSearchVM.placeHolder = @"Адрес, или название фирмы";
 	_toSearchVM.letter = @"B";
 
 	_didBecomeEditingSignal = [[RACObserve(self, currentSearchVM)
