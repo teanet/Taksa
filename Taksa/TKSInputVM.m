@@ -1,8 +1,5 @@
 #import "TKSInputVM.h"
 
-@interface TKSInputVM ()
-@end
-
 @implementation TKSInputVM
 
 - (instancetype)init

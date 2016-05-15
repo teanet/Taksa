@@ -12,8 +12,6 @@
 - (void)registerTaxiTableView:(UITableView *)tableView;
 - (void)registerSuggestTableView:(UITableView *)tableView;
 
-- (void)loadDataWithCompletion:(dispatch_block_t)block;
-
 /*! \sendNext @[TKSTaxiSection] */
 - (RACSignal *)searchTaxiSignal;
 

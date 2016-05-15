@@ -88,7 +88,7 @@
 		if (self.inputVM.fromSearchVM.text.length > 0)
 		{
 			// Ищем
-			
+//			[[[self searchTaxiSignal] publish] connect];
 		}
 		else
 		{
@@ -106,23 +106,6 @@
 - (void)registerSuggestTableView:(UITableView *)tableView
 {
 	[self.suggestListModel registerTableView:tableView];
-}
-
-- (void)loadDataWithCompletion:(dispatch_block_t)block
-{
-	@weakify(self);
-	[[[RACSignal return:nil]
-		delay:1.0]
-		subscribeNext:^(id _) {
-			@strongify(self);
-
-			self.taxiListVM.data = @[
-				[TKSTaxiSection testGroupeSuggest],
-				[TKSTaxiSection testGroupeList],
-			];
-
-			block();
-		}];
 }
 
 - (RACSignal *)searchTaxiSignal

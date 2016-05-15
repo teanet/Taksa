@@ -1,6 +1,5 @@
 #import "TKSSerializableProtocol.h"
 #import "TKSTaxiRow.h"
-#import "TKSRoute.h"
 #import "TKSTaxi.h"
 
 /*
@@ -36,7 +35,7 @@
 
 @interface TKSTaxiSection (TKSLocalTaxi)
 
-- (instancetype)initWithRoute:(TKSRoute *)route rows:(NSArray<TKSTaxiRow *> *)rows;
+- (instancetype)initWithTitle:(NSString *)title rows:(NSArray<TKSTaxiRow *> *)rows;
 
 @end
 

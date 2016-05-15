@@ -79,6 +79,12 @@
 
 - (NSInteger)priceForDistance:(NSInteger)distance duration:(NSTimeInterval)duration travelDate:(NSDate *)date
 {
+	// Если тариф неподходящий по времени, возвращаем -1 = ошибка
+	if(![self isTimeOfDate:date betweenStartDate:self.timeFrom endDate:self.timeTo]) return -1;
+
+	// Если день недели не тот, возвращаем -1 = ошибка
+	if(![self isDayOfDate:date betweenStartDate:self.dayFrom endDate:self.dayTo]) return -1;
+
 	// Вычитаем заложенные в стоимость подачи километры/минуты
 	double effectiveDistance = (double)distance - (double)self.includeKm;
 	double effectiveDuration = (double)duration - (double)self.includeMinutes;
@@ -91,6 +97,59 @@
 	NSInteger costInRubles = (NSInteger) cost > self.costMinimum ? cost : self.costMinimum;
 
 	return costInRubles;
+}
+
+- (NSDate *)dateByNeutralizingDateComponentsOfDate:(NSDate *)originalDate
+{
+	NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+
+	// Get the components for this date
+	NSDateComponents *components = [gregorian components:  (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond) fromDate: originalDate];
+
+	// Set the year, month and day to some values (the values are arbitrary)
+	[components setYear:2000];
+	[components setMonth:1];
+	[components setDay:1];
+
+	return [gregorian dateFromComponents:components];
+}
+
+- (BOOL)isDayOfDate:(NSDate *)targetDate betweenStartDate:(NSDate *)startDate endDate:(NSDate *)endDate
+{
+	NSDateComponents *componentTarget = [[NSCalendar currentCalendar] components:NSCalendarUnitWeekday fromDate:targetDate];
+	NSDateComponents *componentStart = [[NSCalendar currentCalendar] components:NSCalendarUnitWeekday fromDate:startDate];
+	NSDateComponents *componentEnd = [[NSCalendar currentCalendar] components:NSCalendarUnitWeekday fromDate:endDate];
+
+	NSInteger weekDayTarget = [self normalizedDayFromYankeeDay:componentTarget.weekday];
+	NSInteger weekDayStart = [self normalizedDayFromYankeeDay:componentStart.weekday];
+	NSInteger weekDayEnd = [self normalizedDayFromYankeeDay:componentEnd.weekday];
+
+	return ((weekDayTarget >= weekDayStart) && (weekDayTarget <= weekDayEnd));
+}
+
+- (NSInteger)normalizedDayFromYankeeDay:(NSInteger)weekday
+{
+	NSInteger normalizedWeekday = weekday - 1;
+	return normalizedWeekday == 0 ? 7 : normalizedWeekday;
+}
+
+- (BOOL)isTimeOfDate:(NSDate *)targetDate betweenStartDate:(NSDate *)startDate endDate:(NSDate *)endDate
+{
+	if (!targetDate || !startDate || !endDate)
+	{
+		return NO;
+	}
+
+	// Make sure all the dates have the same date component.
+	NSDate *newStartDate = [self dateByNeutralizingDateComponentsOfDate:startDate];
+	NSDate *newEndDate = [self dateByNeutralizingDateComponentsOfDate:endDate];
+	NSDate *newTargetDate = [self dateByNeutralizingDateComponentsOfDate:targetDate];
+
+	// Compare the target with the start and end dates
+	NSComparisonResult compareTargetToStart = [newTargetDate compare:newStartDate];
+	NSComparisonResult compareTargetToEnd = [newTargetDate compare:newEndDate];
+
+	return (compareTargetToStart == NSOrderedDescending && compareTargetToEnd == NSOrderedAscending);
 }
 
 @end

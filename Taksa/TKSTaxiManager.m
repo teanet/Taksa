@@ -24,11 +24,29 @@
 			return [[TKSTaxiRow alloc] initWithTaxi:taxi price:price];
 		}].array;
 
-	if (rows.count <= 1) return nil;
+	NSMutableArray<TKSTaxiSection *> *sections = [NSMutableArray arrayWithCapacity:2];
 
-	TKSTaxiSection *section = [[TKSTaxiSection alloc] initWithRoute:route rows:[rows subarrayWithRange:NSMakeRange(1, rows.count - 1)]];
-	TKSTaxiSection *emptySection = [[TKSTaxiSection alloc] initWithRoute:route rows:@[rows.firstObject]];
-	return @[emptySection, section];
+	if (rows.count > 0)
+	{
+		NSString *titleFirst = [NSString stringWithFormat:@"%.1f км, %ld минут", route.distance, route.duration];
+		TKSTaxiSection *sectionSuggest = [[TKSTaxiSection alloc] initWithTitle:titleFirst rows:@[rows.firstObject]];
+
+		[sections addObject:sectionSuggest];
+	}
+
+	if (rows.count > 1)
+	{
+		NSArray<TKSTaxiRow *> *rowsDefault = [rows subarrayWithRange:NSMakeRange(1, rows.count - 1)];
+		TKSTaxiRow *rowCheapest = [rowsDefault firstObject];
+		TKSTaxiRow *rowMostExpensive = [rowsDefault lastObject];
+		NSString *titleSecond = [NSString stringWithFormat:@"%ld предложения от %@ до %@ рублей",
+			(long)rowsDefault.count, rowCheapest.price, rowMostExpensive.price];
+		TKSTaxiSection *sectionList = [[TKSTaxiSection alloc] initWithTitle:titleSecond rows:rowsDefault];
+
+		[sections addObject:sectionList];
+	}
+
+	return [sections copy];
 }
 
 @end

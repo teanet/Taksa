@@ -253,6 +253,14 @@
 				73489BF51CD6477D00B218CB /* Cell */,
 				730F64391CD8B1F400A34A33 /* TKSTextField.h */,
 				730F643A1CD8B1F400A34A33 /* TKSTextField.m */,
+				73BB12681CCCA1D400E07190 /* TKSInputView.h */,
+				73BB12691CCCA1D400E07190 /* TKSInputView.m */,
+				73BB0F911CCBC01000E07190 /* TKSRootVC.h */,
+				73BB0F921CCBC01000E07190 /* TKSRootVC.m */,
+				73BB12611CCBC3BE00E07190 /* TKSSelectCityVC.h */,
+				73BB12621CCBC3BE00E07190 /* TKSSelectCityVC.m */,
+				73BB12641CCBC6AE00E07190 /* TKSOrderVC.h */,
+				73BB12651CCBC6AE00E07190 /* TKSOrderVC.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -325,19 +333,13 @@
 				73489C051CD6554900B218CB /* Utils */,
 				73489BF41CD6477500B218CB /* View */,
 				73489BE81CD6181E00B218CB /* Model */,
-				73BB12671CCCA1BB00E07190 /* ViewModel */,
+				73BB12671CCCA1BB00E07190 /* ViewModels */,
 				73BB0F7D1CCBBB6500E07190 /* AppDelegate.h */,
 				73BB0F7E1CCBBB6500E07190 /* AppDelegate.m */,
 				73BB0F861CCBBB6500E07190 /* Assets.xcassets */,
 				73BB0F881CCBBB6500E07190 /* LaunchScreen.storyboard */,
 				73BB0F8B1CCBBB6500E07190 /* Info.plist */,
 				73BB0F7A1CCBBB6500E07190 /* Supporting Files */,
-				73BB0F911CCBC01000E07190 /* TKSRootVC.h */,
-				73BB0F921CCBC01000E07190 /* TKSRootVC.m */,
-				73BB12611CCBC3BE00E07190 /* TKSSelectCityVC.h */,
-				73BB12621CCBC3BE00E07190 /* TKSSelectCityVC.m */,
-				73BB12641CCBC6AE00E07190 /* TKSOrderVC.h */,
-				73BB12651CCBC6AE00E07190 /* TKSOrderVC.m */,
 			);
 			path = Taksa;
 			sourceTree = "<group>";
@@ -352,15 +354,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		73BB12671CCCA1BB00E07190 /* ViewModel */ = {
+		73BB12671CCCA1BB00E07190 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
 				73489BE91CD61EE200B218CB /* Suggest */,
-				73BB12681CCCA1D400E07190 /* TKSInputView.h */,
-				73BB12691CCCA1D400E07190 /* TKSInputView.m */,
+				734898E61CD60E6500B218CB /* TaxiList */,
 				73BB126B1CCCA62A00E07190 /* TKSInputVM.h */,
 				73BB126C1CCCA62A00E07190 /* TKSInputVM.m */,
-				734898E61CD60E6500B218CB /* TaxiList */,
 				73489BF11CD6217400B218CB /* TKSSearchVM.h */,
 				73489BF21CD6217400B218CB /* TKSSearchVM.m */,
 				730F643C1CD8D9FA00A34A33 /* TKSRootVM.h */,
@@ -368,7 +368,7 @@
 				730F643F1CD8E09F00A34A33 /* TKSSelectCityVM.h */,
 				730F64401CD8E09F00A34A33 /* TKSSelectCityVM.m */,
 			);
-			name = ViewModel;
+			name = ViewModels;
 			sourceTree = "<group>";
 		};
 		7F6C5F950062643104210155 /* Frameworks */ = {

@@ -1,11 +1,5 @@
 #import "TKSTaxiSection.h"
 
-@interface TKSTaxiSection ()
-
-@property (nonatomic, copy, readwrite) NSArray<TKSTaxiRow *> *rows;
-
-@end
-
 @implementation TKSTaxiSection
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
@@ -29,13 +23,13 @@
 
 @implementation TKSTaxiSection (TKSLocalTaxi)
 
-- (instancetype)initWithRoute:(TKSRoute *)route rows:(NSArray<TKSTaxiRow *> *)rows
+- (instancetype)initWithTitle:(NSString *)title rows:(NSArray<TKSTaxiRow *> *)rows
 {
 	self = [super init];
 	if (self == nil) return nil;
 
-	_title = [NSString stringWithFormat:@"%.1f км, %ld минут", route.distance, route.duration];
-	_rows = rows;
+	_title = [title copy];
+	_rows = [rows copy];
 
 	return self;
 }

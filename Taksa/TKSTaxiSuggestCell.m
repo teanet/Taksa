@@ -28,6 +28,7 @@
 
 	_nameLabel = [[UILabel alloc] init];
 	_nameLabel.font = [UIFont dgs_regularFontOfSize:24.0];
+	_nameLabel.numberOfLines = 0;
 	[contentView addSubview:_nameLabel];
 
 	_priceLabel = [[UILabel alloc] init];
@@ -63,6 +64,7 @@
 	[_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.leading.equalTo(_iconView.mas_trailing).with.offset(8.0);
 		make.centerY.equalTo(_iconView);
+		make.trailing.equalTo(_priceLabel.mas_leading);
 	}];
 
 	[_priceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
