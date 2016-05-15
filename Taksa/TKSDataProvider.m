@@ -112,10 +112,10 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 	@weakify(self);
 
 	return [[self.apiController fetchRouteFromObject:objectFrom toObject:objectTo regionId:self.currentRegion.id]
-		map:^TKSTaxiSection *(TKSRoute *route) {
+		map:^NSArray<TKSTaxiSection *> *(TKSRoute *route) {
 			@strongify(self);
 			
-			return @[[self.taxiManager sectionResultsForRoute:route]];
+			return [self.taxiManager sectionResultsForRoute:route];
 		}];
 }
 

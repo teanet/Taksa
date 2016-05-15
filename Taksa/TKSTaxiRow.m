@@ -37,7 +37,11 @@
 		? taxi.tel
 		: taxi.site.absoluteString;
 
-	_price = [NSString stringWithFormat:@"%ld", price];
+	_contact = _contact.length > 0
+		? taxi.url.absoluteString
+		: @"Нет контакта ='(";
+
+	_price = [NSString stringWithFormat:@"%ld", (long)price];
 	_color = taxi.backgroundColor;
 
 	return self;

@@ -14,6 +14,6 @@
 
 @property (nonatomic, copy) NSArray<TKSTaxi *> *taxies;
 
-- (TKSTaxiSection *)sectionResultsForRoute:(TKSRoute *)route;
+- (NSArray<TKSTaxiSection *> *)sectionResultsForRoute:(TKSRoute *)route;
 
 @end

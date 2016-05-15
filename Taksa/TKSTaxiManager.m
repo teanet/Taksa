@@ -4,7 +4,7 @@
 
 @implementation TKSTaxiManager
 
-- (TKSTaxiSection *)sectionResultsForRoute:(TKSRoute *)route
+- (NSArray<TKSTaxiSection *> *)sectionResultsForRoute:(TKSRoute *)route
 {
 	NSDate *travelDate = [NSDate date];
 
@@ -24,9 +24,11 @@
 			return [[TKSTaxiRow alloc] initWithTaxi:taxi price:price];
 		}].array;
 
-	TKSTaxiSection *section = [[TKSTaxiSection alloc] initWithRoute:route rows:rows];
+	if (rows.count <= 1) return nil;
 
-	return section;
+	TKSTaxiSection *section = [[TKSTaxiSection alloc] initWithRoute:route rows:[rows subarrayWithRange:NSMakeRange(1, rows.count - 1)]];
+	TKSTaxiSection *emptySection = [[TKSTaxiSection alloc] initWithRoute:route rows:@[rows.firstObject]];
+	return @[emptySection, section];
 }
 
 @end

@@ -45,7 +45,7 @@
 		_site = [NSURL URLWithString:siteString];
 	}
 
-	NSString *bgColorString = dictionary[@"background_color"];
+	NSString *bgColorString = dictionary[@"bacground_color"];
 	_backgroundColor = [UIColor dgs_colorWithString:bgColorString];
 
 	NSString *textColorString = dictionary[@"text_color"];
@@ -88,7 +88,7 @@
 	cost += (double)self.costKm * (double)effectiveDistance;
 	cost +=  (double)self.costMinute * (double)effectiveDuration;
 
-	NSInteger costInRubles = (NSInteger) cost > self.costMinimum ?: self.costMinimum;
+	NSInteger costInRubles = (NSInteger) cost > self.costMinimum ? cost : self.costMinimum;
 
 	return costInRubles;
 }
