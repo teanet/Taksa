@@ -7,8 +7,6 @@
 @interface TKSOrderVM ()
 
 @property (nonatomic, strong, readonly) TKSTaxiListVM *taxiListVM;
-@property (nonatomic, strong) TKSDatabaseObject *objectFrom;
-@property (nonatomic, strong) TKSDatabaseObject *objectTo;
 
 @end
 
@@ -54,11 +52,11 @@
 {
 	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
 	{
-		self.objectFrom = nil;
+		self.inputVM.fromSearchVM.dbObject = nil;
 	}
 	else
 	{
-		self.objectTo = nil;
+		self.inputVM.toSearchVM.dbObject = nil;
 	}
 }
 
@@ -66,11 +64,11 @@
 {
 	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
 	{
-		self.objectFrom = dbObject;
+		self.inputVM.fromSearchVM.dbObject = dbObject;
 	}
 	else
 	{
-		self.objectTo = dbObject;
+		self.inputVM.toSearchVM.dbObject = dbObject;
 	}
 }
 
@@ -108,19 +106,19 @@
 	[self.suggestListModel registerTableView:tableView];
 }
 
-- (RACSignal *)searchTaxiSignal
+- (RACSignal *)fetchTaxiList
 {
 	@weakify(self);
 
-	RACSignal *objectFromSignal = self.objectFrom
-		? [RACSignal return:self.objectFrom]
+	RACSignal *objectFromSignal = self.inputVM.fromSearchVM.dbObject
+		? [RACSignal return:self.inputVM.fromSearchVM.dbObject]
 		: [[[TKSDataProvider sharedProvider] fetchObjectsForSearchString:self.inputVM.fromSearchVM.text]
 			map:^TKSDatabaseObject *(NSArray<TKSDatabaseObject *> *dbObjects) {
 				return dbObjects.firstObject;
 			}];
 
-	RACSignal *objectToSignal = self.objectTo
-		? [RACSignal return:self.objectTo]
+	RACSignal *objectToSignal = self.inputVM.toSearchVM.dbObject
+		? [RACSignal return:self.inputVM.toSearchVM.dbObject]
 		: [[[TKSDataProvider sharedProvider] fetchObjectsForSearchString:self.inputVM.toSearchVM.text]
 		   map:^TKSDatabaseObject *(NSArray<TKSDatabaseObject *> *dbObjects) {
 			   return dbObjects.firstObject;

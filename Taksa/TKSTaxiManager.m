@@ -28,7 +28,7 @@
 
 	if (rows.count > 0)
 	{
-		NSString *titleFirst = [NSString stringWithFormat:@"%.1f км, %ld минут", route.distance, route.duration];
+		NSString *titleFirst = [NSString stringWithFormat:@"%.1f км, %ld минут", route.distance, (long)route.duration];
 		TKSTaxiSection *sectionSuggest = [[TKSTaxiSection alloc] initWithTitle:titleFirst rows:@[rows.firstObject]];
 
 		[sections addObject:sectionSuggest];

@@ -86,8 +86,8 @@
 	if(![self isDayOfDate:date betweenStartDate:self.dayFrom endDate:self.dayTo]) return -1;
 
 	// Вычитаем заложенные в стоимость подачи километры/минуты
-	double effectiveDistance = (double)distance - (double)self.includeKm;
-	double effectiveDuration = (double)duration - (double)self.includeMinutes;
+	double effectiveDistance = MAX(0, (double)distance - (double)self.includeKm);
+	double effectiveDuration = MAX(0, (double)duration - (double)self.includeMinutes);
 
 	// Складываем минималку и рассчитанную стоимость поездки
 	double cost = (double)self.start;

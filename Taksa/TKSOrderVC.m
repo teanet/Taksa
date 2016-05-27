@@ -148,7 +148,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	@weakify(self);
 	self.orderMode = TKSOrderModeLoading;
 
-	[[self.viewModel searchTaxiSignal]
+	[[self.viewModel fetchTaxiList]
 		subscribeNext:^(id x) {
 			@strongify(self);
 			

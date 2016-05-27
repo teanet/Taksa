@@ -13,6 +13,6 @@
 - (void)registerSuggestTableView:(UITableView *)tableView;
 
 /*! \sendNext @[TKSTaxiSection] */
-- (RACSignal *)searchTaxiSignal;
+- (RACSignal *)fetchTaxiList;
 
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01008545F0CD2CC20A0B5D5F /* libPods-Taksa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DAF4B96412FD2D7E8DADBCA /* libPods-Taksa.a */; };
 		300275AC1CD8A19400232840 /* TKSRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 300275AB1CD8A19400232840 /* TKSRegion.m */; };
 		300275AF1CD8A30E00232840 /* TKSDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 300275AE1CD8A30E00232840 /* TKSDataProvider.m */; };
 		300275B21CD8A90700232840 /* TKSLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 300275B11CD8A90700232840 /* TKSLocationManager.m */; };
@@ -49,11 +50,10 @@
 		73BB12661CCBC6AE00E07190 /* TKSOrderVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 73BB12651CCBC6AE00E07190 /* TKSOrderVC.m */; };
 		73BB126A1CCCA1D400E07190 /* TKSInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 73BB12691CCCA1D400E07190 /* TKSInputView.m */; };
 		73BB126D1CCCA62A00E07190 /* TKSInputVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 73BB126C1CCCA62A00E07190 /* TKSInputVM.m */; };
-		92C549D4EF83E154E92279A6 /* libPods-Taksa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 149E21171269EC904FAD1E28 /* libPods-Taksa.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		149E21171269EC904FAD1E28 /* libPods-Taksa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Taksa.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		210DCD3EA9C244D4277BDE16 /* Pods-Taksa.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Taksa.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Taksa/Pods-Taksa.debug.xcconfig"; sourceTree = "<group>"; };
 		300275AA1CD8A19400232840 /* TKSRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSRegion.h; sourceTree = "<group>"; };
 		300275AB1CD8A19400232840 /* TKSRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSRegion.m; sourceTree = "<group>"; };
 		300275AD1CD8A30E00232840 /* TKSDataProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSDataProvider.h; sourceTree = "<group>"; };
@@ -71,7 +71,8 @@
 		305D5C5F1CE894AD005CE5D8 /* NSDateFormatter+TKSTaxiProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+TKSTaxiProvider.m"; sourceTree = "<group>"; };
 		305D5C611CE8ACB5005CE5D8 /* TKSRoute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSRoute.h; sourceTree = "<group>"; };
 		305D5C621CE8ACB5005CE5D8 /* TKSRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSRoute.m; sourceTree = "<group>"; };
-		6BF070F2BB478594E19CD2CC /* Pods-Taksa.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Taksa.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Taksa/Pods-Taksa.debug.xcconfig"; sourceTree = "<group>"; };
+		470208B2B914298C29990303 /* Pods-Taksa.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Taksa.release.xcconfig"; path = "Pods/Target Support Files/Pods-Taksa/Pods-Taksa.release.xcconfig"; sourceTree = "<group>"; };
+		4DAF4B96412FD2D7E8DADBCA /* libPods-Taksa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Taksa.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		730F64331CD8A0E800A34A33 /* TKSNavigationControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSNavigationControllerDelegate.h; sourceTree = "<group>"; };
 		730F64341CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSNavigationControllerDelegate.m; sourceTree = "<group>"; };
 		730F64361CD8A18F00A34A33 /* TKSTransitionRootToOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTransitionRootToOrder.h; sourceTree = "<group>"; };
@@ -137,7 +138,6 @@
 		73BB12691CCCA1D400E07190 /* TKSInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSInputView.m; sourceTree = "<group>"; };
 		73BB126B1CCCA62A00E07190 /* TKSInputVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSInputVM.h; sourceTree = "<group>"; };
 		73BB126C1CCCA62A00E07190 /* TKSInputVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSInputVM.m; sourceTree = "<group>"; };
-		FF509455F84FCF36C9B0103E /* Pods-Taksa.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Taksa.release.xcconfig"; path = "Pods/Target Support Files/Pods-Taksa/Pods-Taksa.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,18 +145,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92C549D4EF83E154E92279A6 /* libPods-Taksa.a in Frameworks */,
+				01008545F0CD2CC20A0B5D5F /* libPods-Taksa.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		193C1912FF29AE7D6819EBC3 /* Pods */ = {
+		0B74E2ABCBC9D769B4D18653 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6BF070F2BB478594E19CD2CC /* Pods-Taksa.debug.xcconfig */,
-				FF509455F84FCF36C9B0103E /* Pods-Taksa.release.xcconfig */,
+				210DCD3EA9C244D4277BDE16 /* Pods-Taksa.debug.xcconfig */,
+				470208B2B914298C29990303 /* Pods-Taksa.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -312,8 +312,8 @@
 			children = (
 				73BB0F791CCBBB6500E07190 /* Taksa */,
 				73BB0F781CCBBB6500E07190 /* Products */,
-				193C1912FF29AE7D6819EBC3 /* Pods */,
-				7F6C5F950062643104210155 /* Frameworks */,
+				0B74E2ABCBC9D769B4D18653 /* Pods */,
+				7EFBFD05DEBB151ED28425D8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -371,10 +371,10 @@
 			name = ViewModels;
 			sourceTree = "<group>";
 		};
-		7F6C5F950062643104210155 /* Frameworks */ = {
+		7EFBFD05DEBB151ED28425D8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				149E21171269EC904FAD1E28 /* libPods-Taksa.a */,
+				4DAF4B96412FD2D7E8DADBCA /* libPods-Taksa.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -386,12 +386,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 73BB0F8E1CCBBB6500E07190 /* Build configuration list for PBXNativeTarget "Taksa" */;
 			buildPhases = (
-				9C8E02009ADD7C5180A6028F /* Check Pods Manifest.lock */,
+				4033ACC03D3922D31C9A67F8 /* 📦 Check Pods Manifest.lock */,
 				73BB0F731CCBBB6500E07190 /* Sources */,
 				73BB0F741CCBBB6500E07190 /* Frameworks */,
 				73BB0F751CCBBB6500E07190 /* Resources */,
-				2F20E81F40E49CF6113E6BFB /* Embed Pods Frameworks */,
-				D32F16C3E904BB9BB7608B11 /* Copy Pods Resources */,
+				68AFD6243B6FE277798C543B /* 📦 Embed Pods Frameworks */,
+				8A2627F0D7AAF8E0FFFBB2F7 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -451,29 +451,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2F20E81F40E49CF6113E6BFB /* Embed Pods Frameworks */ = {
+		4033ACC03D3922D31C9A67F8 /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Taksa/Pods-Taksa-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9C8E02009ADD7C5180A6028F /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -481,14 +466,29 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		D32F16C3E904BB9BB7608B11 /* Copy Pods Resources */ = {
+		68AFD6243B6FE277798C543B /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Taksa/Pods-Taksa-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8A2627F0D7AAF8E0FFFBB2F7 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -641,7 +641,7 @@
 		};
 		73BB0F8F1CCBBB6500E07190 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6BF070F2BB478594E19CD2CC /* Pods-Taksa.debug.xcconfig */;
+			baseConfigurationReference = 210DCD3EA9C244D4277BDE16 /* Pods-Taksa.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -659,7 +659,7 @@
 		};
 		73BB0F901CCBBB6500E07190 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FF509455F84FCF36C9B0103E /* Pods-Taksa.release.xcconfig */;
+			baseConfigurationReference = 470208B2B914298C29990303 /* Pods-Taksa.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
