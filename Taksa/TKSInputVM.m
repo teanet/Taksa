@@ -10,6 +10,7 @@
 	_fromSearchVM = [[TKSSearchVM alloc] init];
 	_fromSearchVM.placeHolder = @"Адрес, или название фирмы";
 	_fromSearchVM.letter = @"A";
+	_fromSearchVM.highlighted = YES;
 
 	_toSearchVM = [[TKSSearchVM alloc] init];
 	_toSearchVM.placeHolder = @"Адрес, или название фирмы";

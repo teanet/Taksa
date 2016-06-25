@@ -87,11 +87,22 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	nameLabel.font = [UIFont boldSystemFontOfSize:20];
 	[nameLabel sizeToFit];
 	self.navigationItem.titleView = nameLabel;
+
+	UIView *statusBarView = [[UIView alloc] init];
+	statusBarView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.1];
+	[self.view addSubview:statusBarView];
+
+	[statusBarView mas_makeConstraints:^(MASConstraintMaker *make) {
+		make.top.equalTo(self.view);
+		make.leading.equalTo(self.view);
+		make.trailing.equalTo(self.view);
+		make.height.equalTo(@20.0);
+	}];
 	
 	_inputView = [[TKSInputView alloc] initWithVM:self.viewModel.inputVM];
 	[self.view addSubview:_inputView];
 	[_inputView mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.top.mas_equalTo(self.view);
+		make.top.mas_equalTo(statusBarView.mas_bottom);
 		make.leading.equalTo(self.view);
 		make.trailing.equalTo(self.view);
 	}];
@@ -114,6 +125,12 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	[self.taxiTableView mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.edges.equalTo(self.suggestTableView);
 	}];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+	[self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
 - (void)setOrderMode:(TKSOrderMode)orderMode

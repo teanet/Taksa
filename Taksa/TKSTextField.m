@@ -45,9 +45,12 @@
 			self.searchVM.text = text;
 		}];
 
-	RAC(self, text) = [RACObserve(self.searchVM, text) distinctUntilChanged];
+	RACSignal *activeSignal = RACObserve(searchVM, active);
+	RACSignal *textSignal = [RACObserve(self.searchVM, text) distinctUntilChanged];
 
-	[RACObserve(searchVM, active) subscribeNext:^(NSNumber *active) {
+	RAC(self, text) = textSignal;
+
+	[activeSignal subscribeNext:^(NSNumber *active) {
 		@strongify(self);
 
 		if (active.boolValue)
@@ -60,7 +63,26 @@
 		}
 	}];
 
+	[[[[activeSignal combineLatestWith:textSignal]
+		skip:1]
+		startWith:RACTuplePack(@(searchVM.highlighted), @"")]
+		subscribeNext:^(RACTuple *tuple) {
+			@strongify(self);
+
+			RACTupleUnpack(NSNumber *activeNumber, NSString *text) = tuple;
+
+			[self swithToHighlighted:activeNumber.boolValue || text.length > 0];
+		}];
+
 	return self;
+}
+
+- (void)swithToHighlighted:(BOOL)highlighted
+{
+	CGFloat alpha = highlighted
+		? 1.0
+		: 0.3;
+	self.alpha = alpha;
 }
 
 @end
