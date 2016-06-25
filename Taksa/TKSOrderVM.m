@@ -1,14 +1,7 @@
 #import "TKSOrderVM.h"
 
-#import "TKSTaxiListVM.h"
 #import "TKSTaxiSection.h"
 #import "TKSDataProvider.h"
-
-@interface TKSOrderVM ()
-
-@property (nonatomic, strong, readonly) TKSTaxiListVM *taxiListVM;
-
-@end
 
 @implementation TKSOrderVM
 
@@ -31,19 +24,11 @@
 	@weakify(self);
 
 	[self.suggestListModel.didSelectSuggestSignal
-		subscribeNext:^(TKSSuggest *suggest) {
+		subscribeNext:^(TKSSuggestObject *suggest) {
 			@strongify(self);
 
 			self.inputVM.currentSearchVM.text = suggest.text;
-			[self clearSearchResultForCurrentSearchVM];
-		}];
-
-	[self.suggestListModel.didSelectResultSignal
-		subscribeNext:^(TKSDatabaseObject *dbObject) {
-			@strongify(self);
-
-			self.inputVM.currentSearchVM.text = dbObject.fullName;
-			[self setSearchResultForCurrentSearchVM:dbObject];
+			[self setSearchResultForCurrentSearchVM:suggest];
 			[self toggleTextField];
 		}];
 }
@@ -60,15 +45,15 @@
 	}
 }
 
-- (void)setSearchResultForCurrentSearchVM:(TKSDatabaseObject *)dbObject
+- (void)setSearchResultForCurrentSearchVM:(TKSSuggestObject *)suggest
 {
 	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
 	{
-		self.inputVM.fromSearchVM.dbObject = dbObject;
+		self.inputVM.fromSearchVM.dbObject = suggest;
 	}
 	else
 	{
-		self.inputVM.toSearchVM.dbObject = dbObject;
+		self.inputVM.toSearchVM.dbObject = suggest;
 	}
 }
 
@@ -127,26 +112,8 @@
 {
 	@weakify(self);
 
-	RACSignal *objectFromSignal = self.inputVM.fromSearchVM.dbObject
-		? [RACSignal return:self.inputVM.fromSearchVM.dbObject]
-		: [[[TKSDataProvider sharedProvider] fetchObjectsForSearchString:self.inputVM.fromSearchVM.text]
-			map:^TKSDatabaseObject *(NSArray<TKSDatabaseObject *> *dbObjects) {
-				return dbObjects.firstObject;
-			}];
-
-	RACSignal *objectToSignal = self.inputVM.toSearchVM.dbObject
-		? [RACSignal return:self.inputVM.toSearchVM.dbObject]
-		: [[[TKSDataProvider sharedProvider] fetchObjectsForSearchString:self.inputVM.toSearchVM.text]
-		   map:^TKSDatabaseObject *(NSArray<TKSDatabaseObject *> *dbObjects) {
-			   return dbObjects.firstObject;
-		   }];
-
-	return [[[objectFromSignal combineLatestWith:objectToSignal]
-		flattenMap:^RACStream *(RACTuple *t) {
-			RACTupleUnpack(TKSDatabaseObject *objectFrom, TKSDatabaseObject *objectTo) = t;
-
-			return [[TKSDataProvider sharedProvider] fetchTaxiListFromObject:objectFrom toObject:objectTo];
-		}]
+	return [[[TKSDataProvider sharedProvider] fetchTaxiListFromObject:self.inputVM.fromSearchVM.dbObject
+															toObject:self.inputVM.toSearchVM.dbObject]
 		doNext:^(NSArray<TKSTaxiSection *> *taxiList) {
 			@strongify(self);
 

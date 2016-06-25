@@ -4,8 +4,7 @@
 
 @interface TKSSearchVM ()
 
-@property (nonatomic, strong, readwrite) NSArray<TKSSuggest *> *suggests;
-@property (nonatomic, strong, readwrite) NSArray<TKSDatabaseObject *> *results;
+@property (nonatomic, strong, readwrite) NSArray<TKSSuggestObject *> *suggests;
 
 @end
 
@@ -40,28 +39,14 @@
 			return [[TKSDataProvider sharedProvider] fetchSuggestsForSearchString:inputText];
 		}];
 
-	RACSignal *resultsListFillSignal = [searchQuerySignal
-		flattenMap:^RACStream *(NSString *inputText) {
-			return [[TKSDataProvider sharedProvider] fetchObjectsForSearchString:inputText];
-		}];
 
 	[[RACSignal merge:@[suggestListClearSignal, suggestListFillSignal]]
-		subscribeNext:^(NSArray<TKSSuggest *> *suggests) {
+		subscribeNext:^(NSArray<TKSSuggestObject *> *suggests) {
 			@strongify(self);
 
 			self.suggests = suggests;
-			[suggests enumerateObjectsUsingBlock:^(TKSSuggest *suggest, NSUInteger _, BOOL *__) {
+			[suggests enumerateObjectsUsingBlock:^(TKSSuggestObject *suggest, NSUInteger _, BOOL *__) {
 				NSLog(@">>> Suggest: %@", suggest.text);
-			}];
-		}];
-
-	[[RACSignal merge:@[suggestListClearSignal, resultsListFillSignal]]
-		subscribeNext:^(NSArray<TKSDatabaseObject *> *results) {
-			@strongify(self);
-
-			self.results = results;
-			[results enumerateObjectsUsingBlock:^(TKSDatabaseObject *dbObject, NSUInteger _, BOOL *__) {
-				NSLog(@">>> Result: %@", dbObject.name);
 			}];
 		}];
 
@@ -71,7 +56,6 @@
 - (void)clearSuggestsAndResults
 {
 	self.suggests = nil;
-	self.results = nil;
 }
 
 @end

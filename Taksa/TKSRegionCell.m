@@ -28,7 +28,7 @@
 - (void)setRegion:(TKSRegion *)region
 {
 	_region = region;
-	self.nameLabel.text = region.name;
+	self.nameLabel.text = region.title;
 }
 
 @end

@@ -1,7 +1,6 @@
 #import "TKSAPIController+TKSModels.h"
 
-#import "TKSSuggest.h"
-#import "TKSDatabaseObject.h"
+#import "TKSSuggestObject.h"
 #import "TKSTaxiSection.h"
 #import "TKSRegion.h"
 #import "TKSTaxi.h"
@@ -9,209 +8,46 @@
 
 @implementation TKSAPIController (TKSModels)
 
-// MARK: WebAPI Server
+// MARK: Taksa Server
 
-- (RACSignal *)fetchSuggestsForSearchString:(NSString *)searchString
-								   regionId:(NSString *)regionId
-{
-	NSCParameterAssert(regionId);
-
-	if ((searchString.length == 0) || (regionId.length == 0)) return [RACSignal return:nil];
-
-	NSDictionary *params = @{
-		@"key": self.webAPIKey,
-		@"type": @"default",//@"street",
-		@"region_id" : regionId,
-		@"lang" : @"ru",
-		@"output" : @"json",
-		@"types" : @"adm_div.settlement,adm_div.city,address,street,branch",
-		@"q": searchString,
-	};
-
-	return [[self GET:@"suggest/list" service:TKSServiceWebAPI params:params]
-		map:^NSArray<TKSSuggest *> *(NSDictionary *responseObject) {
-			NSArray<TKSSuggest *> *returnArray = nil;
-
-			if ([responseObject isKindOfClass:[NSDictionary class]])
-			{
-				NSDictionary *resultDictionary = responseObject[@"result"];
-				NSArray *hintDictionaries = resultDictionary[@"items"];
-				returnArray = [hintDictionaries.rac_sequence
-
-							   map:^TKSSuggest *(NSDictionary *hintDictionary) {
-								   return [[TKSSuggest alloc] initWithDictionary:hintDictionary];
-							   }].array;
-			}
-
-			return returnArray;
-		}];
-}
-
-- (RACSignal *)fetchObjectsForSearchString:(NSString *)searchString
-								  regionId:(NSString *)regionId;
-{
-	NSCParameterAssert(regionId);
-
-	if ((searchString.length == 0) || (regionId.length == 0)) return [RACSignal return:nil];
-
-	NSDictionary *params = @{
-		@"key": self.webAPIKey,
-		@"region_id" : regionId,
-		@"lang" : @"ru",
-		@"output" : @"json",
-		@"q" : searchString,
-		@"type" : @"building",
-		@"fields": @"items.geometry.selection",
-	};
-
-	return [[self GET:@"geo/search" service:TKSServiceWebAPI params:params]
-			map:^NSArray <TKSDatabaseObject *> *(NSDictionary *responseObject) {
-				NSArray <TKSDatabaseObject *> *returnArray = nil;
-
-				if ([responseObject isKindOfClass:[NSDictionary class]])
-				{
-					NSDictionary *resultDictionary = responseObject[@"result"];
-					NSArray<NSDictionary *> *itemDictionaries = resultDictionary[@"items"];
-
-					returnArray = [itemDictionaries.rac_sequence
-								   map:^TKSDatabaseObject *(NSDictionary *objectDictionary) {
-									   return [[TKSDatabaseObject alloc] initWithDictionary:objectDictionary];
-								   }].array;
-				}
-				
-				return returnArray;
-			}];
-}
-
-- (RACSignal *)fetchObjectForObjectId:(NSString *)objectId
-							 regionId:(NSString *)regionId
-{
-	NSCParameterAssert(objectId);
-	NSCParameterAssert(regionId);
-
-	if ((objectId.length == 0) || (regionId.length == 0)) return [RACSignal return:nil];
-
-	NSDictionary *params = @{
-		@"key": self.webAPIKey,
-		@"id": objectId,
-		@"region_id" : regionId,
-		@"lang" : @"ru",
-		@"output" : @"json",
-		@"fields": @"items.geometry.selection",
-	};
-
-	return [[self GET:@"geo/get" service:TKSServiceWebAPI params:params]
-		map:^TKSDatabaseObject *(NSDictionary *responseObject) {
-			TKSDatabaseObject *returnObject = nil;
-			
-			if ([responseObject isKindOfClass:[NSDictionary class]])
-			{
-				NSDictionary *resultDictionary = responseObject[@"result"];
-				NSArray *itemsDictionaries = resultDictionary[@"items"];
-				NSDictionary *objectDictionary = itemsDictionaries.firstObject;
-				if ([objectDictionary isKindOfClass:[NSDictionary class]])
-				{
-					returnObject = [[TKSDatabaseObject alloc] initWithDictionary:objectDictionary];
-				}
-			}
-
-			return returnObject;
-		}];
-}
-
-- (RACSignal *)fetchObjectForLocation:(CLLocation *)location
-							 regionId:(NSString *)regionId
-{
-	NSCParameterAssert(location);
-	NSCParameterAssert(regionId);
-
-	if ((!location) || (regionId.length == 0)) return [RACSignal return:nil];
-
-	NSString *pointString = [NSString stringWithFormat:@"%f,%f",
-		location.coordinate.longitude, location.coordinate.latitude];
-	NSDictionary *params = @{
-		@"key": self.webAPIKey,
-		@"region_id" : regionId,
-		@"lang" : @"ru",
-		@"output" : @"json",
-		@"point" : pointString,
-		@"type" : @"building",
-		@"radius" : @"1",
-		@"fields": @"items.geometry.selection",
-	};
-
-	return [[self GET:@"geo/search" service:TKSServiceWebAPI params:params]
-		map:^TKSDatabaseObject *(NSDictionary *responseObject) {
-			TKSDatabaseObject *returnObject = nil;
-
-			if ([responseObject isKindOfClass:[NSDictionary class]])
-			{
-				NSDictionary *resultDictionary = responseObject[@"result"];
-				NSArray *itemsDictionaries = resultDictionary[@"items"];
-				NSDictionary *objectDictionary = itemsDictionaries.firstObject;
-				if ([objectDictionary isKindOfClass:[NSDictionary class]])
-				{
-					returnObject = [[TKSDatabaseObject alloc] initWithDictionary:objectDictionary];
-				}
-			}
-			
-			return returnObject;
-		}];
-}
-
-// http://catalog.api.2gis.ru/2.0/region/list?key=ruczoy1743
+// http://10.154.18.111:8080/taksa/api/1.0/regions
 - (RACSignal *)fetchRegions
 {
-	NSDictionary *params = @{
-		@"key": self.webAPIKey,
-		@"lang" : @"ru",
-		@"output" : @"json",
-		@"locale" : @"ru_RU",
-		@"locale_filter" : @"ru_RU",
-	};
+	return [[self GET:@"regions" params:nil]
+		map:^NSArray<TKSRegion *> *(NSDictionary *responseObject) {
+			NSArray<TKSRegion *> *returnRegions = nil;
 
-	return [[self GET:@"region/list" service:TKSServiceWebAPI params:params]
-			map:^NSArray<TKSRegion *> *(NSDictionary *responseObject) {
-				NSArray<TKSRegion *> *returnRegions = nil;
+			if ([responseObject isKindOfClass:[NSDictionary class]])
+			{
+				NSArray *itemDictionaries = responseObject[@"results"];
 
-				if ([responseObject isKindOfClass:[NSDictionary class]])
-				{
-					NSDictionary *resultDictionary = responseObject[@"result"];
-					NSArray *itemDictionaries = resultDictionary[@"items"];
+				returnRegions = [itemDictionaries.rac_sequence
+					map:^TKSRegion *(NSDictionary *regionDictionary) {
+						return[[TKSRegion alloc] initWithDictionary:regionDictionary];
+					}].array;
+			}
 
-					returnRegions = [itemDictionaries.rac_sequence
-						map:^TKSRegion *(NSDictionary *regionDictionary) {
-							return[[TKSRegion alloc] initWithDictionary:regionDictionary];
-						}].array;
-				}
-				
-				return returnRegions;
-			}];
+			return returnRegions;
+		}];
 }
 
-//http://catalog.api.2gis.ru/2.0/region/search?q=82.921663,55.030195&key=ruczoy1743
+// /taksa/api/1.0/regions/by-location?lon=14.88&lat=228
 - (RACSignal *)fetchCurrentRegionWithLocation:(CLLocation *)location
 {
 	if (!location) return [RACSignal return:nil];
 
-	NSString *locationString = [NSString stringWithFormat:@"%f,%f",
-		location.coordinate.longitude, location.coordinate.latitude];
-
 	NSDictionary *params = @{
-		@"key": self.webAPIKey,
-		@"lang" : @"ru",
-		@"output" : @"json",
-		@"q" : locationString
+		@"lon" : [NSString stringWithFormat:@"%f", location.coordinate.longitude],
+		@"lat" : [NSString stringWithFormat:@"%f", location.coordinate.latitude],
 	};
 
-	return [[self GET:@"region/search" service:TKSServiceWebAPI params:params]
+	return [[self GET:@"regions/by-location" params:params]
 		map:^TKSRegion *(NSDictionary *responseObject) {
 			TKSRegion *returnRegion = nil;
 
 			if ([responseObject isKindOfClass:[NSDictionary class]])
 			{
-				NSDictionary *resultDictionary = responseObject[@"result"];
-				NSArray *itemsDictionaries = resultDictionary[@"items"];
+				NSArray *itemsDictionaries = responseObject[@"results"];
 				NSDictionary *regionDictionary = itemsDictionaries.firstObject;
 				if ([regionDictionary isKindOfClass:[NSDictionary class]])
 				{
@@ -223,51 +59,86 @@
 		}];
 }
 
-// MARK: Taksa Server
-
-// catalog.api.2gis.ru/2.0/transport/calculate_directions?waypoints=82.645277+54.694943%2C82.84240722656251+54.992585288467666%2C82.994843+54.989434&routing_type=optimal_statistic%2Cshortest&region_id=1&key=ruczoy1743
-- (RACSignal *)fetchRouteFromObject:(TKSDatabaseObject *)objectFrom
-						   toObject:(TKSDatabaseObject *)objectTo
-						   regionId:(NSString *)regionId
+// 10.154.18.111:8080/taksa/api/1.0/address/suggest?region_id=1&q=красный
+- (RACSignal *)fetchSuggestsForSearchString:(NSString *)searchString
+								   regionId:(NSString *)regionId
 {
-	if (!objectFrom || !objectTo || (regionId.length == 0)) return [RACSignal return:nil];
+	NSCParameterAssert(regionId);
 
-	NSString *locationFromString = [NSString stringWithFormat:@"%f+%f",
-		objectFrom.location.coordinate.longitude, objectFrom.location.coordinate.latitude];
-	NSString *locationToString = [NSString stringWithFormat:@"%f+%f",
-		objectTo.location.coordinate.longitude, objectTo.location.coordinate.latitude];
+	if ((searchString.length == 0) || (regionId.length == 0)) return [RACSignal return:nil];
 
-	NSString *waypoints = [NSString stringWithFormat:@"%@,%@", locationFromString, locationToString];
+	NSDictionary *params = @{
+		@"region_id" : regionId,
+		@"q": searchString,
+	};
 
-	// Костыль, чтобы обойти косяк в API, когда она не понимает экодированный +
-	NSString *queryString = [NSString stringWithFormat:@"transport/calculate_directions?key=%@&lang=ru&output=json&region_id=%@&routing_type=optimal_statistic,shortest&waypoints=%@", self.webAPIKey, regionId, waypoints];
-
-	return [[self GET:queryString service:TKSServiceWebAPI params:nil]
-			map:^TKSRoute *(NSDictionary *responseObject) {
-				TKSRoute *returnRoute = nil;
-
-				if ([responseObject isKindOfClass:[NSDictionary class]])
-				{
-					NSDictionary *resultDictionary = responseObject[@"result"];
-					NSArray *itemDictionaries = resultDictionary[@"items"];
-					NSDictionary *routeDictionary = itemDictionaries.firstObject;
-					if ([routeDictionary isKindOfClass:[NSDictionary class]])
-					{
-						returnRoute = [[TKSRoute alloc] initWithDictionary:routeDictionary];
-					}
-				}
-				
-				return returnRoute;
-			}];
+	return [[self GET:@"address/suggest" params:params]
+		flattenMap:^RACStream *(NSDictionary *responseObject) {
+			return [TKSAPIController fetchSuggestObjectsFromResponseDictionary:responseObject];
+		}];
 }
 
-- (RACSignal *)fetchTaxiDictionariesArray
+// \sendNext @[TKSSuggestObject]
++ (RACSignal *)fetchSuggestObjectsFromResponseDictionary:(NSDictionary *)responseDictionary
 {
-	return [[[self GET:self.taxiProvidersFileName service:TKSServiceDropbox params:nil]
-		filter:^BOOL(id responseObject) {
-			return [responseObject isKindOfClass:[NSArray class]];
-		}]
-		ignore:nil];
+	return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+		NSArray<TKSSuggestObject *> *returnArray = nil;
+
+		if ([responseDictionary isKindOfClass:[NSDictionary class]])
+		{
+			NSArray *hintDictionaries = responseDictionary[@"results"];
+			returnArray = [hintDictionaries.rac_sequence
+						   map:^TKSSuggestObject *(NSDictionary *hintDictionary) {
+							   return [[TKSSuggestObject alloc] initWithDictionary:hintDictionary];
+						   }].array;
+		}
+
+		[subscriber sendNext:returnArray];
+		[subscriber sendCompleted];
+
+		return nil;
+	}];
+}
+
+// /taksa/api/1.0/address/suggest/by-location?lon=14.88&lat=228
+- (RACSignal *)fetchSuggestForLocation:(CLLocation *)location
+							  regionId:(NSString *)regionId
+{
+	NSCParameterAssert(location);
+	NSCParameterAssert(regionId);
+
+	if ((!location) || (regionId.length == 0)) return [RACSignal return:nil];
+
+	NSDictionary *params = @{
+		@"region_id" : regionId,
+		@"lon" : [NSString stringWithFormat:@"%f", location.coordinate.longitude],
+		@"lat" : [NSString stringWithFormat:@"%f", location.coordinate.latitude],
+	};
+
+	return [[self GET:@"suggest/by-location" params:params]
+		flattenMap:^RACStream *(NSDictionary *responseObject) {
+			return [TKSAPIController fetchSuggestObjectsFromResponseDictionary:responseObject];
+		}];
+}
+
+// api.steelhoss.xyz/taksa/api/1.0/route/calculate?points[]=1,2
+- (RACSignal *)fetchTaxiResultsFromObject:(TKSSuggestObject *)suggestFrom
+								 toObject:(TKSSuggestObject *)suggestTo
+								 regionId:(NSString *)regionId
+{
+	NSCParameterAssert(suggestFrom);
+	NSCParameterAssert(suggestFrom);
+
+	NSString *q = [NSString stringWithFormat:@"%@,%@", suggestFrom.id, suggestTo.id];
+	NSDictionary *params = @{
+		@"region_id" : regionId,
+		@"points[]" : q,
+	};
+
+	return [[self GET:@"route/calculate" params:params]
+		map:^NSArray<TKSTaxiSection *> *(NSDictionary *responseObject) {
+			return [NSArray tks_sectionsWithDictionary:responseObject];
+		}];
 }
 
 @end

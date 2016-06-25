@@ -15,31 +15,23 @@ typedef NS_ENUM(NSInteger, TKSHintStyle) {
 
 /*!
  {
-	"highlighted_text" =
-	(
- {
- style = highlighted;
- text = "те";
- },
- {
- style = normal;
- text = "кст";
+	 "highlights": [{
+		 "style": "normal",
+		 "text": "Пролетарская"
+	 }],
+	 "text": "Пролетарская",
+	 "id": "141476222740914",
+	 "type_text": "Улица",
+	 "type": "street"
  }
-	);
-	"hint_type" = street;
-	id = 141476222739705;
-	label = street;
-	text = "текст";
- };
-
  */
 @interface TKSSuggest : NSObject <TKSSerializableProtocol>
 
+@property (nonatomic, copy, readonly) NSString *id;
 @property (nonatomic, copy, readonly) NSString *text;
 @property (nonatomic, copy, readonly) NSAttributedString *attributedText;
 @property (nonatomic, copy, readonly) NSArray<TKSHintItem *> *hintItems;
 @property (nonatomic, copy, readonly) NSString *hintTypeDescription;
 @property (nonatomic, copy, readonly) NSString *hintLabel;
-@property (nonatomic, copy, readonly) NSString *id;
 
 @end

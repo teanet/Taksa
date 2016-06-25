@@ -1,5 +1,4 @@
-#import "TKSSuggest.h"
-#import "TKSDatabaseObject.h"
+#import "TKSSuggestObject.h"
 
 @interface TKSSuggestListModel : NSObject
 <
@@ -8,10 +7,7 @@ UITableViewDataSource
 >
 
 @property (nonatomic, strong, readonly) RACSignal *didSelectSuggestSignal;
-@property (nonatomic, strong, readonly) RACSignal *didSelectResultSignal;
-
-@property (nonatomic, strong) NSArray<TKSSuggest *> *suggests;
-@property (nonatomic, strong) NSArray<TKSDatabaseObject *> *results;
+@property (nonatomic, strong) NSArray<TKSSuggestObject *> *suggests;
 
 - (void)registerTableView:(UITableView *)tableView;
 

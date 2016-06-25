@@ -34,29 +34,35 @@
 
 @synthesize attributedText = _attributedText;
 
+/*!
+ {
+	 "highlights": [{
+		 "style": "normal",
+		 "text": "Пролетарская"
+	 }],
+	 "text": "Пролетарская",
+	 "id": "141476222740914",
+	 "type_text": "Улица",
+	 "type": "street"
+ }
+ */
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
 	self = [super init];
 	if (self == nil) return nil;
 
 	_id = dictionary[@"id"];
-	NSDictionary *suggestDictionary = dictionary[@"hint"];
+	_text = dictionary[@"text"];
 
-	NSArray<NSDictionary *> *hintItemDictionaries = suggestDictionary[@"highlighted_text"];
-	NSMutableArray *mutableHintItems = [NSMutableArray arrayWithCapacity:hintItemDictionaries.count];
+	NSArray<NSDictionary *> *hintItemDictionaries = dictionary[@"highlights"];
+	_hintItems = [hintItemDictionaries.rac_sequence
+		map:^TKSHintItem *(NSDictionary *hintItemDictionary) {
+			return [[TKSHintItem alloc] initWithDictionary:hintItemDictionary];
+		}].array;
 
-	[hintItemDictionaries enumerateObjectsUsingBlock:^(NSDictionary *hintDictionary, NSUInteger _, BOOL *__) {
-		TKSHintItem *item = [[TKSHintItem alloc] initWithDictionary:hintDictionary];
-		if (item)
-		{
-			[mutableHintItems addObject:item];
-		}
-	}];
-
-	_hintItems = [mutableHintItems copy];
-	_hintTypeDescription = suggestDictionary[@"hint_type"];
-	_hintLabel = suggestDictionary[@"label"];
-	_text = suggestDictionary[@"text"];
+	_hintTypeDescription = dictionary[@"type_text"];
+	_hintLabel = dictionary[@"type"];
 
 	return self;
 }

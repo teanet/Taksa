@@ -1,5 +1,5 @@
-#import "TKSSuggest.h"
-#import "TKSDatabaseObject.h"
+#import "TKSSuggestObject.h"
+#import "TKSSuggestObject.h"
 #import "TKSTaxiSection.h"
 #import "TKSRegion.h"
 
@@ -11,23 +11,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedProvider;
 
-/*! \return @[TKSSuggest] */
+/*! \return @[TKSSuggestObject] Переделано! */
 - (RACSignal *)fetchSuggestsForSearchString:(NSString *)searchString;
-/*! \sendNext @[TKSDatabaseObject] */
-- (RACSignal *)fetchObjectsForSearchString:(NSString *)searchString;
-/*! \sendNext TKSDatabaseObject */
-- (RACSignal *)fetchObjectForObjectId:(NSString *)objectId;
-/*! \sendNext TKSDatabaseObject */
-- (RACSignal *)fetchObjectForLocation:(CLLocation *)location;
+
+/*! \sendNext TKSSuggestObject Переделано! */
+- (RACSignal *)fetchSuggestForLocation:(CLLocation *)location;
 
 /*! \sendNext @[TKSTaxiSection] */
-- (RACSignal *)fetchTaxiListFromObject:(TKSDatabaseObject *)objectFrom
-							  toObject:(TKSDatabaseObject *)objectTo;
+- (RACSignal *)fetchTaxiListFromObject:(TKSSuggestObject *)objectFrom
+							  toObject:(TKSSuggestObject *)objectTo;
 
-/*! \sendNext @[TKSRegion] */
+/*! \sendNext @[TKSRegion] Переделано! */
 - (RACSignal *)fetchRegions;
 
-/*! Side Effect = запоминает текущий регион, и все последующие запросы будут с ним
+/*! Side Effect = запоминает текущий регион, и все последующие запросы будут с ним Переделано!
  *	\sendNext TKSRegion
  */
 - (RACSignal *)fetchCurrentRegion;

@@ -2,28 +2,23 @@
 
 #import <AFNetworking/AFNetworking.h>
 
-static NSString *const kTKS2GISWebAPIBaseURLString = @"http://catalog.api.2gis.ru/2.0/";
+static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa/api/1.0/";
 static NSString *const kTKSDropboxBaseURLString = @"https://dl.dropboxusercontent.com/u/39349894/Taksa/";
 
 @interface TKSAPIController ()
 
-@property (nonatomic, strong) AFHTTPRequestOperationManager *requestManagerWebApi;
-@property (nonatomic, strong) AFHTTPRequestOperationManager *requestManagerDropbox;
+@property (nonatomic, strong) AFHTTPRequestOperationManager *requestManager;
 
 @end
 
 @implementation TKSAPIController
 
-- (instancetype)initWithWebAPIKey:(NSString *)webAPIKey taxiProvidersFileName:(NSString *)taxiProvidersFileName
+- (instancetype)init
 {
 	self = [super init];
 	if (self == nil) return nil;
-
-	_webAPIKey = [webAPIKey copy];
-	_taxiProvidersFileName = [taxiProvidersFileName copy];
 	
-	_requestManagerWebApi = [TKSAPIController requestManagerWithURLString:kTKS2GISWebAPIBaseURLString];
-	_requestManagerDropbox = [TKSAPIController requestManagerWithURLString:kTKSDropboxBaseURLString];
+	_requestManager = [TKSAPIController requestManagerWithURLString:kTKSTaksaBaseURLString];
 
 	return self;
 }
@@ -34,7 +29,7 @@ static NSString *const kTKSDropboxBaseURLString = @"https://dl.dropboxuserconten
 		[[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:urlString]];
 
 	manager.requestSerializer = [AFJSONRequestSerializer serializer];
-	manager.requestSerializer.timeoutInterval = 10.0;
+	manager.requestSerializer.timeoutInterval = 30.0;
 	manager.responseSerializer = [AFJSONResponseSerializer serializer];
 
 	NSSet *typesSet = [NSSet setWithArray:@[@"text/plain", @"application/json"]];
@@ -44,7 +39,7 @@ static NSString *const kTKSDropboxBaseURLString = @"https://dl.dropboxuserconten
 }
 
 // MARK: TKSAPIController+Private
-- (RACSignal *)GET:(NSString *)method service:(TKSService)service params:(NSDictionary *)params
+- (RACSignal *)GET:(NSString *)method params:(NSDictionary *)params
 {
 	@weakify(self);
 	return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -62,24 +57,12 @@ static NSString *const kTKSDropboxBaseURLString = @"https://dl.dropboxuserconten
 			[subscriber sendError:error];
 		};
 
-		AFHTTPRequestOperationManager *requestManager = [self requestManagerForService:service];
-		AFHTTPRequestOperation *operation = [requestManager GET:method parameters:params success:successBlock failure:failBlock];
+		AFHTTPRequestOperation *operation = [self.requestManager GET:method parameters:params success:successBlock failure:failBlock];
 
 		return [RACDisposable disposableWithBlock:^{
 			[operation cancel];
 		}];
 	}];
-}
-
-- (AFHTTPRequestOperationManager *)requestManagerForService:(TKSService)service
-{
-	switch (service)
-	{
-		case TKSServiceWebAPI	: return self.requestManagerWebApi;
-		case TKSServiceDropbox	: return self.requestManagerDropbox;
-	}
-
-	return nil;
 }
 
 @end

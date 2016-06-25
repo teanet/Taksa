@@ -1,6 +1,6 @@
-#import "TKSRegion.h"
+#import "TKSSuggestObject.h"
 
-@implementation TKSRegion
+@implementation TKSSuggestObject
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
@@ -8,8 +8,9 @@
 	if (self == nil) return nil;
 
 	_id = dictionary[@"id"];
-	_title = dictionary[@"title"];
-	_code = dictionary[@"code"];
+	_type = dictionary[@"type"];
+	_typeText = dictionary[@"type_text"];
+	_text = dictionary[@"text"];
 
 	return self;
 }

@@ -2,17 +2,14 @@
 
 #import "TKSAPIController+TKSModels.h"
 #import "TKSLocationManager.h"
-#import "TKSTaxiManager.h"
 #import "TKSRoute.h"
 
-static NSString *const kTKS2GISWebAPIKey = @"ruczoy1743";
 static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 
 @interface TKSDataProvider ()
 
 @property (nonatomic, strong, readonly) TKSAPIController *apiController;
 @property (nonatomic, strong, readonly) TKSLocationManager *locationManager;
-@property (nonatomic, strong, readonly) TKSTaxiManager *taxiManager;
 
 @end
 
@@ -34,51 +31,10 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 	self = [super init];
 	if (self == nil) return nil;
 
-	_apiController = [[TKSAPIController alloc] initWithWebAPIKey:kTKS2GISWebAPIKey taxiProvidersFileName:kTaxiProvidersName];
+	_apiController = [[TKSAPIController alloc] init];
 	_locationManager = [[TKSLocationManager alloc] init];
-	_taxiManager = [[TKSTaxiManager alloc] init];
-
-	[self loadTaxiesFromLocalStorage];
-	[self updateTaxiesFromRemoteServer];
 
 	return self;
-}
-
-- (void)updateTaxiesFromRemoteServer
-{
-	[[self.apiController fetchTaxiDictionariesArray]
-		subscribeNext:^(NSArray *taxiDictionariesArray) {
-			NSData *fileData = [NSKeyedArchiver archivedDataWithRootObject:taxiDictionariesArray];
-			NSString *path = [[NSBundle mainBundle] pathForResource:kTaxiProvidersName ofType:nil];
-
-			if (path.length > 0)
-			{
-				NSURL *pathURL = [NSURL URLWithString:path];
-				[fileData writeToURL:pathURL atomically:YES];
-			}
-
-			[self loadTaxiesWithTaxiDictionariesArray:taxiDictionariesArray];
-		}];
-}
-
-- (void)loadTaxiesFromLocalStorage
-{
-	NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:kTaxiProvidersName ofType:nil]];
-	if (data.length > 0)
-	{
-		NSArray *taxiDictionariesArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-		[self loadTaxiesWithTaxiDictionariesArray:taxiDictionariesArray];
-	}
-}
-
-- (void)loadTaxiesWithTaxiDictionariesArray:(NSArray<NSDictionary *> *)taxiDictionariesArray
-{
-	NSArray<TKSTaxi *> *taxies = [taxiDictionariesArray.rac_sequence
-		map:^TKSTaxi *(NSDictionary *taxiDictionary) {
-			return [[TKSTaxi alloc] initWithDictionary:taxiDictionary];
-		}].array;
-
-	self.taxiManager.taxies = taxies;
 }
 
 // MARK: TKSAPIController+TKSModels
@@ -90,33 +46,20 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 
 - (RACSignal *)fetchObjectsForSearchString:(NSString *)searchString
 {
-	return [self.apiController fetchObjectsForSearchString:searchString
+	return [self.apiController fetchSuggestsForSearchString:searchString
 												  regionId:self.currentRegion.id];
 }
 
-- (RACSignal *)fetchObjectForObjectId:(NSString *)objectId
+- (RACSignal *)fetchSuggestForLocation:(CLLocation *)location
 {
-	return [self.apiController fetchObjectForObjectId:objectId
-											 regionId:self.currentRegion.id];
+	return [self.apiController fetchSuggestForLocation:location
+											  regionId:self.currentRegion.id];
 }
 
-- (RACSignal *)fetchObjectForLocation:(CLLocation *)location
+- (RACSignal *)fetchTaxiListFromObject:(TKSSuggestObject *)objectFrom
+							  toObject:(TKSSuggestObject *)objectTo
 {
-	return [self.apiController fetchObjectForLocation:location
-											 regionId:self.currentRegion.id];
-}
-
-- (RACSignal *)fetchTaxiListFromObject:(TKSDatabaseObject *)objectFrom
-							  toObject:(TKSDatabaseObject *)objectTo
-{
-	@weakify(self);
-
-	return [[self.apiController fetchRouteFromObject:objectFrom toObject:objectTo regionId:self.currentRegion.id]
-		map:^NSArray<TKSTaxiSection *> *(TKSRoute *route) {
-			@strongify(self);
-			
-			return [self.taxiManager sectionResultsForRoute:route];
-		}];
+	return [self.apiController fetchTaxiResultsFromObject:objectFrom toObject:objectTo regionId:self.currentRegion.id];
 }
 
 - (RACSignal *)fetchRegions
@@ -141,7 +84,5 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 			self.currentRegion = region;
 		}];
 }
-
-// MARK: LocalTaxi Data Management
 
 @end

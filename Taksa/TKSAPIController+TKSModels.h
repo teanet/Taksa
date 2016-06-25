@@ -1,45 +1,30 @@
 #import "TKSAPIController.h"
 
-@class TKSDatabaseObject;
+@class TKSSuggestObject;
 
 @interface TKSAPIController (TKSModels)
-
-/*!
- *	2GIS WebAPI
- */
-
-/*! \return @[TKSSuggest] */
-- (RACSignal *)fetchSuggestsForSearchString:(NSString *)searchString
-								   regionId:(NSString *)regionId;
-
-/*! \sendNext @[TKSDatabaseObject] */
-- (RACSignal *)fetchObjectsForSearchString:(NSString *)searchString
-								  regionId:(NSString *)regionId;
-
-/*! \sendNext TKSDatabaseObject */
-- (RACSignal *)fetchObjectForObjectId:(NSString *)objectId
-							 regionId:(NSString *)regionId;
-
-/*! \sendNext TKSDatabaseObject */
-- (RACSignal *)fetchObjectForLocation:(CLLocation *)location
-							 regionId:(NSString *)regionId;
-
-/*! \sendNext @[TKSRegion] */
-- (RACSignal *)fetchRegions;
-
-/*! \sendNext TKSRegion */
-- (RACSignal *)fetchCurrentRegionWithLocation:(CLLocation *)location;
 
 /*!
  *	Taksa™ Server®
  */
 
-/*! \sendNext TKSRoute */
-- (RACSignal *)fetchRouteFromObject:(TKSDatabaseObject *)objectFrom
-						   toObject:(TKSDatabaseObject *)objectTo
-						   regionId:(NSString *)regionId;
+/*! \sendNext @[TKSRegion] Переделано! */
+- (RACSignal *)fetchRegions;
 
-/*! \sendNext @[NSDictionary] */
-- (RACSignal *)fetchTaxiDictionariesArray;
+/*! \sendNext TKSRegion Переделано! */
+- (RACSignal *)fetchCurrentRegionWithLocation:(CLLocation *)location;
+
+/*! \return @[TKSSuggestObject] Переделано! */
+- (RACSignal *)fetchSuggestsForSearchString:(NSString *)searchString
+								   regionId:(NSString *)regionId;
+
+/*! \sendNext TKSSuggestObject */
+- (RACSignal *)fetchSuggestForLocation:(CLLocation *)location
+							  regionId:(NSString *)regionId;
+
+/*! \sendNext @[TKSTaxiSection] */
+- (RACSignal *)fetchTaxiResultsFromObject:(TKSSuggestObject *)suggestFrom
+								 toObject:(TKSSuggestObject *)suggestTo
+								 regionId:(NSString *)regionId;
 
 @end
