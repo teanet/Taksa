@@ -15,13 +15,21 @@
 {
 	self = [super init];
 	if (self == nil) return nil;
+	
 	@weakify(self);
 
 	_inputVM = [[TKSInputVM alloc] init];
 	[_inputVM.didBecomeEditingSignal subscribeNext:^(id _) {
 		@strongify(self);
 
-		[self searchAddress];
+		if ([TKSDataProvider sharedProvider].currentRegion)
+		{
+			[self searchAddress];
+		}
+		else
+		{
+			[self selectCity];
+		}
 	}];
 
 	_searchAddressSignal = [[self rac_signalForSelector:@checkselector0(self, searchAddress)]

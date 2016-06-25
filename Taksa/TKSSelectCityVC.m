@@ -8,6 +8,16 @@
 
 @implementation TKSSelectCityVC
 
+- (instancetype)initWithVM:(id)orderVM
+{
+	self = [super initWithVM:orderVM];
+	if (self == nil) return nil;
+
+	self.title = @"Выберите город";
+
+	return self;
+}
+
 - (void)loadView
 {
 	_tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
