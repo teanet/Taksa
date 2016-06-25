@@ -18,6 +18,12 @@
 	[tableView registerClass:[UITableViewHeaderFooterView class] forHeaderFooterViewReuseIdentifier:@"header"];
 	tableView.delegate = self;
 	tableView.dataSource = self;
+
+	[[RACObserve(self, data)
+		ignore:nil]
+		subscribeNext:^(id _) {
+			[tableView reloadData];
+		}];
 }
 
 #pragma mark TableView

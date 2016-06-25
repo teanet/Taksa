@@ -17,6 +17,7 @@
 	if (self == nil) return nil;
 
 	@weakify(self);
+	
 	_letter = @" ";
 	_placeHolder = @"";
 	_text = @"";
@@ -65,6 +66,12 @@
 		}];
 
 	return self;
+}
+
+- (void)clearSuggestsAndResults
+{
+	self.suggests = nil;
+	self.results = nil;
 }
 
 @end

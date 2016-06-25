@@ -74,6 +74,12 @@
 
 - (void)toggleTextField
 {
+	[self switchToNextTextFiledIfNeeded];
+	[self startSearchIfNeeded];
+}
+
+- (void)switchToNextTextFiledIfNeeded
+{
 	// Если `А` inputVM активен, переключаем на `Б` inputVM
 	// Если `Б` inputVM активен, смотрим, если `А` - пустой, то переключаем на него, если полный, то готовы искать такси
 	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
@@ -83,16 +89,27 @@
 	}
 	else
 	{
-		if (self.inputVM.fromSearchVM.text.length > 0)
-		{
-			// Ищем
-//			[[[self searchTaxiSignal] publish] connect];
-		}
-		else
+		if (!self.inputVM.fromSearchVM.dbObject)
 		{
 			self.inputVM.fromSearchVM.active = YES;
 			self.inputVM.toSearchVM.active = NO;
 		}
+	}
+}
+
+- (void)startSearchIfNeeded
+{
+	@weakify(self);
+
+	if (self.inputVM.fromSearchVM.dbObject && self.inputVM.toSearchVM.dbObject)
+	{
+		[[self fetchTaxiList]
+			subscribeNext:^(id _) {
+				@strongify(self);
+				
+				[self.inputVM.fromSearchVM clearSuggestsAndResults];
+				[self.inputVM.toSearchVM clearSuggestsAndResults];
+			}];
 	}
 }
 
