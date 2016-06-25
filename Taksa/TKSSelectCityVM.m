@@ -59,10 +59,9 @@
 	TKSRegionCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
 	TKSRegion *region = self.regions[indexPath.row];
 	cell.region = region;
-	cell.accessoryType =
-		[region.id isEqualToString:[TKSDataProvider sharedProvider].currentRegion.id] ?
-		UITableViewCellAccessoryCheckmark :
-		UITableViewCellAccessoryNone;
+	cell.accessoryType = [region.id isEqualToString:[TKSDataProvider sharedProvider].currentRegion.id]
+		? UITableViewCellAccessoryCheckmark
+		: UITableViewCellAccessoryNone;
 	return cell;
 }
 
