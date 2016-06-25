@@ -1,6 +1,6 @@
 #import "TKSSuggest.h"
 #import "TKSDatabaseObject.h"
-#import "TKSTaxiGroupModel.h"
+#import "TKSTaxiSection.h"
 #import "TKSRegion.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -11,17 +11,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedProvider;
 
-/*! \return NSArray<TKSSuggest *> */
-- (RACSignal *)fetchSuggestsForString:(NSString *)searchString;
-
+/*! \return @[TKSSuggest] */
+- (RACSignal *)fetchSuggestsForSearchString:(NSString *)searchString;
+/*! \sendNext @[TKSDatabaseObject] */
+- (RACSignal *)fetchObjectsForSearchString:(NSString *)searchString;
 /*! \sendNext TKSDatabaseObject */
 - (RACSignal *)fetchObjectForObjectId:(NSString *)objectId;
 /*! \sendNext TKSDatabaseObject */
 - (RACSignal *)fetchObjectForLocation:(CLLocation *)location;
-/*! \sendNext TKSDatabaseObject */
-- (RACSignal *)fetchObjectForSearchString:(NSString *)searchString;
 
-/*! \sendNext @[TKSTaxiGroupModel] */
+/*! \sendNext @[TKSTaxiSection] */
 - (RACSignal *)fetchTaxiListFromObject:(TKSDatabaseObject *)objectFrom
 							  toObject:(TKSDatabaseObject *)objectTo;
 

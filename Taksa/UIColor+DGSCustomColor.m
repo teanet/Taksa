@@ -167,8 +167,7 @@ static NSUInteger hexForHexString(NSString *hexString)
 	BOOL unexpectedHexStringLength = (hexString.length < 6) || (hexString.length > 8);
     if (unexpectedHexStringLength)
 	{
-        NSCAssert(NO, @"Invalid hex format");
-        return 0;
+        return 0xffffff;
     }
 
     NSScanner *scanner = [NSScanner scannerWithString:hexString];
@@ -180,8 +179,7 @@ static NSUInteger hexForHexString(NSString *hexString)
 
     unsigned hex = 0;
     if (![scanner scanHexInt:&hex]) {
-        NSCAssert(NO, @"Invalid hex format");
-        return 0;
+        return 0xffffff;
     }
 
     return hex;

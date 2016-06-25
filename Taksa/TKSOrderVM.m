@@ -2,6 +2,7 @@
 
 #import "TKSTaxiListVM.h"
 #import "TKSTaxiSection.h"
+#import "TKSDataProvider.h"
 
 @interface TKSOrderVM ()
 
@@ -20,7 +21,79 @@
 	_suggestListModel = [[TKSSuggestListModel alloc] init];
 	_inputVM = inputVM ?: [[TKSInputVM alloc] init];
 
+	[self setupReactiveStuff];
+
 	return self;
+}
+
+- (void)setupReactiveStuff
+{
+	@weakify(self);
+
+	[self.suggestListModel.didSelectSuggestSignal
+		subscribeNext:^(TKSSuggest *suggest) {
+			@strongify(self);
+
+			self.inputVM.currentSearchVM.text = suggest.text;
+			[self clearSearchResultForCurrentSearchVM];
+		}];
+
+	[self.suggestListModel.didSelectResultSignal
+		subscribeNext:^(TKSDatabaseObject *dbObject) {
+			@strongify(self);
+
+			self.inputVM.currentSearchVM.text = dbObject.fullName;
+			[self setSearchResultForCurrentSearchVM:dbObject];
+			[self toggleTextField];
+		}];
+}
+
+- (void)clearSearchResultForCurrentSearchVM
+{
+	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
+	{
+		self.inputVM.fromSearchVM.dbObject = nil;
+	}
+	else
+	{
+		self.inputVM.toSearchVM.dbObject = nil;
+	}
+}
+
+- (void)setSearchResultForCurrentSearchVM:(TKSDatabaseObject *)dbObject
+{
+	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
+	{
+		self.inputVM.fromSearchVM.dbObject = dbObject;
+	}
+	else
+	{
+		self.inputVM.toSearchVM.dbObject = dbObject;
+	}
+}
+
+- (void)toggleTextField
+{
+	// Если `А` inputVM активен, переключаем на `Б` inputVM
+	// Если `Б` inputVM активен, смотрим, если `А` - пустой, то переключаем на него, если полный, то готовы искать такси
+	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
+	{
+		self.inputVM.fromSearchVM.active = NO;
+		self.inputVM.toSearchVM.active = YES;
+	}
+	else
+	{
+		if (self.inputVM.fromSearchVM.text.length > 0)
+		{
+			// Ищем
+//			[[[self searchTaxiSignal] publish] connect];
+		}
+		else
+		{
+			self.inputVM.fromSearchVM.active = YES;
+			self.inputVM.toSearchVM.active = NO;
+		}
+	}
 }
 
 - (void)registerTaxiTableView:(UITableView *)tableView
@@ -33,20 +106,34 @@
 	[self.suggestListModel registerTableView:tableView];
 }
 
-- (void)loadDataWithCompletion:(dispatch_block_t)block
+- (RACSignal *)fetchTaxiList
 {
 	@weakify(self);
-	[[[RACSignal return:nil]
-		delay:1.0]
-		subscribeNext:^(id _) {
+
+	RACSignal *objectFromSignal = self.inputVM.fromSearchVM.dbObject
+		? [RACSignal return:self.inputVM.fromSearchVM.dbObject]
+		: [[[TKSDataProvider sharedProvider] fetchObjectsForSearchString:self.inputVM.fromSearchVM.text]
+			map:^TKSDatabaseObject *(NSArray<TKSDatabaseObject *> *dbObjects) {
+				return dbObjects.firstObject;
+			}];
+
+	RACSignal *objectToSignal = self.inputVM.toSearchVM.dbObject
+		? [RACSignal return:self.inputVM.toSearchVM.dbObject]
+		: [[[TKSDataProvider sharedProvider] fetchObjectsForSearchString:self.inputVM.toSearchVM.text]
+		   map:^TKSDatabaseObject *(NSArray<TKSDatabaseObject *> *dbObjects) {
+			   return dbObjects.firstObject;
+		   }];
+
+	return [[[objectFromSignal combineLatestWith:objectToSignal]
+		flattenMap:^RACStream *(RACTuple *t) {
+			RACTupleUnpack(TKSDatabaseObject *objectFrom, TKSDatabaseObject *objectTo) = t;
+
+			return [[TKSDataProvider sharedProvider] fetchTaxiListFromObject:objectFrom toObject:objectTo];
+		}]
+		doNext:^(NSArray<TKSTaxiSection *> *taxiList) {
 			@strongify(self);
 
-			self.taxiListVM.data = @[
-				[TKSTaxiSection testGroupeSuggest],
-				[TKSTaxiSection testGroupeList],
-			];
-
-			block();
+			self.taxiListVM.data = taxiList;
 		}];
 }
 

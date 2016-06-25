@@ -1,5 +1,7 @@
 #import "TKSSerializableProtocol.h"
 
+#import "TKSTaxi.h"
+
 typedef NS_ENUM(NSInteger, TKSTaxiModelType) {
 	TKSTaxiModelTypeDefault = 0,
 	TKSTaxiModelTypeSuggest = 1,
@@ -26,3 +28,10 @@ typedef NS_ENUM(NSInteger, TKSTaxiModelType) {
 @property (nonatomic, strong, readonly) UIColor *color;
 
 @end
+
+@interface TKSTaxiRow (TKSLocalTaxi)
+
+- (instancetype)initWithTaxi:(TKSTaxi *)taxi price:(NSInteger)price;
+
+@end
+

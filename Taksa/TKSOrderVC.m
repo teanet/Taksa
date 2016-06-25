@@ -37,7 +37,14 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 {
 	_spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 	_suggestTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+	_suggestTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+	_suggestTableView.alpha = 0.0;
+	_suggestTableView.backgroundColor = [UIColor clearColor];
+
 	_taxiTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+	_taxiTableView.backgroundColor = [UIColor clearColor];
+	_taxiTableView.allowsSelection = NO;
+	_taxiTableView.showsVerticalScrollIndicator = NO;
 	self.view = [[UIView alloc] init];
 }
 
@@ -46,20 +53,28 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	@weakify(self);
 
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor brownColor];
+    self.view.backgroundColor = [UIColor dgs_colorWithString:@"F4F4F4"];
 	[self setEdgesForExtendedLayout:UIRectEdgeNone];
 
 	[self.viewModel registerTaxiTableView:self.taxiTableView];
 	[self.viewModel registerSuggestTableView:self.suggestTableView];
 
-	[[RACObserve(self.viewModel.inputVM, currentSearchVM.suggests)
-		ignore:nil]
-		subscribeNext:^(NSArray *suggests) {
+	[[[RACObserve(self.viewModel.inputVM, currentSearchVM.suggests)
+		combineLatestWith:RACObserve(self.viewModel.inputVM, currentSearchVM.results)]
+		deliverOnMainThread]
+		subscribeNext:^(RACTuple *t) {
 			@strongify(self);
 
+			RACTupleUnpack(NSArray<TKSSuggest *> *suggests, NSArray<TKSDatabaseObject *> *results) = t;
 			self.viewModel.suggestListModel.suggests = suggests;
+			self.viewModel.suggestListModel.results = results;
+
+			BOOL visible = (suggests.count > 0) || (results.count > 0);
+			[self changeSuggesterVisible:visible];
+			
 			[self.suggestTableView reloadData];
 		}];
+
 	[self.viewModel.inputVM.didBecomeEditingSignal subscribeNext:^(id x) {
 		@strongify(self);
 
@@ -84,8 +99,8 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	[self.view addSubview:self.suggestTableView];
 	[self.suggestTableView mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.top.equalTo(_inputView.mas_bottom);
-		make.leading.equalTo(self.view);
-		make.trailing.equalTo(self.view);
+		make.centerX.equalTo(self.view);
+		make.width.equalTo(self.view).with.offset(-32.0);
 		make.bottom.equalTo(self.view);
 	}];
 
@@ -133,11 +148,19 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	@weakify(self);
 	self.orderMode = TKSOrderModeLoading;
 
-	[self.viewModel loadDataWithCompletion:^{
-		@strongify(self);
+	[[self.viewModel fetchTaxiList]
+		subscribeNext:^(id x) {
+			@strongify(self);
+			
+			[self.taxiTableView reloadData];
+			self.orderMode = TKSOrderModeTaxiList;
+		}];
+}
 
-		[self.taxiTableView reloadData];
-		self.orderMode = TKSOrderModeTaxiList;
+- (void)changeSuggesterVisible:(BOOL)visible
+{
+	[UIView animateWithDuration:0.3 animations:^{
+		self.suggestTableView.alpha = visible ? 1.0 : 0.0;
 	}];
 }
 

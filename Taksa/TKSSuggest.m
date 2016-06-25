@@ -67,34 +67,18 @@
 	{
 		NSMutableAttributedString *mutableAttributedText = [[NSMutableAttributedString alloc] init];
 
-		if (self.id.length > 0 /*&&
-								([self.hintTypeDescription isEqualToString:@"building"] ||
-								[self.hintTypeDescription isEqualToString:@"address"] ||
-								[self.hintTypeDescription isEqualToString:@"adm_div.place"] ||
-								[self.hintTypeDescription isEqualToString:@"station"] ||
-								[self.hintTypeDescription isEqualToString:@"attraction"] ||
-								[self.hintTypeDescription isEqualToString:@"branch"] ||
-								[self.hintTypeDescription isEqualToString:@"station.metro"])*/)
-		{
-			mutableAttributedText = [NSMutableAttributedString dgs_makeString:^(DGSAttributedStringMaker *add) {
-				add.string(self.text).with.font([UIFont dgs_boldFontOfSize:15.0]);
+		[self.hintItems enumerateObjectsUsingBlock:^(TKSHintItem *hintItem, NSUInteger _, BOOL * __) {
+			[mutableAttributedText dgs_remakeString:^(DGSAttributedStringMaker *add) {
+				if (hintItem.style == TKSHintStyleHighlighted)
+				{
+					add.string(hintItem.text).with.font([UIFont dgs_boldFontOfSize:15.0]);
+				}
+				else
+				{
+					add.string(hintItem.text).with.font([UIFont dgs_regularFontOfSize:15.0]);
+				}
 			}];
-		}
-		else
-		{
-			[self.hintItems enumerateObjectsUsingBlock:^(TKSHintItem *hintItem, NSUInteger _, BOOL * __) {
-				[mutableAttributedText dgs_remakeString:^(DGSAttributedStringMaker *add) {
-					if (hintItem.style == TKSHintStyleHighlighted)
-					{
-						add.string(hintItem.text).with.font([UIFont dgs_boldFontOfSize:15.0]);
-					}
-					else
-					{
-						add.string(hintItem.text).with.font([UIFont dgs_regularFontOfSize:15.0]);
-					}
-				}];
-			}];
-		}
+		}];
 
 		_attributedText = [mutableAttributedText copy];
 	}

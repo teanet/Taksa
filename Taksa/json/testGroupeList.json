@@ -3,23 +3,23 @@
 	"summary": "",
 	"taxi_list": [{
 		"type": "default",
-		"name": "Uber",
+		"name": "UBER",
 		"contact": "uber://..",
 		"price": "100",
-		"color": "#CFFCCF"
+		"color": "#3A3A3A"
 	},
 	{
 		"type": "default",
 		"name": "Сатурн",
 		"contact": "+7(383)19-19-19",
 		"price": "150",
-		"color": "#CCCCCC"
+		"color": "#EA676B"
 	},
 	{
 		"type": "default",
 		"name": "Яндекс.Такси",
 		"contact": "taxi.yandex.ru",
 		"price": "200",
-		"color": "#ABBAAB"
+		"color": "#ECC31C"
 	}]
 }

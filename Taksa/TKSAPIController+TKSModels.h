@@ -8,9 +8,13 @@
  *	2GIS WebAPI
  */
 
-/*! \return NSArray<TKSSuggest *> */
-- (RACSignal *)fetchSuggestsForString:(NSString *)searchString
-							 regionId:(NSString *)regionId;
+/*! \return @[TKSSuggest] */
+- (RACSignal *)fetchSuggestsForSearchString:(NSString *)searchString
+								   regionId:(NSString *)regionId;
+
+/*! \sendNext @[TKSDatabaseObject] */
+- (RACSignal *)fetchObjectsForSearchString:(NSString *)searchString
+								  regionId:(NSString *)regionId;
 
 /*! \sendNext TKSDatabaseObject */
 - (RACSignal *)fetchObjectForObjectId:(NSString *)objectId
@@ -19,10 +23,6 @@
 /*! \sendNext TKSDatabaseObject */
 - (RACSignal *)fetchObjectForLocation:(CLLocation *)location
 							 regionId:(NSString *)regionId;
-
-/*! \sendNext TKSDatabaseObject */
-- (RACSignal *)fetchObjectForSearchString:(NSString *)searchString
-								 regionId:(NSString *)regionId;
 
 /*! \sendNext @[TKSRegion] */
 - (RACSignal *)fetchRegions;
@@ -34,8 +34,12 @@
  *	Taksa™ Server®
  */
 
-/*! \sendNext @[TKSTaxiGroupModel] */
-- (RACSignal *)fetchTaxiListFromObject:(TKSDatabaseObject *)objectFrom
-							  toObject:(TKSDatabaseObject *)objectTo;
+/*! \sendNext TKSRoute */
+- (RACSignal *)fetchRouteFromObject:(TKSDatabaseObject *)objectFrom
+						   toObject:(TKSDatabaseObject *)objectTo
+						   regionId:(NSString *)regionId;
+
+/*! \sendNext @[NSDictionary] */
+- (RACSignal *)fetchTaxiDictionariesArray;
 
 @end

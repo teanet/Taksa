@@ -67,6 +67,7 @@
 	}];
 
 	UIButton *selectCity = [[UIButton alloc] init];
+	[selectCity setTitle:@"Определяю город..." forState:UIControlStateNormal];
 	[selectCity setTitleColor:[[UIColor dgs_colorWithString:@"333333"] colorWithAlphaComponent:0.87] forState:UIControlStateNormal];
 	[selectCity addTarget:self.viewModel action:@checkselector0(self.viewModel, selectCity) forControlEvents:UIControlEventTouchUpInside];
 	[centerView addSubview:selectCity];
@@ -97,6 +98,13 @@
 		TKSSelectCityVC *selectCityVC = [[TKSSelectCityVC alloc] initWithVM:selectCityVM];
 		[self presentViewController:[[UINavigationController alloc] initWithRootViewController:selectCityVC] animated:YES completion:nil];
 	}];
+
+	[self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+	return UIStatusBarStyleLightContent;
 }
 
 @end

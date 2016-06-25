@@ -21,6 +21,21 @@
 
 @end
 
+@implementation TKSTaxiSection (TKSLocalTaxi)
+
+- (instancetype)initWithTitle:(NSString *)title rows:(NSArray<TKSTaxiRow *> *)rows
+{
+	self = [super init];
+	if (self == nil) return nil;
+
+	_title = [title copy];
+	_rows = [rows copy];
+
+	return self;
+}
+
+@end
+
 @implementation TKSTaxiSection (TKSTest)
 
 + (instancetype)testGroupeList
@@ -42,3 +57,4 @@
 }
 
 @end
+
