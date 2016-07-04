@@ -6,7 +6,6 @@
 @interface TKSSuggestListModel ()
 
 @property (nonatomic, strong, readonly) RACSubject *didSelectSuggestSubject;
-@property (nonatomic, strong, readonly) RACSubject *didSelectResultSubject;
 
 @end
 
@@ -17,8 +16,6 @@
 	self = [super init];
 	if (self == nil) return nil;
 
-	_didSelectResultSubject = [RACSubject subject];
-	_didSelectResultSignal = _didSelectResultSubject;
 	_didSelectSuggestSubject = [RACSubject subject];
 	_didSelectSuggestSignal = _didSelectSuggestSubject;
 
@@ -28,7 +25,6 @@
 - (void)dealloc
 {
 	[_didSelectSuggestSubject sendCompleted];
-	[_didSelectResultSubject sendCompleted];
 }
 
 - (void)registerTableView:(UITableView *)tableView
@@ -43,34 +39,19 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 2;
+	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	NSUInteger count = (section == 0)
-		? self.suggests.count
-		: self.results.count;
-	return count;
+	return self.suggests.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
 	cell.textLabel.numberOfLines = 0;
-
-	if (indexPath.section == 0)
-	{
-		cell.textLabel.attributedText = self.suggests[indexPath.row].attributedText;
-	}
-	else
-	{
-		TKSDatabaseObject *dbObject = self.results[indexPath.row];
-		cell.textLabel.attributedText = [NSAttributedString	dgs_makeString:^(DGSAttributedStringMaker *add) {
-			add.string(dbObject.fullName).with.font([UIFont dgs_boldFontOfSize:15.0]);
-		}];
-	}
-
+	cell.textLabel.attributedText = self.suggests[indexPath.row].attributedText;
 	return cell;
 }
 
@@ -78,14 +59,7 @@
 {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-	if (indexPath.section == 0)
-	{
-		[self.didSelectSuggestSubject sendNext:self.suggests[indexPath.row]];
-	}
-	else
-	{
-		[self.didSelectResultSubject sendNext:self.results[indexPath.row]];
-	}
+	[self.didSelectSuggestSubject sendNext:self.suggests[indexPath.row]];
 }
 
 @end

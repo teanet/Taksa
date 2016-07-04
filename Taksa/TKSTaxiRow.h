@@ -1,37 +1,26 @@
 #import "TKSSerializableProtocol.h"
 
-#import "TKSTaxi.h"
-
 typedef NS_ENUM(NSInteger, TKSTaxiModelType) {
 	TKSTaxiModelTypeDefault = 0,
 	TKSTaxiModelTypeSuggest = 1,
 };
 
-/*
-	{
- "type": "default/suggest",
- "name": "Uber",
- "contact": "uber://..",
- "price": "100",
- "color": "#CFCFCF",
- "summary": "..."
-	}
- */
-
 @interface TKSTaxiRow : NSObject <TKSSerializableProtocol>
 
 @property (nonatomic, assign, readonly) TKSTaxiModelType type;
-@property (nonatomic, copy, readonly) NSString *name;
-@property (nonatomic, copy, readonly) NSString *contact;
-@property (nonatomic, copy, readonly) NSString *price;
+@property (nonatomic, copy, readonly) NSString *title;
 @property (nonatomic, copy, readonly) NSString *summary;
+@property (nonatomic, copy, readonly) NSString *site;
+@property (nonatomic, copy, readonly) NSString *siteUrlString;
+@property (nonatomic, copy, readonly) NSString *phoneText;
+@property (nonatomic, copy, readonly) NSString *phoneValue;
 @property (nonatomic, strong, readonly) UIColor *color;
+@property (nonatomic, strong, readonly) UIColor *textColor;
+@property (nonatomic, copy, readonly) NSString *price;
 
-@end
-
-@interface TKSTaxiRow (TKSLocalTaxi)
-
-- (instancetype)initWithTaxi:(TKSTaxi *)taxi price:(NSInteger)price;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary type:(TKSTaxiModelType)type NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
 
 @end
 

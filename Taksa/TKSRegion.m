@@ -8,8 +8,8 @@
 	if (self == nil) return nil;
 
 	_id = dictionary[@"id"];
-	_name = dictionary[@"name"];
-	_type = dictionary[@"type"];
+	_title = dictionary[@"title"];
+	_code = dictionary[@"code"];
 
 	return self;
 }

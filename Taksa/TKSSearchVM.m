@@ -5,7 +5,6 @@
 @interface TKSSearchVM ()
 
 @property (nonatomic, strong, readwrite) NSArray<TKSSuggest *> *suggests;
-@property (nonatomic, strong, readwrite) NSArray<TKSDatabaseObject *> *results;
 
 @end
 
@@ -40,10 +39,6 @@
 			return [[TKSDataProvider sharedProvider] fetchSuggestsForSearchString:inputText];
 		}];
 
-	RACSignal *resultsListFillSignal = [searchQuerySignal
-		flattenMap:^RACStream *(NSString *inputText) {
-			return [[TKSDataProvider sharedProvider] fetchObjectsForSearchString:inputText];
-		}];
 
 	[[RACSignal merge:@[suggestListClearSignal, suggestListFillSignal]]
 		subscribeNext:^(NSArray<TKSSuggest *> *suggests) {
@@ -55,23 +50,12 @@
 			}];
 		}];
 
-	[[RACSignal merge:@[suggestListClearSignal, resultsListFillSignal]]
-		subscribeNext:^(NSArray<TKSDatabaseObject *> *results) {
-			@strongify(self);
-
-			self.results = results;
-			[results enumerateObjectsUsingBlock:^(TKSDatabaseObject *dbObject, NSUInteger _, BOOL *__) {
-				NSLog(@">>> Result: %@", dbObject.name);
-			}];
-		}];
-
 	return self;
 }
 
 - (void)clearSuggestsAndResults
 {
 	self.suggests = nil;
-	self.results = nil;
 }
 
 @end

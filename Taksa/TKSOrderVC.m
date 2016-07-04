@@ -59,17 +59,14 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	[self.viewModel registerTaxiTableView:self.taxiTableView];
 	[self.viewModel registerSuggestTableView:self.suggestTableView];
 
-	[[[RACObserve(self.viewModel.inputVM, currentSearchVM.suggests)
-		combineLatestWith:RACObserve(self.viewModel.inputVM, currentSearchVM.results)]
+	[[RACObserve(self.viewModel.inputVM, currentSearchVM.suggests)
 		deliverOnMainThread]
-		subscribeNext:^(RACTuple *t) {
+		subscribeNext:^(NSArray<TKSSuggest *> *suggests) {
 			@strongify(self);
 
-			RACTupleUnpack(NSArray<TKSSuggest *> *suggests, NSArray<TKSDatabaseObject *> *results) = t;
 			self.viewModel.suggestListModel.suggests = suggests;
-			self.viewModel.suggestListModel.results = results;
 
-			BOOL visible = (suggests.count > 0) || (results.count > 0);
+			BOOL visible = (suggests.count > 0);
 			[self changeSuggesterVisible:visible];
 			
 			[self.suggestTableView reloadData];
@@ -80,6 +77,17 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 
 		self.orderMode = TKSOrderModeSearch;
 	}];
+
+	[[[RACObserve(self.viewModel.taxiListVM, data)
+		ignore:nil]
+		filter:^BOOL(NSArray *a) {
+			return a.count > 0;
+		}]
+		subscribeNext:^(id _) {
+			@strongify(self);
+
+			self.orderMode = TKSOrderModeTaxiList;
+		}];
 
 	UILabel *nameLabel = [[UILabel alloc] init];
 	nameLabel.text = @"ТАКСА";

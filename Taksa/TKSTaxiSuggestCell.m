@@ -84,21 +84,12 @@
 
 - (void)setTaxiRow:(TKSTaxiRow *)taxiRow
 {
-	self.nameLabel.text	= taxiRow.name;
+	self.nameLabel.text	= taxiRow.title;
 	self.descriptionLabel.text = taxiRow.summary;
 	self.priceLabel.text = [taxiRow.price stringByAppendingString:@" ₽"];
 	self.iconView.backgroundColor = taxiRow.color;
-	self.letterLabel.text = [taxiRow.name substringWithRange:NSMakeRange(0, 1)];
-	self.letterLabel.textColor = [self isLightColor:taxiRow.color]
-		? [UIColor blackColor]
-		: [UIColor whiteColor];
-}
-
-- (BOOL)isLightColor:(UIColor *)color
-{
-	CGFloat white = 0;
-	[color getWhite:&white alpha:nil];
-	return (white >= 0.5);
+	self.letterLabel.text = [taxiRow.title substringWithRange:NSMakeRange(0, 1)];
+	self.letterLabel.textColor = taxiRow.textColor;
 }
 
 @end
