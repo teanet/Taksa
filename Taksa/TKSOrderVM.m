@@ -24,7 +24,7 @@
 	@weakify(self);
 
 	[self.suggestListModel.didSelectSuggestSignal
-		subscribeNext:^(TKSSuggestObject *suggest) {
+		subscribeNext:^(TKSSuggest *suggest) {
 			@strongify(self);
 
 			self.inputVM.currentSearchVM.text = suggest.text;
@@ -45,7 +45,7 @@
 	}
 }
 
-- (void)setSearchResultForCurrentSearchVM:(TKSSuggestObject *)suggest
+- (void)setSearchResultForCurrentSearchVM:(TKSSuggest *)suggest
 {
 	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
 	{
@@ -113,7 +113,7 @@
 	@weakify(self);
 
 	return [[[TKSDataProvider sharedProvider] fetchTaxiListFromObject:self.inputVM.fromSearchVM.dbObject
-															toObject:self.inputVM.toSearchVM.dbObject]
+															 toObject:self.inputVM.toSearchVM.dbObject]
 		doNext:^(NSArray<TKSTaxiSection *> *taxiList) {
 			@strongify(self);
 

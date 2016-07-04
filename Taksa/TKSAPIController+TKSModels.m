@@ -1,16 +1,14 @@
 #import "TKSAPIController+TKSModels.h"
 
-#import "TKSSuggestObject.h"
+#import "TKSSuggest.h"
 #import "TKSTaxiSection.h"
 #import "TKSRegion.h"
-#import "TKSTaxi.h"
-#import "TKSRoute.h"
 
 @implementation TKSAPIController (TKSModels)
 
 // MARK: Taksa Server
 
-// http://10.154.18.111:8080/taksa/api/1.0/regions
+// /taksa/api/1.0/regions
 - (RACSignal *)fetchRegions
 {
 	return [[self GET:@"regions" params:nil]
@@ -59,7 +57,7 @@
 		}];
 }
 
-// 10.154.18.111:8080/taksa/api/1.0/address/suggest?region_id=1&q=красный
+// /taksa/api/1.0/address/suggest?region_id=1&q=красный
 - (RACSignal *)fetchSuggestsForSearchString:(NSString *)searchString
 								   regionId:(NSString *)regionId
 {
@@ -78,18 +76,18 @@
 		}];
 }
 
-// \sendNext @[TKSSuggestObject]
+// \sendNext @[TKSSuggest]
 + (RACSignal *)fetchSuggestObjectsFromResponseDictionary:(NSDictionary *)responseDictionary
 {
 	return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-		NSArray<TKSSuggestObject *> *returnArray = nil;
+		NSArray<TKSSuggest *> *returnArray = nil;
 
 		if ([responseDictionary isKindOfClass:[NSDictionary class]])
 		{
 			NSArray *hintDictionaries = responseDictionary[@"results"];
 			returnArray = [hintDictionaries.rac_sequence
-						   map:^TKSSuggestObject *(NSDictionary *hintDictionary) {
-							   return [[TKSSuggestObject alloc] initWithDictionary:hintDictionary];
+						   map:^TKSSuggest *(NSDictionary *hintDictionary) {
+							   return [[TKSSuggest alloc] initWithDictionary:hintDictionary];
 						   }].array;
 		}
 
@@ -122,12 +120,12 @@
 }
 
 // api.steelhoss.xyz/taksa/api/1.0/route/calculate?points[]=1,2
-- (RACSignal *)fetchTaxiResultsFromObject:(TKSSuggestObject *)suggestFrom
-								 toObject:(TKSSuggestObject *)suggestTo
+- (RACSignal *)fetchTaxiResultsFromObject:(TKSSuggest *)suggestFrom
+								 toObject:(TKSSuggest *)suggestTo
 								 regionId:(NSString *)regionId
 {
 	NSCParameterAssert(suggestFrom);
-	NSCParameterAssert(suggestFrom);
+	NSCParameterAssert(suggestTo);
 
 	NSString *q = [NSString stringWithFormat:@"%@,%@", suggestFrom.id, suggestTo.id];
 	NSDictionary *params = @{

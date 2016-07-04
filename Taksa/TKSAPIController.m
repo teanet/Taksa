@@ -3,7 +3,6 @@
 #import <AFNetworking/AFNetworking.h>
 
 static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa/api/1.0/";
-static NSString *const kTKSDropboxBaseURLString = @"https://dl.dropboxusercontent.com/u/39349894/Taksa/";
 
 @interface TKSAPIController ()
 

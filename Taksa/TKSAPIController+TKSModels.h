@@ -1,6 +1,6 @@
 #import "TKSAPIController.h"
 
-@class TKSSuggestObject;
+@class TKSSuggest;
 
 @interface TKSAPIController (TKSModels)
 
@@ -23,8 +23,8 @@
 							  regionId:(NSString *)regionId;
 
 /*! \sendNext @[TKSTaxiSection] */
-- (RACSignal *)fetchTaxiResultsFromObject:(TKSSuggestObject *)suggestFrom
-								 toObject:(TKSSuggestObject *)suggestTo
+- (RACSignal *)fetchTaxiResultsFromObject:(TKSSuggest *)suggestFrom
+								 toObject:(TKSSuggest *)suggestTo
 								 regionId:(NSString *)regionId;
 
 @end

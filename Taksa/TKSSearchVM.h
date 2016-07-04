@@ -1,4 +1,4 @@
-#import "TKSSuggestObject.h"
+#import "TKSSuggest.h"
 
 @interface TKSSearchVM : NSObject
 
@@ -7,9 +7,9 @@
 @property (nonatomic, copy) NSString *letter;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, copy) NSString *placeHolder;
-@property (nonatomic, strong) TKSSuggestObject *dbObject;
+@property (nonatomic, strong) TKSSuggest *dbObject;
 
-@property (nonatomic, strong, readonly) NSArray<TKSSuggestObject *> *suggests;
+@property (nonatomic, strong, readonly) NSArray<TKSSuggest *> *suggests;
 
 - (void)clearSuggestsAndResults;
 

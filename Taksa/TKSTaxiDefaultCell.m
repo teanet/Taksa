@@ -87,11 +87,4 @@
 	self.letterLabel.textColor = taxiRow.textColor;
 }
 
-- (BOOL)isLightColor:(UIColor *)color
-{
-	CGFloat white = 0;
-	[color getWhite:&white alpha:nil];
-	return (white >= 0.5);
-}
-
 @end

@@ -37,8 +37,11 @@
 
 	// URL
 	NSDictionary *siteDictionary = operatorDictionary[@"site"];
-	_site = siteDictionary[@"text"];
-	_siteUrlString = siteDictionary[@"value"];
+	if ([siteDictionary isKindOfClass:[NSDictionary class]])
+	{
+		_site = siteDictionary[@"text"];
+		_siteUrlString = siteDictionary[@"value"];
+	}
 
 	NSString *colorString = operatorDictionary[@"background_color"];
 	_color = [UIColor dgs_colorWithString:colorString];
@@ -47,8 +50,11 @@
 
 	// Phone
 	NSDictionary *phoneDictionary = operatorDictionary[@"phone"];
-	_phoneText = phoneDictionary[@"text"];
-	_phoneValue = phoneDictionary[@"value"];
+	if ([phoneDictionary isKindOfClass:[NSDictionary class]])
+	{
+		_phoneText = phoneDictionary[@"text"];
+		_phoneValue = phoneDictionary[@"value"];
+	}
 
 	NSNumber *priceNumber = dictionary[@"price"];
 	_price = [priceNumber stringValue];

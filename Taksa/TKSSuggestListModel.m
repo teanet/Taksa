@@ -51,7 +51,7 @@
 {
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
 	cell.textLabel.numberOfLines = 0;
-	cell.textLabel.text = self.suggests[indexPath.row].text;
+	cell.textLabel.attributedText = self.suggests[indexPath.row].attributedText;
 	return cell;
 }
 

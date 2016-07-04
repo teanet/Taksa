@@ -1,5 +1,4 @@
-#import "TKSSuggestObject.h"
-#import "TKSSuggestObject.h"
+#import "TKSSuggest.h"
 #import "TKSTaxiSection.h"
 #import "TKSRegion.h"
 
@@ -11,15 +10,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedProvider;
 
-/*! \return @[TKSSuggestObject] Переделано! */
+/*! \return @[TKSSuggest] Переделано! */
 - (RACSignal *)fetchSuggestsForSearchString:(NSString *)searchString;
 
-/*! \sendNext TKSSuggestObject Переделано! */
+/*! \sendNext TKSSuggest Переделано! */
 - (RACSignal *)fetchSuggestForLocation:(CLLocation *)location;
 
-/*! \sendNext @[TKSTaxiSection] */
-- (RACSignal *)fetchTaxiListFromObject:(TKSSuggestObject *)objectFrom
-							  toObject:(TKSSuggestObject *)objectTo;
+/*! \sendNext @[TKSTaxiSection] Переделано!  */
+- (RACSignal *)fetchTaxiListFromObject:(TKSSuggest *)objectFrom
+							  toObject:(TKSSuggest *)objectTo;
 
 /*! \sendNext @[TKSRegion] Переделано! */
 - (RACSignal *)fetchRegions;

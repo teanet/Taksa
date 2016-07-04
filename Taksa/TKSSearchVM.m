@@ -4,7 +4,7 @@
 
 @interface TKSSearchVM ()
 
-@property (nonatomic, strong, readwrite) NSArray<TKSSuggestObject *> *suggests;
+@property (nonatomic, strong, readwrite) NSArray<TKSSuggest *> *suggests;
 
 @end
 
@@ -41,11 +41,11 @@
 
 
 	[[RACSignal merge:@[suggestListClearSignal, suggestListFillSignal]]
-		subscribeNext:^(NSArray<TKSSuggestObject *> *suggests) {
+		subscribeNext:^(NSArray<TKSSuggest *> *suggests) {
 			@strongify(self);
 
 			self.suggests = suggests;
-			[suggests enumerateObjectsUsingBlock:^(TKSSuggestObject *suggest, NSUInteger _, BOOL *__) {
+			[suggests enumerateObjectsUsingBlock:^(TKSSuggest *suggest, NSUInteger _, BOOL *__) {
 				NSLog(@">>> Suggest: %@", suggest.text);
 			}];
 		}];

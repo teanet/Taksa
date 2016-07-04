@@ -2,7 +2,6 @@
 
 #import "TKSAPIController+TKSModels.h"
 #import "TKSLocationManager.h"
-#import "TKSRoute.h"
 
 static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 
@@ -44,20 +43,14 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 												   regionId:self.currentRegion.id];
 }
 
-- (RACSignal *)fetchObjectsForSearchString:(NSString *)searchString
-{
-	return [self.apiController fetchSuggestsForSearchString:searchString
-												  regionId:self.currentRegion.id];
-}
-
 - (RACSignal *)fetchSuggestForLocation:(CLLocation *)location
 {
 	return [self.apiController fetchSuggestForLocation:location
 											  regionId:self.currentRegion.id];
 }
 
-- (RACSignal *)fetchTaxiListFromObject:(TKSSuggestObject *)objectFrom
-							  toObject:(TKSSuggestObject *)objectTo
+- (RACSignal *)fetchTaxiListFromObject:(TKSSuggest *)objectFrom
+							  toObject:(TKSSuggest *)objectTo
 {
 	return [self.apiController fetchTaxiResultsFromObject:objectFrom toObject:objectTo regionId:self.currentRegion.id];
 }

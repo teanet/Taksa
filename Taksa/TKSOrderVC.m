@@ -61,7 +61,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 
 	[[RACObserve(self.viewModel.inputVM, currentSearchVM.suggests)
 		deliverOnMainThread]
-		subscribeNext:^(NSArray<TKSSuggestObject *> *suggests) {
+		subscribeNext:^(NSArray<TKSSuggest *> *suggests) {
 			@strongify(self);
 
 			self.viewModel.suggestListModel.suggests = suggests;
