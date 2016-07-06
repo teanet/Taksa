@@ -3,6 +3,7 @@
 @implementation TKSTaxiSection
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
+						  searchId:(NSString *)searchId
 						  distance:(NSNumber *)distance
 							  time:(NSNumber *)time
 							  type:(TKSTaxiModelType)type
@@ -15,6 +16,7 @@
 	_distance = [distance stringValue];
 	_time = [time stringValue];
 	_type = type;
+	_searchId = [searchId copy];
 
 	NSArray *taxiDictionariesArray = dictionary[@"results"];
 	_rows = [[taxiDictionariesArray rac_sequence]
@@ -43,13 +45,17 @@
 	NSDictionary *resultsDictionary = dictionary[@"results"];
 	NSDictionary *optimalSectionDictionary = resultsDictionary[@"optimal"];
 	NSDictionary *elseSectionDictionary = resultsDictionary[@"else"];
+	NSNumber *searchIdNumber = resultsDictionary[@"id"];
+	NSString *searchId = [searchIdNumber stringValue];
 
 	TKSTaxiSection *optimalSection = [[TKSTaxiSection alloc] initWithDictionary:optimalSectionDictionary
+																	   searchId:searchId
 																	   distance:distanceNumber
 																		   time:timeNumber
 																		   type:TKSTaxiModelTypeSuggest];
 
 	TKSTaxiSection *elseSection = [[TKSTaxiSection alloc] initWithDictionary:elseSectionDictionary
+																	searchId:searchId
 																	distance:distanceNumber
 																		time:timeNumber
 																		type:TKSTaxiModelTypeDefault];
@@ -75,7 +81,7 @@
 	NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:name ofType:nil]];
 	NSDictionary *testDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 
-	return [[TKSTaxiSection alloc] initWithDictionary:testDictionary distance:nil time:nil type:0];
+	return [[TKSTaxiSection alloc] initWithDictionary:testDictionary searchId:nil distance:nil time:nil type:0];
 }
 
 @end

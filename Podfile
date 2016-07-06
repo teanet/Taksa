@@ -12,6 +12,8 @@ target 'Taksa' do
 	pod 'ReactiveCocoa', '~> 2.5'
 	pod 'AFNetworking', '~> 2.5'
 	pod 'DGSAttributedStringSuite'
+	pod 'UIDevice-Hardware'
+	pod 'SSKeychain'
 
 end
 

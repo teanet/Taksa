@@ -139,4 +139,12 @@
 		}];
 }
 
+- (RACSignal *)fetchAnalyticsResultForType:(NSString *)type
+									  body:(NSDictionary *)bodyDictionary
+								  regionId:(NSString *)regionId
+{
+	NSString *q = [NSString stringWithFormat:@"analytics?type=%@&region_id=%@", type, regionId];
+	return [self POST:q params:bodyDictionary];
+}
+
 @end

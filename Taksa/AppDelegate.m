@@ -2,12 +2,15 @@
 #import "TKSRootVC.h"
 
 #import "UIColor+DGSCustomColor.h"
+#import <SSKeychain.h>
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	[SSKeychain setAccessibilityType:kSecAttrAccessibleAlwaysThisDeviceOnly];
+
 	[self configureWindow];
 	return YES;
 }
