@@ -24,6 +24,8 @@ UIScrollViewDelegate
 	_didSelectSuggestSubject = [RACSubject subject];
 	_didSelectSuggestSignal = _didSelectSuggestSubject;
 
+	_didScrollSignal = [self rac_signalForSelector:@checkselector(self, scrollViewDidScroll:)];
+
 	return self;
 }
 
@@ -80,6 +82,10 @@ UIScrollViewDelegate
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 
 	[self.didSelectSuggestSubject sendNext:self.suggests[indexPath.row]];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
 }
 
 @end

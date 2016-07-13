@@ -25,10 +25,11 @@
 	@weakify(self);
 
 	RACSignal *didSelectSuggestSignal = [self.suggestListVM.didSelectSuggestSignal
-		doNext:^(TKSSuggest *suggest) {
+		filter:^BOOL(TKSSuggest *suggest) {
 			NSString *suggestText = suggest.text;
 
-			if ([suggest.hintLabel isEqualToString:@"street"])
+			BOOL isSuggestStreet = [suggest.hintLabel isEqualToString:@"street"];
+			if (isSuggestStreet)
 			{
 				self.inputVM.currentSearchVM.text = [suggestText stringByAppendingString:@", "];
 				[self setSearchResultForCurrentSearchVM:suggest];
@@ -37,6 +38,8 @@
 			{
 				[self saveSuggestToHistory:suggest];
 			}
+
+			return !isSuggestStreet;
 		}];
 
 	[[RACSignal merge:@[didSelectSuggestSignal, self.historyListVM.didSelectSuggestSignal]]
@@ -47,6 +50,14 @@
 			[self setSearchResultForCurrentSearchVM:suggest];
 			[self switchToNextTextFiledIfNeeded];
 			[self startSearchIfNeeded];
+		}];
+
+	[[RACSignal merge:@[_suggestListVM.didScrollSignal, _historyListVM.didScrollSignal]]
+		subscribeNext:^(id _) {
+			@strongify(self);
+
+			self.inputVM.fromSearchVM.active = NO;
+			self.inputVM.toSearchVM.active = NO;
 		}];
 }
 

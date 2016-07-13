@@ -10,6 +10,7 @@
 @property (nonatomic, strong, readonly) TKSSuggestListVM *suggestListVM;
 @property (nonatomic, strong, readonly) TKSHistoryListVM *historyListVM;
 @property (nonatomic, strong, readonly) TKSTaxiListVM *taxiListVM;
+@property (nonatomic, strong, readonly) RACSignal *shouldResignFirstResponderSignal;
 
 - (instancetype)initWithInputVM:(TKSInputVM *)inputVM;
 
