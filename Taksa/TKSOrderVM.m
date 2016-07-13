@@ -11,7 +11,7 @@
 	if (self == nil) return nil;
 
 	_taxiListVM = [[TKSTaxiListVM alloc] init];
-	_suggestListModel = [[TKSSuggestListModel alloc] init];
+	_suggestListVM = [[TKSSuggestListVM alloc] init];
 	_inputVM = inputVM ?: [[TKSInputVM alloc] init];
 
 	[self setupReactiveStuff];
@@ -23,13 +23,23 @@
 {
 	@weakify(self);
 
-	[self.suggestListModel.didSelectSuggestSignal
+	[self.suggestListVM.didSelectSuggestSignal
 		subscribeNext:^(TKSSuggest *suggest) {
 			@strongify(self);
 
-			self.inputVM.currentSearchVM.text = suggest.text;
-			[self setSearchResultForCurrentSearchVM:suggest];
-			[self toggleTextField];
+			NSString *suggestText = suggest.text;
+
+			if ([suggest.hintLabel isEqualToString:@"street"])
+			{
+				self.inputVM.currentSearchVM.text = [suggestText stringByAppendingString:@", "];
+				[self setSearchResultForCurrentSearchVM:suggest];
+			}
+			else
+			{
+				self.inputVM.currentSearchVM.text = suggestText;
+				[self setSearchResultForCurrentSearchVM:suggest];
+				[self toggleTextField];
+			}
 		}];
 }
 
@@ -105,7 +115,7 @@
 
 - (void)registerSuggestTableView:(UITableView *)tableView
 {
-	[self.suggestListModel registerTableView:tableView];
+	[self.suggestListVM registerTableView:tableView];
 }
 
 - (RACSignal *)fetchTaxiList

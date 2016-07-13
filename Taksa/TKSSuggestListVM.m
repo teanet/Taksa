@@ -1,15 +1,15 @@
-#import "TKSSuggestListModel.h"
+#import "TKSSuggestListVM.h"
 
-#import <DGSAttributedStringSuite/DGSAttributedStringSuite.h>
+#import "TKSSuggestCell.h"
 #import "UIFont+DGSCustomFont.h"
 
-@interface TKSSuggestListModel ()
+@interface TKSSuggestListVM ()
 
 @property (nonatomic, strong, readonly) RACSubject *didSelectSuggestSubject;
 
 @end
 
-@implementation TKSSuggestListModel
+@implementation TKSSuggestListVM
 
 - (instancetype)init
 {
@@ -29,10 +29,17 @@
 
 - (void)registerTableView:(UITableView *)tableView
 {
-	[tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
-	[tableView registerClass:[UITableViewHeaderFooterView class] forHeaderFooterViewReuseIdentifier:@"header"];
+	[tableView registerClass:[TKSSuggestCell class] forCellReuseIdentifier:@"cell"];
 	tableView.delegate = self;
 	tableView.dataSource = self;
+
+	[[[[RACObserve(self, suggests)
+		ignore:nil]
+		takeUntil:[tableView rac_willDeallocSignal]]
+		deliverOnMainThread]
+		subscribeNext:^(id _) {
+			[tableView reloadData];
+		}];
 }
 
 #pragma mark TableView
@@ -49,9 +56,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-	cell.textLabel.numberOfLines = 0;
-	cell.textLabel.attributedText = self.suggests[indexPath.row].attributedText;
+	TKSSuggest *suggest = [self.suggests objectAtIndex:indexPath.row];
+	TKSTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+	cell.viewModel = suggest;
+
 	return cell;
 }
 
