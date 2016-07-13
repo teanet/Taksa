@@ -2,6 +2,7 @@
 
 #import "TKSAPIController+TKSModels.h"
 #import "TKSLocationManager.h"
+#import "TKSPreferences.h"
 
 static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 
@@ -9,6 +10,7 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 
 @property (nonatomic, strong, readonly) TKSAPIController *apiController;
 @property (nonatomic, strong, readonly) TKSLocationManager *locationManager;
+@property (nonatomic, strong, readonly) TKSPreferences *preferences;
 
 @end
 
@@ -30,7 +32,10 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 	self = [super init];
 	if (self == nil) return nil;
 
-	_apiController = [[TKSAPIController alloc] init];
+	_preferences = [[TKSPreferences alloc] init];
+	NSString *userId = _preferences.userId;
+	NSString *sessionId = _preferences.sessionId;
+	_apiController = [[TKSAPIController alloc] initWithUserId:userId sessionId:sessionId];
 	_locationManager = [[TKSLocationManager alloc] init];
 
 	return self;
@@ -75,6 +80,15 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 			@strongify(self);
 
 			self.currentRegion = region;
+			[self sendAnalyticsForType:@"launch" body:nil];
+		}];
+}
+
+- (void)sendAnalyticsForType:(NSString *)type body:(NSDictionary *_Nullable)bodyDictionary
+{
+	[[self.apiController fetchAnalyticsResultForType:type body:bodyDictionary regionId:self.currentRegion.id]
+		subscribeNext:^(id x) {
+			NSLog(@">>> %@", x);
 		}];
 }
 

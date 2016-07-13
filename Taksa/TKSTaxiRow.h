@@ -8,6 +8,7 @@ typedef NS_ENUM(NSInteger, TKSTaxiModelType) {
 @interface TKSTaxiRow : NSObject <TKSSerializableProtocol>
 
 @property (nonatomic, assign, readonly) TKSTaxiModelType type;
+@property (nonatomic, copy, readonly) NSString *id;
 @property (nonatomic, copy, readonly) NSString *title;
 @property (nonatomic, copy, readonly) NSString *summary;
 @property (nonatomic, copy, readonly) NSString *site;

@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (RACSignal *)fetchCurrentRegion;
 
+- (void)sendAnalyticsForType:(NSString *)type body:(NSDictionary *_Nullable)bodyDictionary;
+
 @end
 
 NS_ASSUME_NONNULL_END

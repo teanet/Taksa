@@ -35,6 +35,9 @@
 	_title = operatorDictionary[@"title"];
 	_summary = dictionary[@"summary"];
 
+	NSNumber *idNumber = operatorDictionary[@"id"];
+	_id = [idNumber stringValue];
+
 	// URL
 	NSDictionary *siteDictionary = operatorDictionary[@"site"];
 	if ([siteDictionary isKindOfClass:[NSDictionary class]])

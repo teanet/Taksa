@@ -27,4 +27,9 @@
 								 toObject:(TKSSuggest *)suggestTo
 								 regionId:(NSString *)regionId;
 
+/*! \sendNext @[TKSTaxiSection] */
+- (RACSignal *)fetchAnalyticsResultForType:(NSString *)type
+									  body:(NSDictionary *)bodyDictionary
+								  regionId:(NSString *)regionId;
+
 @end
