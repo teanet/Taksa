@@ -1,8 +1,10 @@
 #import "TKSOrderVC.h"
 
+#import "TKSSuggestListVC.h"
 #import "TKSInputView.h"
 #import "TKSOrderVM.h"
 #import "UIColor+DGSCustomColor.h"
+#import "UIViewController+DGSAdditions.h"
 
 typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	TKSOrderModeSearch = 0,
@@ -12,7 +14,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 
 @interface TKSOrderVC ()
 
-@property (nonatomic, strong, readonly) UITableView *suggestTableView;
+@property (nonatomic, strong, readonly) TKSSuggestListVC *suggestListVC;
 @property (nonatomic, strong, readonly) UITableView *taxiTableView;
 
 @property (nonatomic, strong, readonly) UIActivityIndicatorView *spinner;
@@ -28,6 +30,8 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	self = [super initWithVM:orderVM];
 	if (self == nil) return nil;
 
+	_suggestListVC = [[TKSSuggestListVC alloc] initWithVM:self.viewModel.suggestListVM];
+
 	self.orderMode = TKSOrderModeSearch;
 
 	return self;
@@ -36,10 +40,6 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 - (void)loadView
 {
 	_spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-	_suggestTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-	_suggestTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-	_suggestTableView.alpha = 0.0;
-	_suggestTableView.backgroundColor = [UIColor clearColor];
 
 	_taxiTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
 	_taxiTableView.backgroundColor = [UIColor clearColor];
@@ -57,19 +57,16 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	[self setEdgesForExtendedLayout:UIRectEdgeNone];
 
 	[self.viewModel registerTaxiTableView:self.taxiTableView];
-	[self.viewModel registerSuggestTableView:self.suggestTableView];
 
 	[[RACObserve(self.viewModel.inputVM, currentSearchVM.suggests)
 		deliverOnMainThread]
 		subscribeNext:^(NSArray<TKSSuggest *> *suggests) {
 			@strongify(self);
 
-			self.viewModel.suggestListModel.suggests = suggests;
+			self.viewModel.suggestListVM.suggests = suggests;
 
 			BOOL visible = (suggests.count > 0);
 			[self changeSuggesterVisible:visible];
-			
-			[self.suggestTableView reloadData];
 		}];
 
 	[self.viewModel.inputVM.didBecomeEditingSignal subscribeNext:^(id x) {
@@ -115,8 +112,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 		make.trailing.equalTo(self.view);
 	}];
 
-	[self.view addSubview:self.suggestTableView];
-	[self.suggestTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+	[self dgs_showViewController:self.suggestListVC inView:self.view constraints:^(MASConstraintMaker *make) {
 		make.top.equalTo(_inputView.mas_bottom);
 		make.centerX.equalTo(self.view);
 		make.width.equalTo(self.view).with.offset(-32.0);
@@ -131,7 +127,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 
 	[self.view addSubview:self.taxiTableView];
 	[self.taxiTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.edges.equalTo(self.suggestTableView);
+		make.edges.equalTo(self.suggestListVC.view);
 	}];
 }
 
@@ -146,7 +142,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	_orderMode = orderMode;
 
 	self.taxiTableView.hidden = (orderMode != TKSOrderModeTaxiList);
-	self.suggestTableView.hidden = (orderMode != TKSOrderModeSearch);
+	self.suggestListVC.view.hidden = (orderMode != TKSOrderModeSearch);
 	self.spinner.hidden = (orderMode != TKSOrderModeLoading);
 
 	switch (orderMode) {
@@ -185,7 +181,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 - (void)changeSuggesterVisible:(BOOL)visible
 {
 	[UIView animateWithDuration:0.3 animations:^{
-		self.suggestTableView.alpha = visible ? 1.0 : 0.0;
+		self.suggestListVC.view.alpha = visible ? 1.0 : 0.0;
 	}];
 }
 

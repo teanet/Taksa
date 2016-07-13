@@ -1,6 +1,6 @@
 #import "TKSSuggest.h"
 
-@interface TKSSuggestListModel : NSObject
+@interface TKSSuggestListVM : NSObject
 <
 UITableViewDelegate,
 UITableViewDataSource
