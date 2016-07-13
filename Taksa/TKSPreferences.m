@@ -2,8 +2,11 @@
 
 #import <SSKeychain.h>
 
+static NSInteger const kHistoryItemsMaxCount = 100;
+
 static NSString *const kPreferencesUserId = @"userId";
 static NSString *const kPreferencesUserDidSelectAuthorizationStatus = @"userDidSelectAuthorizationStatus";
+static NSString *const kHistoryKey = @"history";
 
 @implementation TKSPreferences
 
@@ -60,6 +63,34 @@ static NSString *const kPreferencesUserDidSelectAuthorizationStatus = @"userDidS
 	[[NSUserDefaults standardUserDefaults] setBool:userDidSelectAuthorizationStatus
 											forKey:kPreferencesUserDidSelectAuthorizationStatus];
 	[[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)addSuggestDictionaryToHistoryList:(NSDictionary *)suggestDictionary
+{
+	NSCParameterAssert(suggestDictionary);
+
+	if (suggestDictionary)
+	{
+		NSArray<NSDictionary *> *historyArray = [self historyDictionaries];
+		NSArray<NSDictionary *> *newArray = [historyArray arrayByAddingObject:suggestDictionary];
+
+		if (newArray.count > kHistoryItemsMaxCount)
+		{
+			NSRange range = NSMakeRange(newArray.count - kHistoryItemsMaxCount, kHistoryItemsMaxCount);
+			newArray = [newArray subarrayWithRange:range];
+		}
+
+		[[NSUserDefaults standardUserDefaults] setObject:newArray forKey:kHistoryKey];
+		[[NSUserDefaults standardUserDefaults] synchronize];
+	}
+}
+
+- (NSArray<NSDictionary *> *)historyDictionaries
+{
+	NSArray<NSDictionary *> *historyArray = [[NSUserDefaults standardUserDefaults] arrayForKey:kHistoryKey];
+	return historyArray == nil
+		? @[]
+		: [[historyArray reverseObjectEnumerator] allObjects];
 }
 
 @end

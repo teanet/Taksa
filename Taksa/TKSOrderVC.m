@@ -1,6 +1,7 @@
 #import "TKSOrderVC.h"
 
 #import "TKSSuggestListVC.h"
+#import "TKSHistoryListVC.h"
 #import "TKSInputView.h"
 #import "TKSOrderVM.h"
 #import "UIColor+DGSCustomColor.h"
@@ -15,6 +16,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 @interface TKSOrderVC ()
 
 @property (nonatomic, strong, readonly) TKSSuggestListVC *suggestListVC;
+@property (nonatomic, strong, readonly) TKSHistoryListVC *historyListVC;
 @property (nonatomic, strong, readonly) UITableView *taxiTableView;
 
 @property (nonatomic, strong, readonly) UIActivityIndicatorView *spinner;
@@ -31,6 +33,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	if (self == nil) return nil;
 
 	_suggestListVC = [[TKSSuggestListVC alloc] initWithVM:self.viewModel.suggestListVM];
+	_historyListVC = [[TKSHistoryListVC alloc] initWithVM:self.viewModel.historyListVM];
 
 	self.orderMode = TKSOrderModeSearch;
 
@@ -45,6 +48,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	_taxiTableView.backgroundColor = [UIColor clearColor];
 	_taxiTableView.allowsSelection = NO;
 	_taxiTableView.showsVerticalScrollIndicator = NO;
+
 	self.view = [[UIView alloc] init];
 }
 
@@ -119,6 +123,10 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 		make.bottom.equalTo(self.view);
 	}];
 
+	[self dgs_showViewController:self.historyListVC inView:self.view constraints:^(MASConstraintMaker *make) {
+		make.edges.equalTo(self.suggestListVC.view);
+	}];
+
 	[self.spinner startAnimating];
 	[self.view addSubview:self.spinner];
 	[self.spinner mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -182,6 +190,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 {
 	[UIView animateWithDuration:0.3 animations:^{
 		self.suggestListVC.view.alpha = visible ? 1.0 : 0.0;
+		self.historyListVC.view.alpha = visible ? 0.0 : 1.0;
 	}];
 }
 

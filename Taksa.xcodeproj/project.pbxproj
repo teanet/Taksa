@@ -15,6 +15,9 @@
 		302F97551D36779E00194EB8 /* TKSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 302F97541D36779E00194EB8 /* TKSTableViewCell.m */; };
 		302F97581D3677F200194EB8 /* TKSSuggestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 302F97571D3677F200194EB8 /* TKSSuggestCell.m */; };
 		302F9A7C1D367D1600194EB8 /* UIViewController+DGSAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 302F9A7B1D367D1600194EB8 /* UIViewController+DGSAdditions.m */; };
+		302F9A801D36AE0500194EB8 /* TKSHistoryListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 302F9A7F1D36AE0500194EB8 /* TKSHistoryListVC.m */; };
+		302F9A831D36AE1800194EB8 /* TKSHistoryListVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 302F9A821D36AE1800194EB8 /* TKSHistoryListVM.m */; };
+		302F9A871D36AEF000194EB8 /* TKSHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 302F9A861D36AEF000194EB8 /* TKSHistoryCell.m */; };
 		305D5C511CE884D6005CE5D8 /* taxiProviders.json in Resources */ = {isa = PBXBuildFile; fileRef = 305D5C501CE884D6005CE5D8 /* taxiProviders.json */; };
 		305D5C551CE8850C005CE5D8 /* testGroupeList.json in Resources */ = {isa = PBXBuildFile; fileRef = 305D5C531CE8850C005CE5D8 /* testGroupeList.json */; };
 		305D5C561CE8850C005CE5D8 /* testGroupeSuggest.json in Resources */ = {isa = PBXBuildFile; fileRef = 305D5C541CE8850C005CE5D8 /* testGroupeSuggest.json */; };
@@ -67,6 +70,12 @@
 		302F97571D3677F200194EB8 /* TKSSuggestCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSSuggestCell.m; sourceTree = "<group>"; };
 		302F9A7A1D367D1600194EB8 /* UIViewController+DGSAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+DGSAdditions.h"; sourceTree = "<group>"; };
 		302F9A7B1D367D1600194EB8 /* UIViewController+DGSAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+DGSAdditions.m"; sourceTree = "<group>"; };
+		302F9A7E1D36AE0500194EB8 /* TKSHistoryListVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSHistoryListVC.h; sourceTree = "<group>"; };
+		302F9A7F1D36AE0500194EB8 /* TKSHistoryListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSHistoryListVC.m; sourceTree = "<group>"; };
+		302F9A811D36AE1800194EB8 /* TKSHistoryListVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSHistoryListVM.h; sourceTree = "<group>"; };
+		302F9A821D36AE1800194EB8 /* TKSHistoryListVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSHistoryListVM.m; sourceTree = "<group>"; };
+		302F9A851D36AEF000194EB8 /* TKSHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSHistoryCell.h; sourceTree = "<group>"; };
+		302F9A861D36AEF000194EB8 /* TKSHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSHistoryCell.m; sourceTree = "<group>"; };
 		305D5C501CE884D6005CE5D8 /* taxiProviders.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = taxiProviders.json; path = json/taxiProviders.json; sourceTree = "<group>"; };
 		305D5C531CE8850C005CE5D8 /* testGroupeList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = testGroupeList.json; path = json/testGroupeList.json; sourceTree = "<group>"; };
 		305D5C541CE8850C005CE5D8 /* testGroupeSuggest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = testGroupeSuggest.json; path = json/testGroupeSuggest.json; sourceTree = "<group>"; };
@@ -263,8 +272,22 @@
 		302F9A7D1D36840600194EB8 /* History */ = {
 			isa = PBXGroup;
 			children = (
+				302F9A841D36AEAB00194EB8 /* Cell */,
+				302F9A811D36AE1800194EB8 /* TKSHistoryListVM.h */,
+				302F9A821D36AE1800194EB8 /* TKSHistoryListVM.m */,
+				302F9A7E1D36AE0500194EB8 /* TKSHistoryListVC.h */,
+				302F9A7F1D36AE0500194EB8 /* TKSHistoryListVC.m */,
 			);
 			name = History;
+			sourceTree = "<group>";
+		};
+		302F9A841D36AEAB00194EB8 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				302F9A851D36AEF000194EB8 /* TKSHistoryCell.h */,
+				302F9A861D36AEF000194EB8 /* TKSHistoryCell.m */,
+			);
+			name = Cell;
 			sourceTree = "<group>";
 		};
 		305D5C521CE884FE005CE5D8 /* json */ = {
@@ -550,6 +573,8 @@
 				730F643E1CD8D9FA00A34A33 /* TKSRootVM.m in Sources */,
 				305F689F1D2BEA9600A7B1A8 /* TKSPreferences.m in Sources */,
 				73489C151CD6562000B218CB /* TKSAPIController.m in Sources */,
+				302F9A801D36AE0500194EB8 /* TKSHistoryListVC.m in Sources */,
+				302F9A871D36AEF000194EB8 /* TKSHistoryCell.m in Sources */,
 				73489BF01CD61F2700B218CB /* TKSSuggest.m in Sources */,
 				300275AF1CD8A30E00232840 /* TKSDataProvider.m in Sources */,
 				300275AC1CD8A19400232840 /* TKSRegion.m in Sources */,
@@ -571,6 +596,7 @@
 				73BB12661CCBC6AE00E07190 /* TKSOrderVC.m in Sources */,
 				73489BF31CD6217400B218CB /* TKSSearchVM.m in Sources */,
 				305D5C601CE894AD005CE5D8 /* NSDateFormatter+TKSTaxiProvider.m in Sources */,
+				302F9A831D36AE1800194EB8 /* TKSHistoryListVM.m in Sources */,
 				73BB0F7F1CCBBB6500E07190 /* AppDelegate.m in Sources */,
 				73BB0F7C1CCBBB6500E07190 /* main.m in Sources */,
 				73489BE41CD613AF00B218CB /* TKSTaxiListVM.m in Sources */,

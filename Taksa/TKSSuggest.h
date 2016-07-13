@@ -34,4 +34,7 @@ typedef NS_ENUM(NSInteger, TKSHintStyle) {
 @property (nonatomic, copy, readonly) NSString *hintTypeDescription;
 @property (nonatomic, copy, readonly) NSString *hintLabel;
 
+/*! Dictionary representation */
+@property (nonatomic, copy, readonly) NSDictionary *dictionary;
+
 @end

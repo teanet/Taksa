@@ -92,4 +92,17 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 		}];
 }
 
+- (void)addSuggestToHistory:(TKSSuggest *)suggest
+{
+	[self.preferences addSuggestDictionaryToHistoryList:suggest.dictionary];
+}
+
+- (NSArray<TKSSuggest *> *)historyList
+{
+	return [[self.preferences historyDictionaries].rac_sequence
+		map:^TKSSuggest *(NSDictionary *suggestDictionary) {
+			return [[TKSSuggest alloc] initWithDictionary:suggestDictionary];
+		}].array;
+}
+
 @end

@@ -1,13 +1,13 @@
-#import "TKSSuggestCell.h"
+#import "TKSHistoryCell.h"
 
-@implementation TKSSuggestCell
+@implementation TKSHistoryCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
 	self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier];
 	if (self == nil) return nil;
 
-	self.imageView.image = [UIImage imageNamed:@"suggestIcon"];
+	self.imageView.image = [UIImage imageNamed:@"historyIcon"];
 
 	return self;
 }
@@ -16,7 +16,7 @@
 {
 	[super setViewModel:viewModel];
 
-//	self.textLabel.numberOfLines = 0;
+//	self.textLabel.numberOfLines = 1;
 	self.textLabel.attributedText = self.viewModel.attributedText;
 	self.detailTextLabel.text = self.viewModel.hintTypeDescription;
 }
