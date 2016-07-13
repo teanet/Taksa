@@ -92,4 +92,21 @@
 	return _attributedText;
 }
 
+- (NSDictionary *)dictionary
+{
+	NSDictionary *highlights = @{
+		@"style": @"normal",
+		@"text": self.text,
+	};
+
+	return @{
+		@"highlights": @[highlights],
+		@"text": self.text,
+		@"id": self.id,
+		@"type_text": self.hintTypeDescription,
+		@"type": self.hintLabel,
+	};
+}
+
+
 @end

@@ -1,18 +1,20 @@
-#import "TKSSuggestListVM.h"
+#import "TKSHistoryListVM.h"
 
-#import "TKSSuggestCell.h"
+#import "TKSHistoryCell.h"
+#import "TKSDataProvider.h"
 
-@interface TKSSuggestListVM ()
+@interface TKSHistoryListVM ()
 <
 UITableViewDelegate,
-UITableViewDataSource
+UITableViewDataSource,
+UIScrollViewDelegate
 >
 
 @property (nonatomic, strong, readonly) RACSubject *didSelectSuggestSubject;
 
 @end
 
-@implementation TKSSuggestListVM
+@implementation TKSHistoryListVM
 
 - (instancetype)init
 {
@@ -32,7 +34,7 @@ UITableViewDataSource
 
 - (void)registerTableView:(UITableView *)tableView
 {
-	[tableView registerClass:[TKSSuggestCell class] forCellReuseIdentifier:@"cell"];
+	[tableView registerClass:[TKSHistoryCell class] forCellReuseIdentifier:@"cell"];
 	tableView.delegate = self;
 	tableView.dataSource = self;
 
@@ -43,6 +45,13 @@ UITableViewDataSource
 		subscribeNext:^(id _) {
 			[tableView reloadData];
 		}];
+
+	[self loadHistory];
+}
+
+- (void)loadHistory
+{
+	self.suggests = [TKSDataProvider sharedProvider].historyList;
 }
 
 #pragma mark TableView

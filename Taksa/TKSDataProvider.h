@@ -30,6 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)sendAnalyticsForType:(NSString *)type body:(NSDictionary *_Nullable)bodyDictionary;
 
+- (void)addSuggestToHistory:(TKSSuggest *)suggest;
+- (NSArray<TKSSuggest *> *)historyList;
+
 @end
 
 NS_ASSUME_NONNULL_END

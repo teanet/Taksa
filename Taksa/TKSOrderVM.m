@@ -12,6 +12,7 @@
 
 	_taxiListVM = [[TKSTaxiListVM alloc] init];
 	_suggestListVM = [[TKSSuggestListVM alloc] init];
+	_historyListVM = [[TKSHistoryListVM alloc] init];
 	_inputVM = inputVM ?: [[TKSInputVM alloc] init];
 
 	[self setupReactiveStuff];
@@ -23,10 +24,8 @@
 {
 	@weakify(self);
 
-	[self.suggestListVM.didSelectSuggestSignal
-		subscribeNext:^(TKSSuggest *suggest) {
-			@strongify(self);
-
+	RACSignal *didSelectSuggestSignal = [self.suggestListVM.didSelectSuggestSignal
+		doNext:^(TKSSuggest *suggest) {
 			NSString *suggestText = suggest.text;
 
 			if ([suggest.hintLabel isEqualToString:@"street"])
@@ -36,10 +35,18 @@
 			}
 			else
 			{
-				self.inputVM.currentSearchVM.text = suggestText;
-				[self setSearchResultForCurrentSearchVM:suggest];
-				[self toggleTextField];
+				[self saveSuggestToHistory:suggest];
 			}
+		}];
+
+	[[RACSignal merge:@[didSelectSuggestSignal, self.historyListVM.didSelectSuggestSignal]]
+		subscribeNext:^(TKSSuggest *suggest) {
+			@strongify(self);
+
+			self.inputVM.currentSearchVM.text = suggest.text;
+			[self setSearchResultForCurrentSearchVM:suggest];
+			[self switchToNextTextFiledIfNeeded];
+			[self startSearchIfNeeded];
 		}];
 }
 
@@ -67,10 +74,10 @@
 	}
 }
 
-- (void)toggleTextField
+- (void)saveSuggestToHistory:(TKSSuggest *)suggest
 {
-	[self switchToNextTextFiledIfNeeded];
-	[self startSearchIfNeeded];
+	[[TKSDataProvider sharedProvider] addSuggestToHistory:suggest];
+	[self.historyListVM loadHistory];
 }
 
 - (void)switchToNextTextFiledIfNeeded
