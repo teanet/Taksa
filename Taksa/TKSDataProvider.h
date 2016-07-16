@@ -8,6 +8,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) TKSRegion *currentRegion;
 
+@property (nonatomic, strong, readonly) RACSignal *errorSignal;
+
 + (instancetype)sharedProvider;
 
 /*! \return @[TKSSuggest] Переделано! */

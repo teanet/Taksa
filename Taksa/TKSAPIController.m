@@ -23,6 +23,11 @@ static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa
 
 	self = [super init];
 	if (self == nil) return nil;
+
+	_didOccurNetworkErrorSignal = [[self rac_signalForSelector:@checkselector(self, didOccurError:)]
+		map:^NSError *(RACTuple *t) {
+			return t.first;
+		}];
 	
 	_requestManager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:kTKSTaksaBaseURLString]];
 	_requestManager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -65,7 +70,10 @@ static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa
 		};
 
 		id failBlock = ^(AFHTTPRequestOperation *operation, NSError *error) {
+			@strongify(self);
+
 			NSLog(@"<TKSAPIController> REQUEST ERROR: %@", error);
+			[self didOccurError:error];
 			[subscriber sendError:error];
 		};
 
@@ -92,7 +100,10 @@ static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa
 		};
 
 		id failBlock = ^(AFHTTPRequestOperation *operation, NSError *error) {
+			@strongify(self);
 			NSLog(@"<NZBServerController> REQUEST ERROR: %@", error);
+
+			[self didOccurError:error];
 			[subscriber sendError:error];
 		};
 
@@ -101,6 +112,10 @@ static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa
 			[op cancel];
 		}];
 	}];
+}
+
+- (void)didOccurError:(NSError *)error
+{
 }
 
 @end
