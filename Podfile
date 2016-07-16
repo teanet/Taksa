@@ -14,6 +14,7 @@ target 'Taksa' do
 	pod 'DGSAttributedStringSuite'
 	pod 'UIDevice-Hardware'
 	pod 'SSKeychain'
+	pod 'DGActivityIndicatorView'
 
 end
 

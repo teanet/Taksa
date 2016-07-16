@@ -53,9 +53,4 @@
 	return self;
 }
 
-- (void)clearSuggestsAndResults
-{
-	self.suggests = nil;
-}
-
 @end
