@@ -4,24 +4,26 @@
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 						  searchId:(NSString *)searchId
-						  distance:(NSNumber *)distance
-							  time:(NSNumber *)time
+							 title:(NSString *)title
 							  type:(TKSTaxiModelType)type
 {
 	self = [super init];
 	if (self == nil) return nil;
 
 	_title = dictionary[@"title"];
+	if (_title.length == 0)
+	{
+		_title = [title copy];
+	}
+	
 	_summary = dictionary[@"summary"];
-	_distance = [distance stringValue];
-	_time = [time stringValue];
 	_type = type;
 	_searchId = [searchId copy];
 
 	NSArray *taxiDictionariesArray = dictionary[@"results"];
 	_rows = [[taxiDictionariesArray rac_sequence]
 		map:^TKSTaxiRow *(NSDictionary *taxiDictionary) {
-			return [[TKSTaxiRow alloc] initWithDictionary:taxiDictionary type:type];
+			return [[TKSTaxiRow alloc] initWithDictionary:taxiDictionary summary:_summary type:type];
 		}].array;
 
 	return self;
@@ -48,18 +50,46 @@
 	NSNumber *searchIdNumber = resultsDictionary[@"id"];
 	NSString *searchId = [searchIdNumber stringValue];
 
+	NSString *optimalTitle = [self.class optimalTitleForDistance:distanceNumber time:timeNumber];
+	NSString *elseTitle = [self.class elseTitleForSectionDictionary:elseSectionDictionary];
+
 	TKSTaxiSection *optimalSection = [[TKSTaxiSection alloc] initWithDictionary:optimalSectionDictionary
 																	   searchId:searchId
-																	   distance:distanceNumber
-																		   time:timeNumber
+																		  title:optimalTitle
 																		   type:TKSTaxiModelTypeSuggest];
 
 	TKSTaxiSection *elseSection = [[TKSTaxiSection alloc] initWithDictionary:elseSectionDictionary
 																	searchId:searchId
-																	distance:distanceNumber
-																		time:timeNumber
+																	   title:elseTitle
 																		type:TKSTaxiModelTypeDefault];
 	return @[optimalSection, elseSection];
+}
+
++ (NSString *)optimalTitleForDistance:(NSNumber *)distanceNumber time:(NSNumber *)timeNumber
+{
+
+	return [NSString stringWithFormat:@"%.1fкм, %ld минуты",
+		[distanceNumber doubleValue]/1000.0,
+		timeNumber.integerValue];
+}
+
++ (NSString *)elseTitleForSectionDictionary:(NSDictionary *)sectionDictionary
+{
+	NSString *title;
+
+	NSArray *operators = sectionDictionary[@"results"];
+	if (operators.count > 1)
+	{
+		NSDictionary *firstOperator = operators.firstObject;
+		NSDictionary *lastOperator = operators.lastObject;
+
+		NSNumber *leastPrice = firstOperator[@"price"];
+		NSNumber *mostPrice = lastOperator[@"price"];
+
+		title = [NSString stringWithFormat:@"%ld предложений от %@ до %@ ₽", operators.count, leastPrice, mostPrice];
+	}
+
+	return title;
 }
 
 @end
@@ -81,7 +111,7 @@
 	NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:name ofType:nil]];
 	NSDictionary *testDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 
-	return [[TKSTaxiSection alloc] initWithDictionary:testDictionary searchId:nil distance:nil time:nil type:0];
+	return [[TKSTaxiSection alloc] initWithDictionary:testDictionary searchId:nil title:nil type:0];
 }
 
 @end

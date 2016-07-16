@@ -24,7 +24,9 @@
 
 @implementation TKSTaxiRow
 
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary type:(TKSTaxiModelType)type
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary
+						   summary:(NSString *)summary
+							  type:(TKSTaxiModelType)type
 {
 	self = [super init];
 	if (self == nil) return nil;
@@ -33,7 +35,8 @@
 
 	NSDictionary *operatorDictionary = dictionary[@"operator"];
 	_title = operatorDictionary[@"title"];
-	_summary = dictionary[@"summary"];
+//	_summary = dictionary[@"summary"];
+	_summary = [summary copy];
 
 	NSNumber *idNumber = operatorDictionary[@"id"];
 	_id = [idNumber stringValue];

@@ -13,8 +13,7 @@
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 						  searchId:(NSString *)searchId
-						  distance:(NSNumber *)distance
-							  time:(NSNumber *)time
+							 title:(NSString *)title
 							  type:(TKSTaxiModelType)type;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_UNAVAILABLE;

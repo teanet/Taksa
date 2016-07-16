@@ -12,7 +12,6 @@
 	[tableView registerClass:[TKSTaxiSuggestCell class] forCellReuseIdentifier:@"cell"];
 	[tableView registerClass:[TKSTaxiDefaultCell class] forCellReuseIdentifier:@"defaultCell"];
 
-//	[tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
 	tableView.rowHeight = UITableViewAutomaticDimension;
 	tableView.estimatedRowHeight = 80.0;
 	[tableView registerClass:[UITableViewHeaderFooterView class] forHeaderFooterViewReuseIdentifier:@"header"];
