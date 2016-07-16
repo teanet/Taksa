@@ -19,6 +19,8 @@
 	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 	if (!self) return nil;
 
+	self.selectionStyle = UITableViewCellSelectionStyleNone;
+
 	UIView *contentView = [[UIView alloc] init];
 	[self.contentView addSubview:contentView];
 

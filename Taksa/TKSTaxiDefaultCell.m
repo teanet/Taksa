@@ -19,6 +19,8 @@
 	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 	if (!self) return nil;
 
+	self.selectionStyle = UITableViewCellSelectionStyleNone;
+
 	_iconView = [[UIImageView alloc] init];
 	_iconView.layer.cornerRadius = 16.0;
 	[self.contentView addSubview:_iconView];

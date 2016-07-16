@@ -18,9 +18,12 @@ typedef NS_ENUM(NSInteger, TKSTaxiModelType) {
 @property (nonatomic, strong, readonly) UIColor *color;
 @property (nonatomic, strong, readonly) UIColor *textColor;
 @property (nonatomic, copy, readonly) NSString *price;
+@property (nonatomic, copy, readonly) NSString *searchId;
+
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 						   summary:(NSString *)summary
+						  searchId:(NSString *)searchId
 							  type:(TKSTaxiModelType)type NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_UNAVAILABLE;
