@@ -23,7 +23,7 @@
 	NSArray *taxiDictionariesArray = dictionary[@"results"];
 	_rows = [[taxiDictionariesArray rac_sequence]
 		map:^TKSTaxiRow *(NSDictionary *taxiDictionary) {
-			return [[TKSTaxiRow alloc] initWithDictionary:taxiDictionary summary:_summary type:type];
+			return [[TKSTaxiRow alloc] initWithDictionary:taxiDictionary summary:_summary searchId:searchId type:type];
 		}].array;
 
 	return self;

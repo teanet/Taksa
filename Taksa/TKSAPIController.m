@@ -103,7 +103,11 @@ static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa
 			@strongify(self);
 			NSLog(@"<NZBServerController> REQUEST ERROR: %@", error);
 
-			[self didOccurError:error];
+			if (error.code != 3840)
+			{
+				[self didOccurError:error];
+			}
+			
 			[subscriber sendError:error];
 		};
 

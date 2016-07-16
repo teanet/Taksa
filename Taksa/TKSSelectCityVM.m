@@ -69,6 +69,11 @@
 {
 	[TKSDataProvider sharedProvider].currentRegion = self.regions[indexPath.row];
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+	NSDictionary *body = @{
+		@"region_id" : [TKSDataProvider sharedProvider].currentRegion.id,
+	};
+	[[TKSDataProvider sharedProvider] sendAnalyticsForType:@"city-select" body:body];
 }
 
 @end

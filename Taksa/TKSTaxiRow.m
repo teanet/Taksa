@@ -26,12 +26,14 @@
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 						   summary:(NSString *)summary
+						  searchId:(NSString *)searchId
 							  type:(TKSTaxiModelType)type
 {
 	self = [super init];
 	if (self == nil) return nil;
 
 	_type = type;
+	_searchId = [searchId copy];
 
 	NSDictionary *operatorDictionary = dictionary[@"operator"];
 	_title = operatorDictionary[@"title"];

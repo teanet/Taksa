@@ -47,10 +47,19 @@
 				[self saveSuggestToHistory:suggest];
 			}
 
+			[self trackSuggest:suggest analyticsType:@"suggest"];
+
 			return !isSuggestStreet;
 		}];
 
-	[[RACSignal merge:@[didSelectSuggestSignal, self.historyListVM.didSelectSuggestSignal]]
+	RACSignal *didSelectHistorySignal = [self.historyListVM.didSelectSuggestSignal
+		doNext:^(TKSSuggest *suggest) {
+			@strongify(self);
+
+			[self trackSuggest:suggest analyticsType:@"history"];
+		}];
+
+	[[RACSignal merge:@[didSelectSuggestSignal, didSelectHistorySignal]]
 		subscribeNext:^(TKSSuggest *suggest) {
 			@strongify(self);
 
@@ -84,6 +93,45 @@
 
 			self.orderMode = TKSOrderModeTaxiList;
 		}];
+
+	[[self.taxiListVM.didSelectTaxiSignal
+		ignore:nil]
+		subscribeNext:^(TKSTaxiRow *taxiRow) {
+			@strongify(self);
+
+			[self trackTaxiRow:taxiRow];
+		}];
+}
+
+- (void)trackSuggest:(TKSSuggest *)suggest analyticsType:(NSString *)analyticsType
+{
+	if (!suggest) return;
+
+	NSString *type = self.inputVM.currentSearchVM == self.inputVM.fromSearchVM
+		? @"from"
+		: @"to";
+
+	NSDictionary *body = @{
+		@"item_id" : suggest.id,
+		@"q" : self.inputVM.currentSearchVM.text,
+		@"type" : type,
+		@"source" : @"q"
+	};
+
+	NSString *aType = [analyticsType stringByAppendingString:@"-select"];
+	[[TKSDataProvider sharedProvider] sendAnalyticsForType:aType body:body];
+}
+
+- (void)trackTaxiRow:(TKSTaxiRow *)taxiRow
+{
+	if (!taxiRow) return;
+
+	NSDictionary *body = @{
+		@"search_id" : taxiRow.searchId,
+		@"operator_id" : taxiRow.id,
+	};
+
+	[[TKSDataProvider sharedProvider] sendAnalyticsForType:@"taxi-select" body:body];
 }
 
 - (void)clearSearchResultForCurrentSearchVM

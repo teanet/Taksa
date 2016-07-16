@@ -23,6 +23,11 @@
 		subscribeNext:^(id _) {
 			[tableView reloadData];
 		}];
+
+	_didSelectTaxiSignal = [[self rac_signalForSelector:@checkselector(self, didSelectTaxiRow:)]
+		map:^TKSTaxiRow *(RACTuple *tuple) {
+			return tuple.first;
+		}];
 }
 
 #pragma mark TableView
@@ -54,6 +59,17 @@
 	TKSTaxiSuggestCell *cell = [tableView dequeueReusableCellWithIdentifier:indexPath.section == 0 ? @"cell" : @"defaultCell"];
 	cell.taxiRow = self.data[indexPath.section].rows[indexPath.row];
 	return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+	[self didSelectTaxiRow:self.data[indexPath.section].rows[indexPath.row]];
+}
+
+- (void)didSelectTaxiRow:(TKSTaxiRow *)taxiRow
+{
 }
 
 @end
