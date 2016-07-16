@@ -1,6 +1,6 @@
 #import "TKSTransitionRootToOrder.h"
 
-#import "TKSRootVC.h"
+#import "TKSHomeVC.h"
 #import "TKSOrderVC.h"
 #import "TKSInputView.h"
 
@@ -8,7 +8,7 @@
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext
 {
-	TKSRootVC *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+	TKSHomeVC *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
 	TKSOrderVC *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
 
 	UIView *containerView = [transitionContext containerView];

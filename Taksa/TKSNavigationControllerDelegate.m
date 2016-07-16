@@ -1,7 +1,7 @@
 #import "TKSNavigationControllerDelegate.h"
 
 #import "TKSTransitionRootToOrder.h"
-#import "TKSRootVC.h"
+#import "TKSHomeVC.h"
 #import "TKSOrderVC.h"
 
 @implementation TKSNavigationControllerDelegate
@@ -34,7 +34,7 @@
 											   fromViewController:(UIViewController *)fromVC
 												 toViewController:(UIViewController *)toVC
 {
-	if ([fromVC isKindOfClass:[TKSRootVC class]] &&
+	if ([fromVC isKindOfClass:[TKSHomeVC class]] &&
 		[toVC isKindOfClass:[TKSOrderVC class]])
 	{
 		return [[TKSTransitionRootToOrder alloc] init];

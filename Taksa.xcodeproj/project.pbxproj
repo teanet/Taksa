@@ -18,6 +18,11 @@
 		302F9A801D36AE0500194EB8 /* TKSHistoryListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 302F9A7F1D36AE0500194EB8 /* TKSHistoryListVC.m */; };
 		302F9A831D36AE1800194EB8 /* TKSHistoryListVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 302F9A821D36AE1800194EB8 /* TKSHistoryListVM.m */; };
 		302F9A871D36AEF000194EB8 /* TKSHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 302F9A861D36AEF000194EB8 /* TKSHistoryCell.m */; };
+		302FA0BF1D3A21C300194EB8 /* TKSRootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 302FA0BE1D3A21C300194EB8 /* TKSRootVC.m */; };
+		302FA0C21D3A21D100194EB8 /* TKSRootVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 302FA0C11D3A21D100194EB8 /* TKSRootVM.m */; };
+		302FA0C61D3A23E600194EB8 /* DGSErrorBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 302FA0C51D3A23E600194EB8 /* DGSErrorBannerView.m */; };
+		302FA0CB1D3A23FE00194EB8 /* DGSErrorBannerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 302FA0C81D3A23FE00194EB8 /* DGSErrorBannerModel.m */; };
+		302FA0CC1D3A23FE00194EB8 /* DGSErrorBannerVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 302FA0CA1D3A23FE00194EB8 /* DGSErrorBannerVM.m */; };
 		305D5C511CE884D6005CE5D8 /* taxiProviders.json in Resources */ = {isa = PBXBuildFile; fileRef = 305D5C501CE884D6005CE5D8 /* taxiProviders.json */; };
 		305D5C551CE8850C005CE5D8 /* testGroupeList.json in Resources */ = {isa = PBXBuildFile; fileRef = 305D5C531CE8850C005CE5D8 /* testGroupeList.json */; };
 		305D5C561CE8850C005CE5D8 /* testGroupeSuggest.json in Resources */ = {isa = PBXBuildFile; fileRef = 305D5C541CE8850C005CE5D8 /* testGroupeSuggest.json */; };
@@ -26,7 +31,7 @@
 		730F64351CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F64341CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m */; };
 		730F64381CD8A18F00A34A33 /* TKSTransitionRootToOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F64371CD8A18F00A34A33 /* TKSTransitionRootToOrder.m */; };
 		730F643B1CD8B1F400A34A33 /* TKSTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F643A1CD8B1F400A34A33 /* TKSTextField.m */; };
-		730F643E1CD8D9FA00A34A33 /* TKSRootVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F643D1CD8D9FA00A34A33 /* TKSRootVM.m */; };
+		730F643E1CD8D9FA00A34A33 /* TKSHomeVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F643D1CD8D9FA00A34A33 /* TKSHomeVM.m */; };
 		730F64411CD8E09F00A34A33 /* TKSSelectCityVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F64401CD8E09F00A34A33 /* TKSSelectCityVM.m */; };
 		730F64441CD8F87A00A34A33 /* TKSRegionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F64431CD8F87A00A34A33 /* TKSRegionCell.m */; };
 		730F64481CD8FAC400A34A33 /* TKSBaseVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F64471CD8FAC400A34A33 /* TKSBaseVC.m */; };
@@ -47,7 +52,7 @@
 		73BB0F7F1CCBBB6500E07190 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 73BB0F7E1CCBBB6500E07190 /* AppDelegate.m */; };
 		73BB0F871CCBBB6500E07190 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 73BB0F861CCBBB6500E07190 /* Assets.xcassets */; };
 		73BB0F8A1CCBBB6500E07190 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 73BB0F881CCBBB6500E07190 /* LaunchScreen.storyboard */; };
-		73BB0F931CCBC01000E07190 /* TKSRootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 73BB0F921CCBC01000E07190 /* TKSRootVC.m */; };
+		73BB0F931CCBC01000E07190 /* TKSHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 73BB0F921CCBC01000E07190 /* TKSHomeVC.m */; };
 		73BB12631CCBC3BE00E07190 /* TKSSelectCityVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 73BB12621CCBC3BE00E07190 /* TKSSelectCityVC.m */; };
 		73BB12661CCBC6AE00E07190 /* TKSOrderVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 73BB12651CCBC6AE00E07190 /* TKSOrderVC.m */; };
 		73BB126A1CCCA1D400E07190 /* TKSInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 73BB12691CCCA1D400E07190 /* TKSInputView.m */; };
@@ -76,6 +81,16 @@
 		302F9A821D36AE1800194EB8 /* TKSHistoryListVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSHistoryListVM.m; sourceTree = "<group>"; };
 		302F9A851D36AEF000194EB8 /* TKSHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSHistoryCell.h; sourceTree = "<group>"; };
 		302F9A861D36AEF000194EB8 /* TKSHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSHistoryCell.m; sourceTree = "<group>"; };
+		302FA0BD1D3A21C300194EB8 /* TKSRootVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSRootVC.h; sourceTree = "<group>"; };
+		302FA0BE1D3A21C300194EB8 /* TKSRootVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSRootVC.m; sourceTree = "<group>"; };
+		302FA0C01D3A21D100194EB8 /* TKSRootVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSRootVM.h; sourceTree = "<group>"; };
+		302FA0C11D3A21D100194EB8 /* TKSRootVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSRootVM.m; sourceTree = "<group>"; };
+		302FA0C41D3A23E600194EB8 /* DGSErrorBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGSErrorBannerView.h; sourceTree = "<group>"; };
+		302FA0C51D3A23E600194EB8 /* DGSErrorBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGSErrorBannerView.m; sourceTree = "<group>"; };
+		302FA0C71D3A23FE00194EB8 /* DGSErrorBannerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGSErrorBannerModel.h; sourceTree = "<group>"; };
+		302FA0C81D3A23FE00194EB8 /* DGSErrorBannerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGSErrorBannerModel.m; sourceTree = "<group>"; };
+		302FA0C91D3A23FE00194EB8 /* DGSErrorBannerVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGSErrorBannerVM.h; sourceTree = "<group>"; };
+		302FA0CA1D3A23FE00194EB8 /* DGSErrorBannerVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGSErrorBannerVM.m; sourceTree = "<group>"; };
 		305D5C501CE884D6005CE5D8 /* taxiProviders.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = taxiProviders.json; path = json/taxiProviders.json; sourceTree = "<group>"; };
 		305D5C531CE8850C005CE5D8 /* testGroupeList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = testGroupeList.json; path = json/testGroupeList.json; sourceTree = "<group>"; };
 		305D5C541CE8850C005CE5D8 /* testGroupeSuggest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = testGroupeSuggest.json; path = json/testGroupeSuggest.json; sourceTree = "<group>"; };
@@ -91,8 +106,8 @@
 		730F64371CD8A18F00A34A33 /* TKSTransitionRootToOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTransitionRootToOrder.m; sourceTree = "<group>"; };
 		730F64391CD8B1F400A34A33 /* TKSTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTextField.h; sourceTree = "<group>"; };
 		730F643A1CD8B1F400A34A33 /* TKSTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTextField.m; sourceTree = "<group>"; };
-		730F643C1CD8D9FA00A34A33 /* TKSRootVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSRootVM.h; sourceTree = "<group>"; };
-		730F643D1CD8D9FA00A34A33 /* TKSRootVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSRootVM.m; sourceTree = "<group>"; };
+		730F643C1CD8D9FA00A34A33 /* TKSHomeVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSHomeVM.h; sourceTree = "<group>"; };
+		730F643D1CD8D9FA00A34A33 /* TKSHomeVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSHomeVM.m; sourceTree = "<group>"; };
 		730F643F1CD8E09F00A34A33 /* TKSSelectCityVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSSelectCityVM.h; sourceTree = "<group>"; };
 		730F64401CD8E09F00A34A33 /* TKSSelectCityVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSSelectCityVM.m; sourceTree = "<group>"; };
 		730F64421CD8F87A00A34A33 /* TKSRegionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSRegionCell.h; sourceTree = "<group>"; };
@@ -133,8 +148,8 @@
 		73BB0F861CCBBB6500E07190 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		73BB0F891CCBBB6500E07190 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		73BB0F8B1CCBBB6500E07190 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		73BB0F911CCBC01000E07190 /* TKSRootVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSRootVC.h; sourceTree = "<group>"; };
-		73BB0F921CCBC01000E07190 /* TKSRootVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSRootVC.m; sourceTree = "<group>"; };
+		73BB0F911CCBC01000E07190 /* TKSHomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSHomeVC.h; sourceTree = "<group>"; };
+		73BB0F921CCBC01000E07190 /* TKSHomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSHomeVC.m; sourceTree = "<group>"; };
 		73BB12601CCBC22600E07190 /* Prefix-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Prefix-Header.h"; sourceTree = "<group>"; };
 		73BB12611CCBC3BE00E07190 /* TKSSelectCityVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSSelectCityVC.h; sourceTree = "<group>"; };
 		73BB12621CCBC3BE00E07190 /* TKSSelectCityVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSSelectCityVC.m; sourceTree = "<group>"; };
@@ -252,10 +267,10 @@
 		302D8FFE1D36737C00195DB3 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				73BB0F911CCBC01000E07190 /* TKSRootVC.h */,
-				73BB0F921CCBC01000E07190 /* TKSRootVC.m */,
-				730F643C1CD8D9FA00A34A33 /* TKSRootVM.h */,
-				730F643D1CD8D9FA00A34A33 /* TKSRootVM.m */,
+				73BB0F911CCBC01000E07190 /* TKSHomeVC.h */,
+				73BB0F921CCBC01000E07190 /* TKSHomeVC.m */,
+				730F643C1CD8D9FA00A34A33 /* TKSHomeVM.h */,
+				730F643D1CD8D9FA00A34A33 /* TKSHomeVM.m */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -288,6 +303,31 @@
 				302F9A861D36AEF000194EB8 /* TKSHistoryCell.m */,
 			);
 			name = Cell;
+			sourceTree = "<group>";
+		};
+		302FA0BC1D3A21A700194EB8 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				302FA0C31D3A23D300194EB8 /* ErrorBanner */,
+				302FA0BD1D3A21C300194EB8 /* TKSRootVC.h */,
+				302FA0BE1D3A21C300194EB8 /* TKSRootVC.m */,
+				302FA0C01D3A21D100194EB8 /* TKSRootVM.h */,
+				302FA0C11D3A21D100194EB8 /* TKSRootVM.m */,
+			);
+			name = Root;
+			sourceTree = "<group>";
+		};
+		302FA0C31D3A23D300194EB8 /* ErrorBanner */ = {
+			isa = PBXGroup;
+			children = (
+				302FA0C71D3A23FE00194EB8 /* DGSErrorBannerModel.h */,
+				302FA0C81D3A23FE00194EB8 /* DGSErrorBannerModel.m */,
+				302FA0C91D3A23FE00194EB8 /* DGSErrorBannerVM.h */,
+				302FA0CA1D3A23FE00194EB8 /* DGSErrorBannerVM.m */,
+				302FA0C41D3A23E600194EB8 /* DGSErrorBannerView.h */,
+				302FA0C51D3A23E600194EB8 /* DGSErrorBannerView.m */,
+			);
+			name = ErrorBanner;
 			sourceTree = "<group>";
 		};
 		305D5C521CE884FE005CE5D8 /* json */ = {
@@ -340,6 +380,7 @@
 		73489BF41CD6477500B218CB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				302FA0BC1D3A21A700194EB8 /* Root */,
 				302F9A7D1D36840600194EB8 /* History */,
 				302D8FF91D36727300195DB3 /* Common */,
 				302D8FFE1D36737C00195DB3 /* Home */,
@@ -566,26 +607,31 @@
 				73489C161CD6562000B218CB /* TKSAPIController+TKSModels.m in Sources */,
 				302F91481D36750C00194EB8 /* TKSSuggestListVC.m in Sources */,
 				302F97581D3677F200194EB8 /* TKSSuggestCell.m in Sources */,
+				302FA0BF1D3A21C300194EB8 /* TKSRootVC.m in Sources */,
+				302FA0CC1D3A23FE00194EB8 /* DGSErrorBannerVM.m in Sources */,
 				734895E41CD5FE6800B218CB /* TKSOrderVM.m in Sources */,
 				73BB126D1CCCA62A00E07190 /* TKSInputVM.m in Sources */,
+				302FA0C61D3A23E600194EB8 /* DGSErrorBannerView.m in Sources */,
 				730F64411CD8E09F00A34A33 /* TKSSelectCityVM.m in Sources */,
 				300275B21CD8A90700232840 /* TKSLocationManager.m in Sources */,
-				730F643E1CD8D9FA00A34A33 /* TKSRootVM.m in Sources */,
+				730F643E1CD8D9FA00A34A33 /* TKSHomeVM.m in Sources */,
 				305F689F1D2BEA9600A7B1A8 /* TKSPreferences.m in Sources */,
 				73489C151CD6562000B218CB /* TKSAPIController.m in Sources */,
 				302F9A801D36AE0500194EB8 /* TKSHistoryListVC.m in Sources */,
 				302F9A871D36AEF000194EB8 /* TKSHistoryCell.m in Sources */,
 				73489BF01CD61F2700B218CB /* TKSSuggest.m in Sources */,
 				300275AF1CD8A30E00232840 /* TKSDataProvider.m in Sources */,
+				302FA0CB1D3A23FE00194EB8 /* DGSErrorBannerModel.m in Sources */,
 				300275AC1CD8A19400232840 /* TKSRegion.m in Sources */,
 				73BB12631CCBC3BE00E07190 /* TKSSelectCityVC.m in Sources */,
 				734898E51CD60D7A00B218CB /* TKSTaxiRow.m in Sources */,
 				73489C0E1CD655B200B218CB /* UIColor+DGSCustomColor.m in Sources */,
 				73489BFB1CD64E4900B218CB /* TKSTaxiDefaultCell.m in Sources */,
 				73489C081CD6556600B218CB /* UIFont+DGSCustomFont.m in Sources */,
-				73BB0F931CCBC01000E07190 /* TKSRootVC.m in Sources */,
+				73BB0F931CCBC01000E07190 /* TKSHomeVC.m in Sources */,
 				73489BE71CD6155700B218CB /* TKSSuggestListVM.m in Sources */,
 				730F64351CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m in Sources */,
+				302FA0C21D3A21D100194EB8 /* TKSRootVM.m in Sources */,
 				302F9A7C1D367D1600194EB8 /* UIViewController+DGSAdditions.m in Sources */,
 				730F64481CD8FAC400A34A33 /* TKSBaseVC.m in Sources */,
 				734898E21CD60D3600B218CB /* TKSTaxiSection.m in Sources */,

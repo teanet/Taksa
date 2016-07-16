@@ -105,4 +105,9 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 		}].array;
 }
 
+- (RACSignal *)errorSignal
+{
+	return self.apiController.didOccurNetworkErrorSignal;
+}
+
 @end
