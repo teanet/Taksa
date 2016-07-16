@@ -11,6 +11,4 @@
 
 @property (nonatomic, strong, readonly) NSArray<TKSSuggest *> *suggests;
 
-- (void)clearSuggestsAndResults;
-
 @end

@@ -3,6 +3,12 @@
 #import "TKSTaxiSection.h"
 #import "TKSDataProvider.h"
 
+@interface TKSOrderVM ()
+
+@property (nonatomic, assign) TKSOrderMode orderMode;
+
+@end
+
 @implementation TKSOrderVM
 
 - (instancetype)initWithInputVM:(TKSInputVM *)inputVM
@@ -14,6 +20,8 @@
 	_suggestListVM = [[TKSSuggestListVM alloc] init];
 	_historyListVM = [[TKSHistoryListVM alloc] init];
 	_inputVM = inputVM ?: [[TKSInputVM alloc] init];
+
+	_orderMode = TKSOrderModeSearch;
 
 	[self setupReactiveStuff];
 
@@ -58,6 +66,23 @@
 
 			self.inputVM.fromSearchVM.active = NO;
 			self.inputVM.toSearchVM.active = NO;
+		}];
+
+	[self.inputVM.didBecomeEditingSignal subscribeNext:^(id x) {
+		@strongify(self);
+
+		self.orderMode = TKSOrderModeSearch;
+	}];
+
+	[[[RACObserve(self.taxiListVM, data)
+		ignore:nil]
+		filter:^BOOL(NSArray *a) {
+			return a.count > 0;
+		}]
+		subscribeNext:^(id _) {
+			@strongify(self);
+
+			self.orderMode = TKSOrderModeTaxiList;
 		}];
 }
 
@@ -112,17 +137,9 @@
 
 - (void)startSearchIfNeeded
 {
-	@weakify(self);
-
 	if (self.inputVM.fromSearchVM.dbObject && self.inputVM.toSearchVM.dbObject)
 	{
-		[[self fetchTaxiList]
-			subscribeNext:^(id _) {
-				@strongify(self);
-				
-				[self.inputVM.fromSearchVM clearSuggestsAndResults];
-				[self.inputVM.toSearchVM clearSuggestsAndResults];
-			}];
+		[[[self fetchTaxiList] publish] connect];
 	}
 }
 
@@ -140,8 +157,11 @@
 {
 	@weakify(self);
 
-	return [[[TKSDataProvider sharedProvider] fetchTaxiListFromObject:self.inputVM.fromSearchVM.dbObject
+	self.orderMode = TKSOrderModeLoading;
+
+	return [[[[TKSDataProvider sharedProvider] fetchTaxiListFromObject:self.inputVM.fromSearchVM.dbObject
 															 toObject:self.inputVM.toSearchVM.dbObject]
+		delay:1.0]
 		doNext:^(NSArray<TKSTaxiSection *> *taxiList) {
 			@strongify(self);
 

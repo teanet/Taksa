@@ -6,21 +6,14 @@
 #import "TKSOrderVM.h"
 #import "UIColor+DGSCustomColor.h"
 #import "UIViewController+DGSAdditions.h"
-
-typedef NS_ENUM(NSUInteger, TKSOrderMode) {
-	TKSOrderModeSearch = 0,
-	TKSOrderModeLoading,
-	TKSOrderModeTaxiList,
-};
+#import <DGActivityIndicatorView/DGActivityIndicatorView.h>
 
 @interface TKSOrderVC ()
 
 @property (nonatomic, strong, readonly) TKSSuggestListVC *suggestListVC;
 @property (nonatomic, strong, readonly) UITableView *taxiTableView;
 
-@property (nonatomic, strong, readonly) UIActivityIndicatorView *spinner;
-
-@property (nonatomic, assign) TKSOrderMode orderMode;
+@property (nonatomic, strong, readonly) DGActivityIndicatorView *spinner;
 
 @end
 
@@ -34,14 +27,14 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	_suggestListVC = [[TKSSuggestListVC alloc] initWithVM:self.viewModel.suggestListVM];
 	_historyListVC = [[TKSHistoryListVC alloc] initWithVM:self.viewModel.historyListVM];
 
-	self.orderMode = TKSOrderModeSearch;
-
 	return self;
 }
 
 - (void)loadView
 {
-	_spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+	_spinner = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeCookieTerminator
+												   tintColor:[UIColor dgs_colorWithString:@"FFE400"]
+														size:50.0];
 
 	_taxiTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
 	_taxiTableView.backgroundColor = [UIColor clearColor];
@@ -53,41 +46,12 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 
 - (void)viewDidLoad
 {
-	@weakify(self);
-
     [super viewDidLoad];
+
     self.view.backgroundColor = [UIColor dgs_colorWithString:@"F4F4F4"];
 	[self setEdgesForExtendedLayout:UIRectEdgeNone];
 
 	[self.viewModel registerTaxiTableView:self.taxiTableView];
-
-	[[RACObserve(self.viewModel.inputVM, currentSearchVM.suggests)
-		deliverOnMainThread]
-		subscribeNext:^(NSArray<TKSSuggest *> *suggests) {
-			@strongify(self);
-
-			self.viewModel.suggestListVM.suggests = suggests;
-
-			BOOL visible = (suggests.count > 0);
-			[self changeSuggesterVisible:visible];
-		}];
-
-	[self.viewModel.inputVM.didBecomeEditingSignal subscribeNext:^(id x) {
-		@strongify(self);
-
-		self.orderMode = TKSOrderModeSearch;
-	}];
-
-	[[[RACObserve(self.viewModel.taxiListVM, data)
-		ignore:nil]
-		filter:^BOOL(NSArray *a) {
-			return a.count > 0;
-		}]
-		subscribeNext:^(id _) {
-			@strongify(self);
-
-			self.orderMode = TKSOrderModeTaxiList;
-		}];
 
 	UILabel *nameLabel = [[UILabel alloc] init];
 	nameLabel.text = @"ТАКСА";
@@ -129,13 +93,40 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	[self.spinner startAnimating];
 	[self.view addSubview:self.spinner];
 	[self.spinner mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.center.equalTo(self.view);
+		make.centerX.equalTo(self.view);
+		make.top.equalTo(self.inputView.mas_bottom).with.offset(50.0);
 	}];
 
 	[self.view addSubview:self.taxiTableView];
 	[self.taxiTableView mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.edges.equalTo(self.suggestListVC.view);
 	}];
+
+	[self setupReactiveStuff];
+}
+
+- (void)setupReactiveStuff
+{
+	@weakify(self);
+
+	[[RACObserve(self.viewModel.inputVM, currentSearchVM.suggests)
+		deliverOnMainThread]
+		subscribeNext:^(NSArray<TKSSuggest *> *suggests) {
+			@strongify(self);
+
+			self.viewModel.suggestListVM.suggests = suggests;
+
+			BOOL visible = (suggests.count > 0);
+			[self changeSuggesterVisible:visible];
+		}];
+
+	[[RACObserve(self.viewModel, orderMode)
+		deliverOnMainThread]
+		subscribeNext:^(NSNumber *orderModeNumber) {
+			@strongify(self);
+
+			[self setOrderMode:orderModeNumber.integerValue];
+		}];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -146,43 +137,17 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 
 - (void)setOrderMode:(TKSOrderMode)orderMode
 {
-	_orderMode = orderMode;
-
 	self.taxiTableView.hidden = (orderMode != TKSOrderModeTaxiList);
+
 	self.suggestListVC.view.hidden = (orderMode != TKSOrderModeSearch);
+	self.historyListVC.view.hidden = (orderMode != TKSOrderModeSearch);
+
 	self.spinner.hidden = (orderMode != TKSOrderModeLoading);
 
-	switch (orderMode) {
-		case TKSOrderModeSearch:
-		{
-			self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchTap)];
-			break;
-		}
-		case TKSOrderModeLoading:
-		{
-			self.navigationItem.rightBarButtonItem = nil;
-			break;
-		}
-		case TKSOrderModeTaxiList:
-		{
-			[self.view endEditing:YES];
-			break;
-		}
+	if (orderMode == TKSOrderModeTaxiList)
+	{
+		[self.view endEditing:YES];
 	}
-}
-
-- (void)searchTap
-{
-	@weakify(self);
-	self.orderMode = TKSOrderModeLoading;
-
-	[[self.viewModel fetchTaxiList]
-		subscribeNext:^(id x) {
-			@strongify(self);
-			
-			[self.taxiTableView reloadData];
-			self.orderMode = TKSOrderModeTaxiList;
-		}];
 }
 
 - (void)changeSuggesterVisible:(BOOL)visible
