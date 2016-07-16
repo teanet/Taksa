@@ -16,7 +16,6 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 @interface TKSOrderVC ()
 
 @property (nonatomic, strong, readonly) TKSSuggestListVC *suggestListVC;
-@property (nonatomic, strong, readonly) TKSHistoryListVC *historyListVC;
 @property (nonatomic, strong, readonly) UITableView *taxiTableView;
 
 @property (nonatomic, strong, readonly) UIActivityIndicatorView *spinner;

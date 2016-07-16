@@ -20,6 +20,7 @@
 	fromViewController.inputView.hidden = YES;
 
 	toViewController.inputView.hidden = YES;
+	toViewController.historyListVC.view.hidden = YES;
 
 	// Get a snapshot of the image view
 
@@ -40,6 +41,14 @@
 		[inputView removeFromSuperview];
 		fromViewController.inputView.hidden = NO;
 		toViewController.inputView.hidden = NO;
+		// Show History
+		toViewController.historyListVC.view.alpha = 0.0;
+		toViewController.historyListVC.view.hidden = NO;
+
+		[UIView animateWithDuration:0.3 animations:^{
+			toViewController.historyListVC.view.alpha = 1.0;
+		}];
+
 		// Clean up
 		fromViewController.view.alpha = 1.0;
 		fromViewController.view.hidden = NO;
