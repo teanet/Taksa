@@ -4,6 +4,6 @@
 #import <Foundation/Foundation.h>
 #import <Masonry/Masonry.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
-#import <extobjc.h>
+#import <libextobjc/EXTSelectorChecking.h>
 
 #endif

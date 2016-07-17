@@ -7,6 +7,19 @@
 
 @implementation TKSTaxiListVM
 
+- (instancetype)init
+{
+	self = [super init];
+	if (self == nil) return nil;
+
+	_didSelectTaxiSignal = [[self rac_signalForSelector:@checkselector(self, didSelectTaxiRow:)]
+		map:^TKSTaxiRow *(RACTuple *tuple) {
+			return tuple.first;
+		}];
+
+	return self;
+}
+
 - (void)registerTableView:(UITableView *)tableView
 {
 	[tableView registerClass:[TKSTaxiSuggestCell class] forCellReuseIdentifier:@"cell"];
@@ -22,11 +35,6 @@
 		ignore:nil]
 		subscribeNext:^(id _) {
 			[tableView reloadData];
-		}];
-
-	_didSelectTaxiSignal = [[self rac_signalForSelector:@checkselector(self, didSelectTaxiRow:)]
-		map:^TKSTaxiRow *(RACTuple *tuple) {
-			return tuple.first;
 		}];
 }
 

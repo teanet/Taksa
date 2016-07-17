@@ -1,6 +1,6 @@
 #import "TKSPreferences.h"
 
-#import <SSKeychain.h>
+#import <SSKeychain/SSKeychain.h>
 
 static NSInteger const kHistoryItemsMaxCount = 100;
 
