@@ -111,9 +111,13 @@
 		? @"from"
 		: @"to";
 
+	NSString *qString = self.inputVM.currentSearchVM.text.length > 0
+		? self.inputVM.currentSearchVM.text
+		: @"";
+
 	NSDictionary *body = @{
 		@"item_id" : suggest.id,
-		@"q" : self.inputVM.currentSearchVM.text,
+		@"q" : qString,
 		@"type" : type,
 		@"source" : @"q"
 	};

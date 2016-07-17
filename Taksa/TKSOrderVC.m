@@ -39,6 +39,7 @@
 	_taxiTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
 	_taxiTableView.backgroundColor = [UIColor clearColor];
 	_taxiTableView.showsVerticalScrollIndicator = NO;
+	_taxiTableView.tableFooterView = [[UIView alloc] init];
 
 	self.view = [[UIView alloc] init];
 }

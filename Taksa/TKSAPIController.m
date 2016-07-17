@@ -52,6 +52,8 @@ static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa
 	NSSet *typesSet = [NSSet setWithArray:@[@"text/plain", @"application/json"]];
 	[_requestManager.responseSerializer setAcceptableContentTypes:typesSet];
 
+	[_requestManager.requestSerializer setValue:@"application/json; charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
+
 	return self;
 }
 
@@ -107,7 +109,7 @@ static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa
 			{
 				[self didOccurError:error];
 			}
-			
+
 			[subscriber sendError:error];
 		};
 
