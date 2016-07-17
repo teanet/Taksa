@@ -1,7 +1,7 @@
 #import "TKSAPIController.h"
 
 #import <AFNetworking/AFNetworking.h>
-#import <UIDevice-Hardware.h>
+#import <UIDevice_Hardware/UIDevice-Hardware.h>
 
 #define CURRENT_VERSION ([[NSBundle bundleForClass:self.class] objectForInfoDictionaryKey:@"CFBundleShortVersionString"])
 #define CURRENT_BUILD ([[NSBundle bundleForClass:self.class] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey])

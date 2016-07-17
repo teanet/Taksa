@@ -1,12 +1,15 @@
 #import "TKSSuggest.h"
 #import "TKSTaxiSection.h"
 #import "TKSRegion.h"
+#import "TKSTaxiProcessor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TKSDataProvider : NSObject
 
 @property (nonatomic, strong, nullable) TKSRegion *currentRegion;
+
+@property (nonatomic, strong, readonly) TKSTaxiProcessor *taxiProcessor;
 
 @property (nonatomic, strong, readonly) RACSignal *errorSignal;
 

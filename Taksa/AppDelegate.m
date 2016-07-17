@@ -1,11 +1,11 @@
 #import "AppDelegate.h"
-#import "TKSRootVC.h"
 
+#import "TKSRootVC.h"
 #import "UIColor+DGSCustomColor.h"
-#import <SSKeychain.h>
+
+#import <SSKeychain/SSKeychain.h>
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -13,6 +13,7 @@
 
 	[self configureAppearance];
 	[self configureWindow];
+
 	return YES;
 }
 

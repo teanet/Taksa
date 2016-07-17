@@ -37,6 +37,7 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 	NSString *sessionId = _preferences.sessionId;
 	_apiController = [[TKSAPIController alloc] initWithUserId:userId sessionId:sessionId];
 	_locationManager = [[TKSLocationManager alloc] init];
+	_taxiProcessor = [[TKSTaxiProcessor alloc] init];
 
 	return self;
 }

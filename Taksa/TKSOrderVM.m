@@ -100,6 +100,9 @@
 			@strongify(self);
 
 			[self trackTaxiRow:taxiRow];
+			[[TKSDataProvider sharedProvider].taxiProcessor processTaxiRow:taxiRow
+															   fromSuggest:self.inputVM.fromSearchVM.dbObject
+																 toSuggest:self.inputVM.toSearchVM.dbObject];
 		}];
 }
 
