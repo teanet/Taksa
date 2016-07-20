@@ -5,7 +5,8 @@
 #import "TKSTaxiListVM.h"
 
 typedef NS_ENUM(NSUInteger, TKSOrderMode) {
-	TKSOrderModeSearch = 0,
+	TKSOrderModeSuggest = 0,
+	TKSOrderModeHistory,
 	TKSOrderModeLoading,
 	TKSOrderModeTaxiList,
 	TKSOrderModeUndefined,

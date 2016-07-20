@@ -7,5 +7,8 @@
 @property (nonatomic, strong, readonly) TKSSearchVM *toSearchVM;
 
 @property (nonatomic, strong, readonly) RACSignal *didBecomeEditingSignal;
+@property (nonatomic, strong, readonly) RACSignal *didPressReturnButtonSignal;
+
+- (void)shouldStartSearchByReturn;
 
 @end

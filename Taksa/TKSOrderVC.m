@@ -117,12 +117,13 @@
 
 			self.viewModel.suggestListVM.suggests = suggests;
 
-			BOOL visible = (suggests.count > 0);
-			[self changeSuggesterVisible:visible];
+			TKSOrderMode mode = (suggests.count > 0) ? TKSOrderModeSuggest : TKSOrderModeHistory;
+			[self setOrderMode:mode];
 		}];
 
-	[[[RACObserve(self.viewModel, orderMode)
+	[[[[RACObserve(self.viewModel, orderMode)
 		startWith:@(TKSOrderModeUndefined)]
+		distinctUntilChanged]
 		deliverOnMainThread]
 		subscribeNext:^(NSNumber *orderModeNumber) {
 			@strongify(self);
@@ -141,23 +142,20 @@
 {
 	[UIView animateWithDuration:0.3 animations:^{
 		self.taxiTableView.alpha = (orderMode != TKSOrderModeTaxiList) ? 0.0 : 1.0;
-		self.suggestListVC.view.alpha = (orderMode != TKSOrderModeSearch) ? 0.0 : 1.0;
-		self.historyListVC.view.alpha = (orderMode != TKSOrderModeSearch) ? 0.0 : 1.0;
+		self.suggestListVC.view.alpha = (orderMode != TKSOrderModeSuggest) ? 0.0 : 1.0;
+		self.historyListVC.view.alpha = (orderMode != TKSOrderModeHistory) ? 0.0 : 1.0;
 		self.spinner.alpha = (orderMode != TKSOrderModeLoading) ? 0.0 : 1.0;
+	} completion:^(BOOL finished) {
+		self.taxiTableView.hidden = (orderMode != TKSOrderModeTaxiList);
+		self.suggestListVC.view.hidden = (orderMode != TKSOrderModeSuggest);
+		self.historyListVC.view.hidden = (orderMode != TKSOrderModeHistory);
+		self.spinner.hidden = (orderMode != TKSOrderModeLoading);
 	}];
 
 	if (orderMode == TKSOrderModeTaxiList)
 	{
 		[self.view endEditing:YES];
 	}
-}
-
-- (void)changeSuggesterVisible:(BOOL)visible
-{
-	[UIView animateWithDuration:0.3 animations:^{
-		self.suggestListVC.view.alpha = visible ? 1.0 : 0.0;
-		self.historyListVC.view.alpha = visible ? 0.0 : 1.0;
-	}];
 }
 
 @end

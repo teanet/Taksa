@@ -30,12 +30,19 @@
 
 	RACSignal *searchQuerySignal = [[RACObserve(self, text)
 		filter:^BOOL(NSString *text) {
+			if (![text isEqualToString:self.dbObject.text])
+			{
+				self.dbObject = nil;
+			}
 			return text.length > 1;
 		}]
 		throttle:0.3];
 
-	RACSignal *suggestListFillSignal = [[searchQuerySignal
+	RACSignal *suggestListFillSignal = [[[searchQuerySignal
 		distinctUntilChanged]
+		filter:^BOOL(NSString *inputText) {
+			return ![inputText isEqualToString:self.dbObject.text];
+		}]
 		flattenMap:^RACStream *(NSString *inputText) {
 			return [[TKSDataProvider sharedProvider] fetchSuggestsForSearchString:inputText];
 		}];

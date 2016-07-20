@@ -73,4 +73,11 @@
 	}
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+	[self.inputVM shouldStartSearchByReturn];
+
+	return YES;
+}
+
 @end

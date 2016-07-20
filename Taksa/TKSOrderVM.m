@@ -21,7 +21,7 @@
 	_historyListVM = [[TKSHistoryListVM alloc] init];
 	_inputVM = inputVM ?: [[TKSInputVM alloc] init];
 
-	_orderMode = TKSOrderModeSearch;
+	_orderMode = TKSOrderModeHistory;
 
 	[self setupReactiveStuff];
 
@@ -32,8 +32,34 @@
 {
 	@weakify(self);
 
-	RACSignal *didSelectSuggestSignal = [[self.suggestListVM.didSelectSuggestSignal
-		distinctUntilChanged]
+	[self setupSuggestsAndHistory];
+	[self setupScroll];
+	[self setupOrderModes];
+
+	[[self.taxiListVM.didSelectTaxiSignal
+		ignore:nil]
+		subscribeNext:^(TKSTaxiRow *taxiRow) {
+			@strongify(self);
+
+			[self trackTaxiRow:taxiRow];
+			[[TKSDataProvider sharedProvider].taxiProcessor processTaxiRow:taxiRow
+															   fromSuggest:self.inputVM.fromSearchVM.dbObject
+																 toSuggest:self.inputVM.toSearchVM.dbObject];
+		}];
+
+	[self.inputVM.didPressReturnButtonSignal
+		subscribeNext:^(id _) {
+			@strongify(self);
+
+			[self startSearchIfNeeded];
+		}];
+}
+
+- (void)setupSuggestsAndHistory
+{
+	@weakify(self);
+
+	RACSignal *didSelectSuggestSignal = [self.suggestListVM.didSelectSuggestSignal
 		filter:^BOOL(TKSSuggest *suggest) {
 			NSString *suggestText = suggest.text;
 
@@ -53,8 +79,7 @@
 			return !isSuggestStreet;
 		}];
 
-	RACSignal *didSelectHistorySignal = [[self.historyListVM.didSelectSuggestSignal
-		distinctUntilChanged]
+	RACSignal *didSelectHistorySignal = [self.historyListVM.didSelectSuggestSignal
 		doNext:^(TKSSuggest *suggest) {
 			@strongify(self);
 
@@ -71,6 +96,11 @@
 			[self switchToNextTextFiledIfNeeded];
 			[self startSearchIfNeeded];
 		}];
+}
+
+- (void)setupScroll
+{
+	@weakify(self);
 
 	[[RACSignal merge:@[_suggestListVM.didScrollSignal, _historyListVM.didScrollSignal]]
 		subscribeNext:^(id _) {
@@ -79,11 +109,17 @@
 			self.inputVM.fromSearchVM.active = NO;
 			self.inputVM.toSearchVM.active = NO;
 		}];
+}
+
+- (void)setupOrderModes
+{
+	@weakify(self);
 
 	[self.inputVM.didBecomeEditingSignal subscribeNext:^(id x) {
 		@strongify(self);
 
-		self.orderMode = TKSOrderModeSearch;
+		TKSOrderMode mode = self.inputVM.currentSearchVM.suggests.count > 0 ? TKSOrderModeSuggest : TKSOrderModeHistory;
+		self.orderMode = mode;
 	}];
 
 	[[[RACObserve(self.taxiListVM, data)
@@ -95,17 +131,6 @@
 			@strongify(self);
 
 			self.orderMode = TKSOrderModeTaxiList;
-		}];
-
-	[[self.taxiListVM.didSelectTaxiSignal
-		ignore:nil]
-		subscribeNext:^(TKSTaxiRow *taxiRow) {
-			@strongify(self);
-
-			[self trackTaxiRow:taxiRow];
-			[[TKSDataProvider sharedProvider].taxiProcessor processTaxiRow:taxiRow
-															   fromSuggest:self.inputVM.fromSearchVM.dbObject
-																 toSuggest:self.inputVM.toSearchVM.dbObject];
 		}];
 }
 
