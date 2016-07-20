@@ -6,6 +6,8 @@
 @interface TKSInputView ()
 <UITextFieldDelegate>
 
+@property (nonatomic, strong, readonly) TKSTextField *fromTF;
+@property (nonatomic, strong, readonly) TKSTextField *toTF;
 @property (nonatomic, assign) BOOL costraintsCreated;
 
 @end

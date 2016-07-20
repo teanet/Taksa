@@ -8,6 +8,7 @@ typedef NS_ENUM(NSUInteger, TKSOrderMode) {
 	TKSOrderModeSearch = 0,
 	TKSOrderModeLoading,
 	TKSOrderModeTaxiList,
+	TKSOrderModeUndefined,
 };
 
 @interface TKSOrderVM : NSObject

@@ -23,6 +23,8 @@
 	self.autocapitalizationType = UITextAutocapitalizationTypeNone;
 	self.autocorrectionType = UITextAutocorrectionTypeNo;
 
+	self.font = [UIFont systemFontOfSize:14.0];
+
 	_letterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 24.0, 24.0)];
 	_letterLabel.layer.cornerRadius = 12.0;
 	_letterLabel.layer.masksToBounds = YES;
@@ -36,7 +38,10 @@
 	self.leftViewMode = UITextFieldViewModeAlways;
 
 	_letterLabel.text = searchVM.letter;
-	self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:searchVM.placeHolder attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:0.0 alpha:0.3]}];
+	self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:searchVM.placeHolder attributes:@{
+		NSForegroundColorAttributeName: [UIColor colorWithWhite:0.0 alpha:0.3],
+		NSFontAttributeName: [UIFont systemFontOfSize:14.0]
+	}];
 
 	[self.rac_textSignal
 		subscribeNext:^(NSString *text) {

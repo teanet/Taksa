@@ -1,4 +1,4 @@
-#import "TKSOrderVC.h"
+ #import "TKSOrderVC.h"
 
 #import "TKSSuggestListVC.h"
 #import "TKSHistoryListVC.h"
@@ -11,6 +11,7 @@
 @interface TKSOrderVC ()
 
 @property (nonatomic, strong, readonly) TKSSuggestListVC *suggestListVC;
+@property (nonatomic, strong, readonly) TKSHistoryListVC *historyListVC;
 @property (nonatomic, strong, readonly) UITableView *taxiTableView;
 
 @property (nonatomic, strong, readonly) DGActivityIndicatorView *spinner;
@@ -120,7 +121,8 @@
 			[self changeSuggesterVisible:visible];
 		}];
 
-	[[RACObserve(self.viewModel, orderMode)
+	[[[RACObserve(self.viewModel, orderMode)
+		startWith:@(TKSOrderModeUndefined)]
 		deliverOnMainThread]
 		subscribeNext:^(NSNumber *orderModeNumber) {
 			@strongify(self);
@@ -137,12 +139,12 @@
 
 - (void)setOrderMode:(TKSOrderMode)orderMode
 {
-	self.taxiTableView.hidden = (orderMode != TKSOrderModeTaxiList);
-
-	self.suggestListVC.view.hidden = (orderMode != TKSOrderModeSearch);
-	self.historyListVC.view.hidden = (orderMode != TKSOrderModeSearch);
-
-	self.spinner.hidden = (orderMode != TKSOrderModeLoading);
+	[UIView animateWithDuration:0.3 animations:^{
+		self.taxiTableView.alpha = (orderMode != TKSOrderModeTaxiList) ? 0.0 : 1.0;
+		self.suggestListVC.view.alpha = (orderMode != TKSOrderModeSearch) ? 0.0 : 1.0;
+		self.historyListVC.view.alpha = (orderMode != TKSOrderModeSearch) ? 0.0 : 1.0;
+		self.spinner.alpha = (orderMode != TKSOrderModeLoading) ? 0.0 : 1.0;
+	}];
 
 	if (orderMode == TKSOrderModeTaxiList)
 	{

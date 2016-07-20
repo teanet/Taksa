@@ -34,11 +34,11 @@
 		}]
 		throttle:0.3];
 
-	RACSignal *suggestListFillSignal = [searchQuerySignal
+	RACSignal *suggestListFillSignal = [[searchQuerySignal
+		distinctUntilChanged]
 		flattenMap:^RACStream *(NSString *inputText) {
 			return [[TKSDataProvider sharedProvider] fetchSuggestsForSearchString:inputText];
 		}];
-
 
 	[[RACSignal merge:@[suggestListClearSignal, suggestListFillSignal]]
 		subscribeNext:^(NSArray<TKSSuggest *> *suggests) {

@@ -32,7 +32,8 @@
 {
 	@weakify(self);
 
-	RACSignal *didSelectSuggestSignal = [self.suggestListVM.didSelectSuggestSignal
+	RACSignal *didSelectSuggestSignal = [[self.suggestListVM.didSelectSuggestSignal
+		distinctUntilChanged]
 		filter:^BOOL(TKSSuggest *suggest) {
 			NSString *suggestText = suggest.text;
 
@@ -40,7 +41,7 @@
 			if (isSuggestStreet)
 			{
 				self.inputVM.currentSearchVM.text = [suggestText stringByAppendingString:@", "];
-				[self setSearchResultForCurrentSearchVM:suggest];
+				self.inputVM.currentSearchVM.dbObject = suggest;
 			}
 			else
 			{
@@ -52,7 +53,8 @@
 			return !isSuggestStreet;
 		}];
 
-	RACSignal *didSelectHistorySignal = [self.historyListVM.didSelectSuggestSignal
+	RACSignal *didSelectHistorySignal = [[self.historyListVM.didSelectSuggestSignal
+		distinctUntilChanged]
 		doNext:^(TKSSuggest *suggest) {
 			@strongify(self);
 
@@ -64,7 +66,8 @@
 			@strongify(self);
 
 			self.inputVM.currentSearchVM.text = suggest.text;
-			[self setSearchResultForCurrentSearchVM:suggest];
+			self.inputVM.currentSearchVM.dbObject = suggest;
+
 			[self switchToNextTextFiledIfNeeded];
 			[self startSearchIfNeeded];
 		}];
@@ -106,63 +109,9 @@
 		}];
 }
 
-- (void)trackSuggest:(TKSSuggest *)suggest analyticsType:(NSString *)analyticsType
-{
-	if (!suggest) return;
-
-	NSString *type = self.inputVM.currentSearchVM == self.inputVM.fromSearchVM
-		? @"from"
-		: @"to";
-
-	NSString *qString = self.inputVM.currentSearchVM.text.length > 0
-		? self.inputVM.currentSearchVM.text
-		: @"";
-
-	NSDictionary *body = @{
-		@"item_id" : suggest.id,
-		@"q" : qString,
-		@"type" : type,
-		@"source" : @"q"
-	};
-
-	NSString *aType = [analyticsType stringByAppendingString:@"-select"];
-	[[TKSDataProvider sharedProvider] sendAnalyticsForType:aType body:body];
-}
-
-- (void)trackTaxiRow:(TKSTaxiRow *)taxiRow
-{
-	if (!taxiRow) return;
-
-	NSDictionary *body = @{
-		@"search_id" : taxiRow.searchId,
-		@"operator_id" : taxiRow.id,
-	};
-
-	[[TKSDataProvider sharedProvider] sendAnalyticsForType:@"taxi-select" body:body];
-}
-
 - (void)clearSearchResultForCurrentSearchVM
 {
-	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
-	{
-		self.inputVM.fromSearchVM.dbObject = nil;
-	}
-	else
-	{
-		self.inputVM.toSearchVM.dbObject = nil;
-	}
-}
-
-- (void)setSearchResultForCurrentSearchVM:(TKSSuggest *)suggest
-{
-	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
-	{
-		self.inputVM.fromSearchVM.dbObject = suggest;
-	}
-	else
-	{
-		self.inputVM.toSearchVM.dbObject = suggest;
-	}
+	self.inputVM.currentSearchVM.dbObject = nil;
 }
 
 - (void)saveSuggestToHistory:(TKSSuggest *)suggest
@@ -222,6 +171,43 @@
 
 			self.taxiListVM.data = taxiList;
 		}];
+}
+
+// MARK: Analytics
+
+- (void)trackSuggest:(TKSSuggest *)suggest analyticsType:(NSString *)analyticsType
+{
+	if (!suggest) return;
+
+	NSString *type = self.inputVM.currentSearchVM == self.inputVM.fromSearchVM
+		? @"from"
+		: @"to";
+
+	NSString *qString = self.inputVM.currentSearchVM.text.length > 0
+		? self.inputVM.currentSearchVM.text
+		: @"";
+
+	NSDictionary *body = @{
+		@"item_id" : suggest.id,
+		@"q" : qString,
+		@"type" : type,
+		@"source" : @"q"
+	};
+
+	NSString *aType = [analyticsType stringByAppendingString:@"-select"];
+	[[TKSDataProvider sharedProvider] sendAnalyticsForType:aType body:body];
+}
+
+- (void)trackTaxiRow:(TKSTaxiRow *)taxiRow
+{
+	if (!taxiRow) return;
+
+	NSDictionary *body = @{
+		@"search_id" : taxiRow.searchId,
+		@"operator_id" : taxiRow.id,
+	};
+
+	[[TKSDataProvider sharedProvider] sendAnalyticsForType:@"taxi-select" body:body];
 }
 
 @end

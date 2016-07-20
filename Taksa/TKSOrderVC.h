@@ -8,6 +8,5 @@
 @interface TKSOrderVC : TKSBaseVC<TKSOrderVM *>
 
 @property (nonatomic, strong, readonly) TKSInputView *inputView;
-@property (nonatomic, strong, readonly) TKSHistoryListVC *historyListVC;
 
 @end
