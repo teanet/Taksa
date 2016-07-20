@@ -5,6 +5,7 @@
 @interface TKSTextField ()
 
 @property (nonatomic, strong, readonly) UILabel *letterLabel;
+@property (nonatomic, strong, readonly) UIButton *locationButton;
 
 @end
 
@@ -43,6 +44,14 @@
 		NSFontAttributeName: [UIFont systemFontOfSize:14.0]
 	}];
 
+	_locationButton = [[UIButton alloc] init];
+	[_locationButton setImage:[UIImage imageNamed:@"locationButton"] forState:UIControlStateNormal];
+	[_locationButton addTarget:self.searchVM
+						action:@checkselector0(self.searchVM, didTapLocationButton)
+			  forControlEvents:UIControlEventTouchUpInside];
+	[_locationButton sizeToFit];
+	self.rightViewMode = UITextFieldViewModeAlways;
+
 	[self.rac_textSignal
 		subscribeNext:^(NSString *text) {
 			@strongify(self);
@@ -54,21 +63,31 @@
 	RACSignal *textSignal = [RACObserve(self.searchVM, text) distinctUntilChanged];
 
 	RAC(self, text) = textSignal;
+	RAC(self.locationButton, enabled) = RACObserve(self.searchVM, active);
+	[[textSignal
+		deliverOnMainThread]
+		subscribeNext:^(NSString *text) {
+			@strongify(self);
 
-	[activeSignal subscribeNext:^(NSNumber *active) {
-		@strongify(self);
+			self.rightView = text.length >0 ? nil : self.locationButton;
+		}];
 
-		if (active.boolValue)
-		{
-			[self becomeFirstResponder];
-		}
-		else
-		{
-			[self resignFirstResponder];
-		}
+	[[activeSignal
+		distinctUntilChanged]
+		subscribeNext:^(NSNumber *active) {
+			@strongify(self);
 
-		[self swithToHighlighted:active.boolValue];
-	}];
+			if (active.boolValue)
+			{
+				[self becomeFirstResponder];
+			}
+			else
+			{
+				[self resignFirstResponder];
+			}
+
+			[self swithToHighlighted:active.boolValue];
+		}];
 
 	return self;
 }

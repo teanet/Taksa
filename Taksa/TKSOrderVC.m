@@ -15,6 +15,8 @@
 @property (nonatomic, strong, readonly) UITableView *taxiTableView;
 
 @property (nonatomic, strong, readonly) DGActivityIndicatorView *spinner;
+@property (nonatomic, strong, readonly) UIImageView *carImageView;
+@property (nonatomic, assign) CGFloat carsBottomOffset;
 
 @end
 
@@ -41,6 +43,10 @@
 	_taxiTableView.backgroundColor = [UIColor clearColor];
 	_taxiTableView.showsVerticalScrollIndicator = NO;
 	_taxiTableView.tableFooterView = [[UIView alloc] init];
+
+	_carImageView = [[UIImageView alloc] init];
+	_carImageView.contentMode = UIViewContentModeCenter;
+	_carImageView.image = [UIImage imageNamed:@"cars"];
 
 	self.view = [[UIView alloc] init];
 }
@@ -70,6 +76,12 @@
 		make.leading.equalTo(self.view);
 		make.trailing.equalTo(self.view);
 		make.height.equalTo(@20.0);
+	}];
+
+	[self.view addSubview:_carImageView];
+	[_carImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+		make.centerX.equalTo(self.view);
+		make.bottom.equalTo(self.view);
 	}];
 	
 	_inputView = [[TKSInputView alloc] initWithVM:self.viewModel.inputVM];
@@ -106,6 +118,15 @@
 	[self setupReactiveStuff];
 }
 
+- (void)updateViewConstraints
+{
+	[_carImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+		make.bottom.equalTo(self.view).with.offset(-self.carsBottomOffset);
+	}];
+
+	[super updateViewConstraints];
+}
+
 - (void)setupReactiveStuff
 {
 	@weakify(self);
@@ -130,6 +151,8 @@
 
 			[self setOrderMode:orderModeNumber.integerValue];
 		}];
+
+	[self configureKeyboardNotifications];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -157,5 +180,64 @@
 		[self.view endEditing:YES];
 	}
 }
+
+- (void)configureKeyboardNotifications
+{
+	@weakify(self);
+
+	[self configureKeyboardBehaviorWithShowBlock:^(NSNotification *notification) {
+		@strongify(self);
+		// Поднимаем тачки на высоту, которую перекрывает клавиатура
+		self.carsBottomOffset = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
+
+	} hideBlock:^(NSNotification *notification) {
+		@strongify(self);
+
+		self.carsBottomOffset = 0.0;
+	}];
+}
+
+- (void)configureKeyboardBehaviorWithShowBlock:(void (^)(NSNotification *notification))showBlock
+									 hideBlock:(void (^)(NSNotification *notification))hideBlock
+{
+	@weakify(self);
+
+	// Пляски с сигналами viewWillAppear/viewWillDisappearSignal нужны для того,
+	// чтобы корректно отрабатывали анимации появления модальных контроллеров
+	RACSignal *viewWillAppearSignal = [self rac_signalForSelector:@selector(viewWillAppear:)];
+	RACSignal *viewWillDisappearSignal = [self rac_signalForSelector:@selector(viewWillDisappear:)];
+
+	[viewWillAppearSignal
+		subscribeNext:^(id _) {
+			@strongify(self);
+
+			RACSignal *showSignal =
+				[[[[NSNotificationCenter defaultCenter] rac_addObserverForName:UIKeyboardWillShowNotification
+					object:nil] combineLatestWith:[RACSignal return:[showBlock copy]]] skip:1];
+
+			RACSignal *hideSignal =
+				[[[[NSNotificationCenter defaultCenter] rac_addObserverForName:UIKeyboardWillHideNotification
+					object:nil] combineLatestWith:[RACSignal return:[hideBlock copy]]] skip:1];
+
+			[[[showSignal merge:hideSignal]
+				takeUntil:viewWillDisappearSignal]
+				subscribeNext:^(RACTuple *t) {
+					@strongify(self);
+
+					RACTupleUnpack(NSNotification *notification, void(^block)(NSNotification *notification)) = t;
+
+					if (block)
+					{
+						block(notification);
+					}
+
+					[self.view setNeedsUpdateConstraints];
+					[UIView animateWithDuration:0.3 animations:^{
+						[self.view layoutIfNeeded];
+					}];
+				}];
+		}];
+}
+
 
 @end

@@ -71,6 +71,8 @@
 	{
 		self.inputVM.currentSearchVM = self.inputVM.toSearchVM;
 	}
+
+	self.inputVM.currentSearchVM.active = YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

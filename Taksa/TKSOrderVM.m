@@ -79,6 +79,19 @@
 			return !isSuggestStreet;
 		}];
 
+	RACSignal *didSelectLocationSignal = [RACSignal merge:@[
+		self.inputVM.fromSearchVM.didSelectLocationSuggestSignal,
+		self.inputVM.toSearchVM.didSelectLocationSuggestSignal,
+	]];
+
+	[didSelectLocationSignal
+		subscribeNext:^(TKSSuggest *suggest) {
+			@strongify(self);
+
+			[self switchToNextTextFiledIfNeeded];
+			[self startSearchIfNeeded];
+		}];
+
 	RACSignal *didSelectHistorySignal = [self.historyListVM.didSelectSuggestSignal
 		doNext:^(TKSSuggest *suggest) {
 			@strongify(self);
@@ -166,9 +179,17 @@
 
 - (void)startSearchIfNeeded
 {
+	@weakify(self);
+
 	if (self.inputVM.fromSearchVM.dbObject && self.inputVM.toSearchVM.dbObject)
 	{
-		[[[self fetchTaxiList] publish] connect];
+		[[self fetchTaxiList]
+			subscribeError:^(NSError *error) {
+				@strongify(self);
+
+				TKSOrderMode mode = self.inputVM.currentSearchVM.suggests.count > 0 ? TKSOrderModeSuggest : TKSOrderModeHistory;
+				self.orderMode = mode;
+			}];
 	}
 }
 

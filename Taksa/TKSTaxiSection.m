@@ -51,7 +51,9 @@
 	NSString *searchId = [searchIdNumber stringValue];
 
 	NSString *optimalTitle = [self.class optimalTitleForDistance:distanceNumber time:timeNumber];
-	NSString *elseTitle = [self.class elseTitleForSectionDictionary:elseSectionDictionary];
+	NSString *elseTitle = [self.class elseTitleForSectionDictionary:elseSectionDictionary
+														   distance:distanceNumber
+															   time:timeNumber];
 
 	TKSTaxiSection *optimalSection = [[TKSTaxiSection alloc] initWithDictionary:optimalSectionDictionary
 																	   searchId:searchId
@@ -74,22 +76,16 @@
 }
 
 + (NSString *)elseTitleForSectionDictionary:(NSDictionary *)sectionDictionary
+								   distance:(NSNumber *)distanceNumber
+									   time:(NSNumber *)timeNumber
 {
-	NSString *title;
-
 	NSArray *operators = sectionDictionary[@"results"];
-	if (operators.count > 1)
-	{
-		NSDictionary *firstOperator = operators.firstObject;
-		NSDictionary *lastOperator = operators.lastObject;
+	NSString *titleLeft = [NSString stringWithFormat:@"%ld предложений", operators.count];
+	NSString *titleRight = [NSString stringWithFormat:@"%.1fкм, %ld минуты",
+		[distanceNumber doubleValue]/1000.0,
+		timeNumber.integerValue];
 
-		NSNumber *leastPrice = firstOperator[@"price"];
-		NSNumber *mostPrice = lastOperator[@"price"];
-
-		title = [NSString stringWithFormat:@"%ld предложений от %@ до %@ ₽", operators.count, leastPrice, mostPrice];
-	}
-
-	return title;
+	return [NSString stringWithFormat:@"%@|%@",titleLeft, titleRight];
 }
 
 @end

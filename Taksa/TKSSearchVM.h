@@ -11,4 +11,9 @@
 
 @property (nonatomic, strong, readonly) NSArray<TKSSuggest *> *suggests;
 
+/*! \sendNext TKSSuggest */
+@property (nonatomic, strong, readonly) RACSignal *didSelectLocationSuggestSignal;
+
+- (void)didTapLocationButton;
+
 @end
