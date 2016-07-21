@@ -19,7 +19,7 @@
 		make.leading.equalTo(self.contentView).with.offset(16.0);
 		make.top.equalTo(self.contentView);
 		make.bottom.equalTo(self.contentView);
-		make.height.equalTo(@50.0);
+		make.height.equalTo(@50.0).with.priorityHigh();
 	}];
 
 	return self;

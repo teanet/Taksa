@@ -189,6 +189,10 @@
 		@strongify(self);
 		// Поднимаем тачки на высоту, которую перекрывает клавиатура
 		self.carsBottomOffset = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
+		if ([UIScreen mainScreen].bounds.size.height == 480.0)
+		{
+			self.carsBottomOffset -= 32.0;
+		}
 
 	} hideBlock:^(NSNotification *notification) {
 		@strongify(self);
