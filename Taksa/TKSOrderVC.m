@@ -1,4 +1,4 @@
-#import "TKSOrderVC.h"
+ #import "TKSOrderVC.h"
 
 #import "TKSSuggestListVC.h"
 #import "TKSHistoryListVC.h"
@@ -11,9 +11,12 @@
 @interface TKSOrderVC ()
 
 @property (nonatomic, strong, readonly) TKSSuggestListVC *suggestListVC;
+@property (nonatomic, strong, readonly) TKSHistoryListVC *historyListVC;
 @property (nonatomic, strong, readonly) UITableView *taxiTableView;
 
 @property (nonatomic, strong, readonly) DGActivityIndicatorView *spinner;
+@property (nonatomic, strong, readonly) UIImageView *carImageView;
+@property (nonatomic, assign) CGFloat carsBottomOffset;
 
 @end
 
@@ -40,6 +43,10 @@
 	_taxiTableView.backgroundColor = [UIColor clearColor];
 	_taxiTableView.showsVerticalScrollIndicator = NO;
 	_taxiTableView.tableFooterView = [[UIView alloc] init];
+
+	_carImageView = [[UIImageView alloc] init];
+	_carImageView.contentMode = UIViewContentModeCenter;
+	_carImageView.image = [UIImage imageNamed:@"cars"];
 
 	self.view = [[UIView alloc] init];
 }
@@ -69,6 +76,12 @@
 		make.leading.equalTo(self.view);
 		make.trailing.equalTo(self.view);
 		make.height.equalTo(@20.0);
+	}];
+
+	[self.view addSubview:_carImageView];
+	[_carImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+		make.centerX.equalTo(self.view);
+		make.bottom.equalTo(self.view);
 	}];
 	
 	_inputView = [[TKSInputView alloc] initWithVM:self.viewModel.inputVM];
@@ -105,6 +118,15 @@
 	[self setupReactiveStuff];
 }
 
+- (void)updateViewConstraints
+{
+	[_carImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+		make.bottom.equalTo(self.view).with.offset(-self.carsBottomOffset);
+	}];
+
+	[super updateViewConstraints];
+}
+
 - (void)setupReactiveStuff
 {
 	@weakify(self);
@@ -116,17 +138,21 @@
 
 			self.viewModel.suggestListVM.suggests = suggests;
 
-			BOOL visible = (suggests.count > 0);
-			[self changeSuggesterVisible:visible];
+			TKSOrderMode mode = (suggests.count > 0) ? TKSOrderModeSuggest : TKSOrderModeHistory;
+			[self setOrderMode:mode];
 		}];
 
-	[[RACObserve(self.viewModel, orderMode)
+	[[[[RACObserve(self.viewModel, orderMode)
+		startWith:@(TKSOrderModeUndefined)]
+		distinctUntilChanged]
 		deliverOnMainThread]
 		subscribeNext:^(NSNumber *orderModeNumber) {
 			@strongify(self);
 
 			[self setOrderMode:orderModeNumber.integerValue];
 		}];
+
+	[self configureKeyboardNotifications];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -137,12 +163,17 @@
 
 - (void)setOrderMode:(TKSOrderMode)orderMode
 {
-	self.taxiTableView.hidden = (orderMode != TKSOrderModeTaxiList);
-
-	self.suggestListVC.view.hidden = (orderMode != TKSOrderModeSearch);
-	self.historyListVC.view.hidden = (orderMode != TKSOrderModeSearch);
-
-	self.spinner.hidden = (orderMode != TKSOrderModeLoading);
+	[UIView animateWithDuration:0.3 animations:^{
+		self.taxiTableView.alpha = (orderMode != TKSOrderModeTaxiList) ? 0.0 : 1.0;
+		self.suggestListVC.view.alpha = (orderMode != TKSOrderModeSuggest) ? 0.0 : 1.0;
+		self.historyListVC.view.alpha = (orderMode != TKSOrderModeHistory) ? 0.0 : 1.0;
+		self.spinner.alpha = (orderMode != TKSOrderModeLoading) ? 0.0 : 1.0;
+	} completion:^(BOOL finished) {
+		self.taxiTableView.hidden = (orderMode != TKSOrderModeTaxiList);
+		self.suggestListVC.view.hidden = (orderMode != TKSOrderModeSuggest);
+		self.historyListVC.view.hidden = (orderMode != TKSOrderModeHistory);
+		self.spinner.hidden = (orderMode != TKSOrderModeLoading);
+	}];
 
 	if (orderMode == TKSOrderModeTaxiList)
 	{
@@ -150,12 +181,67 @@
 	}
 }
 
-- (void)changeSuggesterVisible:(BOOL)visible
+- (void)configureKeyboardNotifications
 {
-	[UIView animateWithDuration:0.3 animations:^{
-		self.suggestListVC.view.alpha = visible ? 1.0 : 0.0;
-		self.historyListVC.view.alpha = visible ? 0.0 : 1.0;
+	@weakify(self);
+
+	[self configureKeyboardBehaviorWithShowBlock:^(NSNotification *notification) {
+		@strongify(self);
+		// Поднимаем тачки на высоту, которую перекрывает клавиатура
+		self.carsBottomOffset = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
+		if ([UIScreen mainScreen].bounds.size.height == 480.0)
+		{
+			self.carsBottomOffset -= 32.0;
+		}
+
+	} hideBlock:^(NSNotification *notification) {
+		@strongify(self);
+
+		self.carsBottomOffset = 0.0;
 	}];
 }
+
+- (void)configureKeyboardBehaviorWithShowBlock:(void (^)(NSNotification *notification))showBlock
+									 hideBlock:(void (^)(NSNotification *notification))hideBlock
+{
+	@weakify(self);
+
+	// Пляски с сигналами viewWillAppear/viewWillDisappearSignal нужны для того,
+	// чтобы корректно отрабатывали анимации появления модальных контроллеров
+	RACSignal *viewWillAppearSignal = [self rac_signalForSelector:@selector(viewWillAppear:)];
+	RACSignal *viewWillDisappearSignal = [self rac_signalForSelector:@selector(viewWillDisappear:)];
+
+	[viewWillAppearSignal
+		subscribeNext:^(id _) {
+			@strongify(self);
+
+			RACSignal *showSignal =
+				[[[[NSNotificationCenter defaultCenter] rac_addObserverForName:UIKeyboardWillShowNotification
+					object:nil] combineLatestWith:[RACSignal return:[showBlock copy]]] skip:1];
+
+			RACSignal *hideSignal =
+				[[[[NSNotificationCenter defaultCenter] rac_addObserverForName:UIKeyboardWillHideNotification
+					object:nil] combineLatestWith:[RACSignal return:[hideBlock copy]]] skip:1];
+
+			[[[showSignal merge:hideSignal]
+				takeUntil:viewWillDisappearSignal]
+				subscribeNext:^(RACTuple *t) {
+					@strongify(self);
+
+					RACTupleUnpack(NSNotification *notification, void(^block)(NSNotification *notification)) = t;
+
+					if (block)
+					{
+						block(notification);
+					}
+
+					[self.view setNeedsUpdateConstraints];
+					[UIView animateWithDuration:0.3 animations:^{
+						[self.view layoutIfNeeded];
+					}];
+				}];
+		}];
+}
+
 
 @end

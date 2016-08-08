@@ -6,6 +6,8 @@
 @interface TKSInputView ()
 <UITextFieldDelegate>
 
+@property (nonatomic, strong, readonly) TKSTextField *fromTF;
+@property (nonatomic, strong, readonly) TKSTextField *toTF;
 @property (nonatomic, assign) BOOL costraintsCreated;
 
 @end
@@ -69,6 +71,15 @@
 	{
 		self.inputVM.currentSearchVM = self.inputVM.toSearchVM;
 	}
+
+	self.inputVM.currentSearchVM.active = YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+	[self.inputVM shouldStartSearchByReturn];
+
+	return YES;
 }
 
 @end

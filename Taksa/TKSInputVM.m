@@ -10,7 +10,7 @@
 	_fromSearchVM = [[TKSSearchVM alloc] init];
 	_fromSearchVM.placeHolder = @"Адрес, или название фирмы";
 	_fromSearchVM.letter = @"A";
-	_fromSearchVM.highlighted = YES;
+	_fromSearchVM.highlightedOnStart = YES;
 
 	_toSearchVM = [[TKSSearchVM alloc] init];
 	_toSearchVM.placeHolder = @"Адрес, или название фирмы";
@@ -19,6 +19,9 @@
 	_didBecomeEditingSignal = [[RACObserve(self, currentSearchVM)
 		ignore:nil]
 		mapReplace:nil];
+
+	_didPressReturnButtonSignal = [[self rac_signalForSelector:@checkselector0(self, shouldStartSearchByReturn)]
+		mapReplace:[RACUnit defaultUnit]];
 
 	return self;
 }
@@ -30,6 +33,10 @@
 	_currentSearchVM.active = NO;
 	_currentSearchVM = currentSearchVM;
 	_currentSearchVM.active = YES;
+}
+
+- (void)shouldStartSearchByReturn
+{
 }
 
 @end

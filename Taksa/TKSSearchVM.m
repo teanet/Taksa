@@ -5,6 +5,7 @@
 @interface TKSSearchVM ()
 
 @property (nonatomic, strong, readwrite) NSArray<TKSSuggest *> *suggests;
+@property (atomic, assign) BOOL processingRequest;
 
 @end
 
@@ -20,6 +21,7 @@
 	_letter = @" ";
 	_placeHolder = @"";
 	_text = @"";
+	_processingRequest = NO;
 
 	RACSignal *suggestListClearSignal = [[[RACObserve(self, text)
 		filter:^BOOL(NSString *text) {
@@ -30,15 +32,22 @@
 
 	RACSignal *searchQuerySignal = [[RACObserve(self, text)
 		filter:^BOOL(NSString *text) {
+			if (![text isEqualToString:self.dbObject.text])
+			{
+				self.dbObject = nil;
+			}
 			return text.length > 1;
 		}]
 		throttle:0.3];
 
-	RACSignal *suggestListFillSignal = [searchQuerySignal
+	RACSignal *suggestListFillSignal = [[[searchQuerySignal
+		distinctUntilChanged]
+		filter:^BOOL(NSString *inputText) {
+			return ![inputText isEqualToString:self.dbObject.text];
+		}]
 		flattenMap:^RACStream *(NSString *inputText) {
 			return [[TKSDataProvider sharedProvider] fetchSuggestsForSearchString:inputText];
 		}];
-
 
 	[[RACSignal merge:@[suggestListClearSignal, suggestListFillSignal]]
 		subscribeNext:^(NSArray<TKSSuggest *> *suggests) {
@@ -50,7 +59,43 @@
 			}];
 		}];
 
+	_didSelectLocationSuggestSignal = [[[self rac_signalForSelector:@checkselector(self, didSelectLocationSuggest:)]
+		ignore:nil]
+		map:^TKSSuggest *(RACTuple *tuple) {
+			return tuple.first;
+		}];
+
 	return self;
+}
+
+- (void)didTapLocationButton
+{
+	@weakify(self);
+
+	@synchronized (self)
+	{
+		if (!self.processingRequest)
+		{
+			self.processingRequest = YES;
+			[[TKSDataProvider sharedProvider].fetchSuggestForLocation
+				subscribeNext:^(NSArray<TKSSuggest *> *suggests) {
+					@strongify(self);
+
+					[self didSelectLocationSuggest:suggests.firstObject];
+					self.processingRequest = NO;
+				} error:^(NSError *error) {
+					@strongify(self);
+
+					self.processingRequest = NO;
+				}];
+		}
+	}
+}
+
+- (void)didSelectLocationSuggest:(TKSSuggest *)suggest
+{
+	self.dbObject = suggest;
+	self.text = suggest.text;
 }
 
 @end

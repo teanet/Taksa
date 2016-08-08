@@ -52,7 +52,15 @@
 	_inputView = [[TKSInputView alloc] initWithVM:self.viewModel.inputVM];
 	[self.view addSubview:_inputView];
 	[_inputView mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.top.equalTo(descriptionLabel.mas_bottom).with.offset(22.0);
+		if ([UIScreen mainScreen].bounds.size.height == 480.0)
+		{
+			make.top.equalTo(descriptionLabel.mas_bottom);
+		}
+		else
+		{
+			make.top.equalTo(descriptionLabel.mas_bottom).with.offset(22.0);
+		}
+
 		make.leading.equalTo(self.view);
 		make.trailing.equalTo(self.view);
 	}];
@@ -60,8 +68,7 @@
 	UIView *centerView = [[UIView alloc] init];
 	[self.view addSubview:centerView];
 	[centerView mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.top.equalTo(_inputView.mas_bottom).with.offset(12.0);
-		make.bottom.equalTo(self.view);
+		make.bottom.equalTo(self.view).with.offset(-24.0);
 		make.leading.equalTo(self.view);
 		make.trailing.equalTo(self.view);
 	}];
@@ -72,6 +79,7 @@
 	[selectCity addTarget:self.viewModel action:@checkselector0(self.viewModel, selectCity) forControlEvents:UIControlEventTouchUpInside];
 	[centerView addSubview:selectCity];
 	[selectCity mas_makeConstraints:^(MASConstraintMaker *make) {
+		make.height.equalTo(centerView);
 		make.center.equalTo(centerView);
 	}];
 	[RACObserve(self.viewModel, selectCityButtonTitle) subscribeNext:^(NSString *title) {

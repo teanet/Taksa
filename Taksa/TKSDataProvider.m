@@ -49,10 +49,17 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 												   regionId:self.currentRegion.id];
 }
 
-- (RACSignal *)fetchSuggestForLocation:(CLLocation *)location
+- (RACSignal *)fetchSuggestForLocation
 {
-	return [self.apiController fetchSuggestForLocation:location
-											  regionId:self.currentRegion.id];
+	@weakify(self);
+
+	return [[[self.locationManager locationSignal]
+		take:1]
+		flattenMap:^RACStream *(CLLocation *location) {
+			@strongify(self);
+
+			return [self.apiController fetchSuggestForLocation:location regionId:self.currentRegion.id];
+		}];
 }
 
 - (RACSignal *)fetchTaxiListFromObject:(TKSSuggest *)objectFrom

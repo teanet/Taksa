@@ -113,7 +113,7 @@
 		@"lat" : [NSString stringWithFormat:@"%f", location.coordinate.latitude],
 	};
 
-	return [[self GET:@"suggest/by-location" params:params]
+	return [[self GET:@"address/suggest/by-location" params:params]
 		flattenMap:^RACStream *(NSDictionary *responseObject) {
 			return [TKSAPIController fetchSuggestObjectsFromResponseDictionary:responseObject];
 		}];
@@ -126,6 +126,8 @@
 {
 	NSCParameterAssert(suggestFrom);
 	NSCParameterAssert(suggestTo);
+
+	if ([suggestTo.id isEqualToString:suggestFrom.id]) return [RACSignal error:nil];
 
 	NSString *q = [NSString stringWithFormat:@"%@,%@", suggestFrom.id, suggestTo.id];
 	NSDictionary *params = @{

@@ -4,6 +4,8 @@
 #import "TKSTaxiSuggestCell.h"
 #import "TKSTaxiDefaultCell.h"
 #import "UIFont+DGSCustomFont.h"
+#import "UIColor+DGSCustomColor.h"
+#import "TKSTaxiHeaderView.h"
 
 @implementation TKSTaxiListVM
 
@@ -24,10 +26,10 @@
 {
 	[tableView registerClass:[TKSTaxiSuggestCell class] forCellReuseIdentifier:@"cell"];
 	[tableView registerClass:[TKSTaxiDefaultCell class] forCellReuseIdentifier:@"defaultCell"];
+	[tableView registerClass:[TKSTaxiHeaderView class] forHeaderFooterViewReuseIdentifier:@"header"];
 
 	tableView.rowHeight = UITableViewAutomaticDimension;
 	tableView.estimatedRowHeight = 80.0;
-	[tableView registerClass:[UITableViewHeaderFooterView class] forHeaderFooterViewReuseIdentifier:@"header"];
 	tableView.delegate = self;
 	tableView.dataSource = self;
 
@@ -52,13 +54,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	return 50.0;
+	return section == 0 ? 0.0 : 50.0;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-	UITableViewHeaderFooterView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"header"];
-	header.textLabel.text = self.data[section].title;
+	TKSTaxiHeaderView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"header"];
+	header.viewModel = self.data[section];
 	return header;
 }
 

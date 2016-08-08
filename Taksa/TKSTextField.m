@@ -5,6 +5,7 @@
 @interface TKSTextField ()
 
 @property (nonatomic, strong, readonly) UILabel *letterLabel;
+@property (nonatomic, strong, readonly) UIButton *locationButton;
 
 @end
 
@@ -23,6 +24,8 @@
 	self.autocapitalizationType = UITextAutocapitalizationTypeNone;
 	self.autocorrectionType = UITextAutocorrectionTypeNo;
 
+	self.font = [UIFont systemFontOfSize:14.0];
+
 	_letterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 24.0, 24.0)];
 	_letterLabel.layer.cornerRadius = 12.0;
 	_letterLabel.layer.masksToBounds = YES;
@@ -36,7 +39,18 @@
 	self.leftViewMode = UITextFieldViewModeAlways;
 
 	_letterLabel.text = searchVM.letter;
-	self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:searchVM.placeHolder attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:0.0 alpha:0.3]}];
+	self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:searchVM.placeHolder attributes:@{
+		NSForegroundColorAttributeName: [UIColor colorWithWhite:0.0 alpha:0.3],
+		NSFontAttributeName: [UIFont systemFontOfSize:14.0]
+	}];
+
+	_locationButton = [[UIButton alloc] init];
+	[_locationButton setImage:[UIImage imageNamed:@"locationButton"] forState:UIControlStateNormal];
+	[_locationButton addTarget:self.searchVM
+						action:@checkselector0(self.searchVM, didTapLocationButton)
+			  forControlEvents:UIControlEventTouchUpInside];
+	[_locationButton sizeToFit];
+	self.rightViewMode = UITextFieldViewModeAlways;
 
 	[self.rac_textSignal
 		subscribeNext:^(NSString *text) {
@@ -45,33 +59,34 @@
 			self.searchVM.text = text;
 		}];
 
-	RACSignal *activeSignal = RACObserve(searchVM, active);
+	RACSignal *activeSignal = [RACObserve(searchVM, active) distinctUntilChanged];
 	RACSignal *textSignal = [RACObserve(self.searchVM, text) distinctUntilChanged];
 
 	RAC(self, text) = textSignal;
-
-	[activeSignal subscribeNext:^(NSNumber *active) {
-		@strongify(self);
-
-		if (active.boolValue)
-		{
-			[self becomeFirstResponder];
-		}
-		else
-		{
-			[self resignFirstResponder];
-		}
-	}];
-
-	[[[[activeSignal combineLatestWith:textSignal]
-		skip:1]
-		startWith:RACTuplePack(@(searchVM.highlighted), @"")]
-		subscribeNext:^(RACTuple *tuple) {
+	RAC(self.locationButton, enabled) = RACObserve(self.searchVM, active);
+	[[textSignal
+		deliverOnMainThread]
+		subscribeNext:^(NSString *text) {
 			@strongify(self);
 
-			RACTupleUnpack(NSNumber *activeNumber, NSString *text) = tuple;
+			self.rightView = text.length >0 ? nil : self.locationButton;
+		}];
 
-			[self swithToHighlighted:activeNumber.boolValue || text.length > 0];
+	[[activeSignal
+		distinctUntilChanged]
+		subscribeNext:^(NSNumber *active) {
+			@strongify(self);
+
+			if (active.boolValue)
+			{
+				[self becomeFirstResponder];
+			}
+			else
+			{
+				[self resignFirstResponder];
+			}
+
+			[self swithToHighlighted:active.boolValue];
 		}];
 
 	return self;
@@ -79,9 +94,10 @@
 
 - (void)swithToHighlighted:(BOOL)highlighted
 {
-	CGFloat alpha = highlighted
+	CGFloat alpha = highlighted || self.text.length || self.searchVM.highlightedOnStart > 0
 		? 1.0
 		: 0.3;
+	self.searchVM.highlightedOnStart = NO;
 	self.alpha = alpha;
 }
 

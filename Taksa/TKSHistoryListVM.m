@@ -68,6 +68,11 @@ UIScrollViewDelegate
 	return self.suggests.count;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return 64.0;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	TKSSuggest *suggest = [self.suggests objectAtIndex:indexPath.row];

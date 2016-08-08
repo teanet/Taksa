@@ -21,7 +21,7 @@
 	_historyListVM = [[TKSHistoryListVM alloc] init];
 	_inputVM = inputVM ?: [[TKSInputVM alloc] init];
 
-	_orderMode = TKSOrderModeSearch;
+	_orderMode = TKSOrderModeHistory;
 
 	[self setupReactiveStuff];
 
@@ -29,6 +29,33 @@
 }
 
 - (void)setupReactiveStuff
+{
+	@weakify(self);
+
+	[self setupSuggestsAndHistory];
+	[self setupScroll];
+	[self setupOrderModes];
+
+	[[self.taxiListVM.didSelectTaxiSignal
+		ignore:nil]
+		subscribeNext:^(TKSTaxiRow *taxiRow) {
+			@strongify(self);
+
+			[self trackTaxiRow:taxiRow];
+			[[TKSDataProvider sharedProvider].taxiProcessor processTaxiRow:taxiRow
+															   fromSuggest:self.inputVM.fromSearchVM.dbObject
+																 toSuggest:self.inputVM.toSearchVM.dbObject];
+		}];
+
+	[self.inputVM.didPressReturnButtonSignal
+		subscribeNext:^(id _) {
+			@strongify(self);
+
+			[self startSearchIfNeeded];
+		}];
+}
+
+- (void)setupSuggestsAndHistory
 {
 	@weakify(self);
 
@@ -40,7 +67,7 @@
 			if (isSuggestStreet)
 			{
 				self.inputVM.currentSearchVM.text = [suggestText stringByAppendingString:@", "];
-				[self setSearchResultForCurrentSearchVM:suggest];
+				self.inputVM.currentSearchVM.dbObject = suggest;
 			}
 			else
 			{
@@ -50,6 +77,19 @@
 			[self trackSuggest:suggest analyticsType:@"suggest"];
 
 			return !isSuggestStreet;
+		}];
+
+	RACSignal *didSelectLocationSignal = [RACSignal merge:@[
+		self.inputVM.fromSearchVM.didSelectLocationSuggestSignal,
+		self.inputVM.toSearchVM.didSelectLocationSuggestSignal,
+	]];
+
+	[didSelectLocationSignal
+		subscribeNext:^(TKSSuggest *suggest) {
+			@strongify(self);
+
+			[self switchToNextTextFiledIfNeeded];
+			[self startSearchIfNeeded];
 		}];
 
 	RACSignal *didSelectHistorySignal = [self.historyListVM.didSelectSuggestSignal
@@ -64,10 +104,16 @@
 			@strongify(self);
 
 			self.inputVM.currentSearchVM.text = suggest.text;
-			[self setSearchResultForCurrentSearchVM:suggest];
+			self.inputVM.currentSearchVM.dbObject = suggest;
+
 			[self switchToNextTextFiledIfNeeded];
 			[self startSearchIfNeeded];
 		}];
+}
+
+- (void)setupScroll
+{
+	@weakify(self);
 
 	[[RACSignal merge:@[_suggestListVM.didScrollSignal, _historyListVM.didScrollSignal]]
 		subscribeNext:^(id _) {
@@ -76,11 +122,17 @@
 			self.inputVM.fromSearchVM.active = NO;
 			self.inputVM.toSearchVM.active = NO;
 		}];
+}
+
+- (void)setupOrderModes
+{
+	@weakify(self);
 
 	[self.inputVM.didBecomeEditingSignal subscribeNext:^(id x) {
 		@strongify(self);
 
-		self.orderMode = TKSOrderModeSearch;
+		TKSOrderMode mode = self.inputVM.currentSearchVM.suggests.count > 0 ? TKSOrderModeSuggest : TKSOrderModeHistory;
+		self.orderMode = mode;
 	}];
 
 	[[[RACObserve(self.taxiListVM, data)
@@ -93,18 +145,81 @@
 
 			self.orderMode = TKSOrderModeTaxiList;
 		}];
+}
 
-	[[self.taxiListVM.didSelectTaxiSignal
-		ignore:nil]
-		subscribeNext:^(TKSTaxiRow *taxiRow) {
+- (void)clearSearchResultForCurrentSearchVM
+{
+	self.inputVM.currentSearchVM.dbObject = nil;
+}
+
+- (void)saveSuggestToHistory:(TKSSuggest *)suggest
+{
+	[[TKSDataProvider sharedProvider] addSuggestToHistory:suggest];
+	[self.historyListVM loadHistory];
+}
+
+- (void)switchToNextTextFiledIfNeeded
+{
+	// Если `А` inputVM активен, переключаем на `Б` inputVM
+	// Если `Б` inputVM активен, смотрим, если `А` - пустой, то переключаем на него, если полный, то готовы искать такси
+	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
+	{
+		self.inputVM.fromSearchVM.active = NO;
+		self.inputVM.toSearchVM.active = YES;
+	}
+	else
+	{
+		if (!self.inputVM.fromSearchVM.dbObject)
+		{
+			self.inputVM.fromSearchVM.active = YES;
+			self.inputVM.toSearchVM.active = NO;
+		}
+	}
+}
+
+- (void)startSearchIfNeeded
+{
+	@weakify(self);
+
+	if (self.inputVM.fromSearchVM.dbObject && self.inputVM.toSearchVM.dbObject)
+	{
+		[[self fetchTaxiList]
+			subscribeError:^(NSError *error) {
+				@strongify(self);
+
+				TKSOrderMode mode = self.inputVM.currentSearchVM.suggests.count > 0 ? TKSOrderModeSuggest : TKSOrderModeHistory;
+				self.orderMode = mode;
+			}];
+	}
+}
+
+- (void)registerTaxiTableView:(UITableView *)tableView
+{
+	[self.taxiListVM registerTableView:tableView];
+}
+
+- (void)registerSuggestTableView:(UITableView *)tableView
+{
+	[self.suggestListVM registerTableView:tableView];
+}
+
+- (RACSignal *)fetchTaxiList
+{
+	@weakify(self);
+
+	self.orderMode = TKSOrderModeLoading;
+
+	return [[[[TKSDataProvider sharedProvider] fetchTaxiListFromObject:self.inputVM.fromSearchVM.dbObject
+															 toObject:self.inputVM.toSearchVM.dbObject]
+		delay:1.0]
+		doNext:^(NSArray<TKSTaxiSection *> *taxiList) {
 			@strongify(self);
 
-			[self trackTaxiRow:taxiRow];
-			[[TKSDataProvider sharedProvider].taxiProcessor processTaxiRow:taxiRow
-															   fromSuggest:self.inputVM.fromSearchVM.dbObject
-																 toSuggest:self.inputVM.toSearchVM.dbObject];
+			self.taxiListVM.data = taxiList;
 		}];
 }
+
+// MARK: Analytics
 
 - (void)trackSuggest:(TKSSuggest *)suggest analyticsType:(NSString *)analyticsType
 {
@@ -139,89 +254,6 @@
 	};
 
 	[[TKSDataProvider sharedProvider] sendAnalyticsForType:@"taxi-select" body:body];
-}
-
-- (void)clearSearchResultForCurrentSearchVM
-{
-	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
-	{
-		self.inputVM.fromSearchVM.dbObject = nil;
-	}
-	else
-	{
-		self.inputVM.toSearchVM.dbObject = nil;
-	}
-}
-
-- (void)setSearchResultForCurrentSearchVM:(TKSSuggest *)suggest
-{
-	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
-	{
-		self.inputVM.fromSearchVM.dbObject = suggest;
-	}
-	else
-	{
-		self.inputVM.toSearchVM.dbObject = suggest;
-	}
-}
-
-- (void)saveSuggestToHistory:(TKSSuggest *)suggest
-{
-	[[TKSDataProvider sharedProvider] addSuggestToHistory:suggest];
-	[self.historyListVM loadHistory];
-}
-
-- (void)switchToNextTextFiledIfNeeded
-{
-	// Если `А` inputVM активен, переключаем на `Б` inputVM
-	// Если `Б` inputVM активен, смотрим, если `А` - пустой, то переключаем на него, если полный, то готовы искать такси
-	if (self.inputVM.currentSearchVM == self.inputVM.fromSearchVM)
-	{
-		self.inputVM.fromSearchVM.active = NO;
-		self.inputVM.toSearchVM.active = YES;
-	}
-	else
-	{
-		if (!self.inputVM.fromSearchVM.dbObject)
-		{
-			self.inputVM.fromSearchVM.active = YES;
-			self.inputVM.toSearchVM.active = NO;
-		}
-	}
-}
-
-- (void)startSearchIfNeeded
-{
-	if (self.inputVM.fromSearchVM.dbObject && self.inputVM.toSearchVM.dbObject)
-	{
-		[[[self fetchTaxiList] publish] connect];
-	}
-}
-
-- (void)registerTaxiTableView:(UITableView *)tableView
-{
-	[self.taxiListVM registerTableView:tableView];
-}
-
-- (void)registerSuggestTableView:(UITableView *)tableView
-{
-	[self.suggestListVM registerTableView:tableView];
-}
-
-- (RACSignal *)fetchTaxiList
-{
-	@weakify(self);
-
-	self.orderMode = TKSOrderModeLoading;
-
-	return [[[[TKSDataProvider sharedProvider] fetchTaxiListFromObject:self.inputVM.fromSearchVM.dbObject
-															 toObject:self.inputVM.toSearchVM.dbObject]
-		delay:1.0]
-		doNext:^(NSArray<TKSTaxiSection *> *taxiList) {
-			@strongify(self);
-
-			self.taxiListVM.data = taxiList;
-		}];
 }
 
 @end

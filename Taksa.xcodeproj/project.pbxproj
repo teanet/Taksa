@@ -29,6 +29,8 @@
 		305D5C561CE8850C005CE5D8 /* testGroupeSuggest.json in Resources */ = {isa = PBXBuildFile; fileRef = 305D5C541CE8850C005CE5D8 /* testGroupeSuggest.json */; };
 		305D5C601CE894AD005CE5D8 /* NSDateFormatter+TKSTaxiProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 305D5C5F1CE894AD005CE5D8 /* NSDateFormatter+TKSTaxiProvider.m */; };
 		305F689F1D2BEA9600A7B1A8 /* TKSPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 305F689E1D2BEA9600A7B1A8 /* TKSPreferences.m */; };
+		30BE43E21D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 30BE43E11D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m */; };
+		30BE43E61D3FFED80084A9DC /* TKSTaxiHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 30BE43E51D3FFED80084A9DC /* TKSTaxiHeaderView.m */; };
 		730F64351CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F64341CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m */; };
 		730F64381CD8A18F00A34A33 /* TKSTransitionRootToOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F64371CD8A18F00A34A33 /* TKSTransitionRootToOrder.m */; };
 		730F643B1CD8B1F400A34A33 /* TKSTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F643A1CD8B1F400A34A33 /* TKSTextField.m */; };
@@ -101,6 +103,10 @@
 		305D5C5F1CE894AD005CE5D8 /* NSDateFormatter+TKSTaxiProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+TKSTaxiProvider.m"; sourceTree = "<group>"; };
 		305F689D1D2BEA9600A7B1A8 /* TKSPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSPreferences.h; sourceTree = "<group>"; };
 		305F689E1D2BEA9600A7B1A8 /* TKSPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSPreferences.m; sourceTree = "<group>"; };
+		30BE43E01D3FFE860084A9DC /* TKSTableViewHeaderFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTableViewHeaderFooterView.h; sourceTree = "<group>"; };
+		30BE43E11D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTableViewHeaderFooterView.m; sourceTree = "<group>"; };
+		30BE43E41D3FFED80084A9DC /* TKSTaxiHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiHeaderView.h; sourceTree = "<group>"; };
+		30BE43E51D3FFED80084A9DC /* TKSTaxiHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTaxiHeaderView.m; sourceTree = "<group>"; };
 		470208B2B914298C29990303 /* Pods-Taksa.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Taksa.release.xcconfig"; path = "Pods/Target Support Files/Pods-Taksa/Pods-Taksa.release.xcconfig"; sourceTree = "<group>"; };
 		730F64331CD8A0E800A34A33 /* TKSNavigationControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSNavigationControllerDelegate.h; sourceTree = "<group>"; };
 		730F64341CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSNavigationControllerDelegate.m; sourceTree = "<group>"; };
@@ -217,6 +223,8 @@
 				730F64471CD8FAC400A34A33 /* TKSBaseVC.m */,
 				302F97531D36779E00194EB8 /* TKSTableViewCell.h */,
 				302F97541D36779E00194EB8 /* TKSTableViewCell.m */,
+				30BE43E01D3FFE860084A9DC /* TKSTableViewHeaderFooterView.h */,
+				30BE43E11D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -343,6 +351,15 @@
 			name = json;
 			sourceTree = "<group>";
 		};
+		30BE43E31D3FFEC60084A9DC /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				30BE43E41D3FFED80084A9DC /* TKSTaxiHeaderView.h */,
+				30BE43E51D3FFED80084A9DC /* TKSTaxiHeaderView.m */,
+			);
+			name = Header;
+			sourceTree = "<group>";
+		};
 		730F64321CD8A0C400A34A33 /* Transitions */ = {
 			isa = PBXGroup;
 			children = (
@@ -357,6 +374,7 @@
 		734898E61CD60E6500B218CB /* TaxiList */ = {
 			isa = PBXGroup;
 			children = (
+				30BE43E31D3FFEC60084A9DC /* Header */,
 				302D8FFD1D36733400195DB3 /* Cells */,
 				73489BE21CD613AF00B218CB /* TKSTaxiListVM.h */,
 				73489BE31CD613AF00B218CB /* TKSTaxiListVM.m */,
@@ -610,6 +628,7 @@
 				302F97551D36779E00194EB8 /* TKSTableViewCell.m in Sources */,
 				730F64441CD8F87A00A34A33 /* TKSRegionCell.m in Sources */,
 				73489C161CD6562000B218CB /* TKSAPIController+TKSModels.m in Sources */,
+				30BE43E21D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m in Sources */,
 				302F91481D36750C00194EB8 /* TKSSuggestListVC.m in Sources */,
 				302F97581D3677F200194EB8 /* TKSSuggestCell.m in Sources */,
 				302FA0BF1D3A21C300194EB8 /* TKSRootVC.m in Sources */,
@@ -630,6 +649,7 @@
 				300275AC1CD8A19400232840 /* TKSRegion.m in Sources */,
 				73BB12631CCBC3BE00E07190 /* TKSSelectCityVC.m in Sources */,
 				734898E51CD60D7A00B218CB /* TKSTaxiRow.m in Sources */,
+				30BE43E61D3FFED80084A9DC /* TKSTaxiHeaderView.m in Sources */,
 				73489C0E1CD655B200B218CB /* UIColor+DGSCustomColor.m in Sources */,
 				73489BFB1CD64E4900B218CB /* TKSTaxiDefaultCell.m in Sources */,
 				73489C081CD6556600B218CB /* UIFont+DGSCustomFont.m in Sources */,

@@ -13,6 +13,7 @@
 	_tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
 	_tableView.tableFooterView = [[UIView alloc] init];
 	_tableView.backgroundColor = [UIColor clearColor];
+	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
 	self.view = [[UIView alloc] init];
 }

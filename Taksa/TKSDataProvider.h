@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)fetchSuggestsForSearchString:(NSString *)searchString;
 
 /*! \sendNext TKSSuggest Переделано! */
-- (RACSignal *)fetchSuggestForLocation:(CLLocation *)location;
+- (RACSignal *)fetchSuggestForLocation;
 
 /*! \sendNext @[TKSTaxiSection] Переделано!  */
 - (RACSignal *)fetchTaxiListFromObject:(TKSSuggest *)objectFrom
