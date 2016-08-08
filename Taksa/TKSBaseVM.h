@@ -1,0 +1,2 @@
+@interface TKSBaseVM : NSObject
+@end
