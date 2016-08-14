@@ -48,20 +48,21 @@
 	if (!self.costraintsCreated)
 	{
 		[self.fromTF mas_makeConstraints:^(MASConstraintMaker *make) {
-			make.top.equalTo(self).with.offset(16.0);
-			make.leading.equalTo(self).with.offset(16.0);
-			make.trailing.equalTo(self).with.offset(-16.0);
+			make.top.equalTo(self);
+			make.leading.equalTo(self);
+			make.trailing.equalTo(self);
 			make.height.equalTo(@48.0);
 		}];
 		[self.toTF mas_makeConstraints:^(MASConstraintMaker *make) {
 			make.top.equalTo(self.fromTF.mas_bottom).with.offset(8.0);
-			make.leading.equalTo(self).with.offset(16.0);
-			make.trailing.equalTo(self).with.offset(-16.0);
+			make.leading.equalTo(self);
+			make.trailing.equalTo(self);
 			make.height.equalTo(@48.0);
 			make.bottom.equalTo(self).with.offset(-16.0);
 		}];
 		self.costraintsCreated = YES;
 	}
+	
 	[super updateConstraints];
 }
 

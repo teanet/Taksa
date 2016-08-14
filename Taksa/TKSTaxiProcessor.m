@@ -6,8 +6,6 @@
 @implementation TKSTaxiProcessor
 
 - (void)processTaxiRow:(TKSTaxiRow *)taxiRow
-		   fromSuggest:(TKSSuggest *)fromSuggest
-			 toSuggest:(TKSSuggest *)toSugges
 {
 	if (taxiRow.phoneValue.length > 1)
 	{
@@ -15,14 +13,23 @@
 	}
 	else if (taxiRow.siteUrlString.length > 0)
 	{
-		NSURL *url = [NSURL URLWithString:taxiRow.siteUrlString];
-		[self openTaxiURL:taxiRow url:url];
+		NSURL *appURL = [NSURL URLWithString:taxiRow.appUrlString];
+
+		BOOL canOpenAppURL =
+			appURL.absoluteString.length > 0 &&
+			[[UIApplication sharedApplication] canOpenURL:appURL];
+
+		NSURL *url = canOpenAppURL
+			? appURL
+			: [NSURL URLWithString:taxiRow.siteUrlString];
+
+		[self openTaxiURL:taxiRow url:url application:canOpenAppURL];
 	}
 }
 
 - (void)callTaxi:(TKSTaxiRow *)taxiRow
 {
-	NSString *message = [NSString stringWithFormat:@"Позвонить в такси %@?", taxiRow.title];
+	NSString *message = [NSString stringWithFormat:@"Позвонить в %@?", taxiRow.shortTitle];
 
 	UIAlertAction *callAction = [UIAlertAction actionWithTitle:@"Позвонить"
 														 style:UIAlertActionStyleDefault
@@ -40,12 +47,14 @@
 	[self presentAlert:alert];
 }
 
-- (void)openTaxiURL:(TKSTaxiRow *)taxiRow
-				url:(NSURL *)url
+- (void)openTaxiURL:(TKSTaxiRow *)taxiRow url:(NSURL *)url application:(BOOL)application
 {
-	NSString *message = [NSString stringWithFormat:@"Открыть сайт такси %@?", taxiRow.title];
+	NSString *message = application
+		? [NSString stringWithFormat:@"Перейти в приложение %@?", taxiRow.shortTitle]
+		: [NSString stringWithFormat:@"Перейти на сайт %@?", taxiRow.shortTitle];
 
-	UIAlertAction *callAction = [UIAlertAction actionWithTitle:@"Открыть сайт"
+	NSString *buttonTitle = application ? @"Перейти" : @"Открыть сайт";
+	UIAlertAction *callAction = [UIAlertAction actionWithTitle:buttonTitle
 														 style:UIAlertActionStyleDefault
 													   handler:^(UIAlertAction * _Nonnull action) {
 	   [[RACScheduler mainThreadScheduler]
@@ -54,7 +63,8 @@
 			}];
    }];
 
-	UIAlertController *alert = [self alertControllerWithTitle:@"Открыть сайт" message:message action:callAction];
+	NSString *alertTitle = application ? @"Перейти в приложение" : @"Перейти на сайт";
+	UIAlertController *alert = [self alertControllerWithTitle:alertTitle message:message action:callAction];
 	
 	[self presentAlert:alert];
 }

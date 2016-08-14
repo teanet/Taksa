@@ -17,14 +17,13 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 	TKSSearchTaxiModeResults
 };
 
-@interface TKSSearchTaxiVM () <UITableViewDelegate, UITableViewDataSource>
+@interface TKSSearchTaxiVM () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate>
 
 @property (nonatomic, strong, readonly) TKSInputVM *inputVM;
 @property (nonatomic, strong, readonly) TKSTaxiResults *taxiResults;
 @property (nonatomic, copy, readonly) NSArray<id<TKSTableSectionVMProtocol>> *sectionVMs;
 @property (nonatomic, strong, readonly) RACSignal *shouldReloadTableSignal;
 @property (nonatomic, assign) TKSSearchTaxiMode mode;
-//@property (nonatomic, copy, readonly) NSDictionary *cellHeightsForModes;
 
 @end
 
@@ -38,21 +37,6 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 	_inputVM = inputVM ?: [[TKSInputVM alloc] init];
 	_taxiResults = [[TKSTaxiResults alloc] init];
 	_mode = TKSSearchTaxiModeSuggest;
-
-//	_cellHeightsForModes = @{
-//		@(TKSSearchTaxiModeResults) : @{
-//			NSStringFromClass([TKSInputSectionVM class]) : @0.0,
-//			NSStringFromClass([TKSResultsSectionVM class]) : @(UITableViewAutomaticDimension),
-//		},
-//		@(TKSSearchTaxiModeSuggest) : @{
-//			NSStringFromClass([TKSInputSectionVM class]) : @(UITableViewAutomaticDimension),
-//			NSStringFromClass([TKSResultsSectionVM class]) : @0.0,
-//		},
-//		@(TKSSearchTaxiModeSearching) : @{
-//			NSStringFromClass([TKSInputSectionVM class]) : @0.0,
-//			NSStringFromClass([TKSResultsSectionVM class]) : @0.0,
-//		},
-//	};
 
 	[self createSections];
 
@@ -93,6 +77,7 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 	tableView.delegate = self;
 	tableView.dataSource = self;
 	tableView.estimatedRowHeight = 200.0;
+	tableView.estimatedSectionHeaderHeight = 120.0;
 
 	[tableView registerClass:[TKSInputHeaderView class]
 		forHeaderFooterViewReuseIdentifier:NSStringFromClass([TKSInputSectionVM class])];
@@ -119,6 +104,7 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 				self.mode = TKSSearchTaxiModeResults;
 			}
 
+			// Clear all other sections
 			[self.sectionVMs enumerateObjectsUsingBlock:^(id<TKSTableSectionVMProtocol> s, NSUInteger _, BOOL *__) {
 				if (![section isEqual:s])
 				{
@@ -126,8 +112,7 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 				}
 			}];
 
-			NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.sectionVMs.count)];
-			[tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
+			[tableView reloadData];
 		}];
 }
 
@@ -174,7 +159,7 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	return section == 0 ? 136.0 : 0.0;
+	return section == 0 ? UITableViewAutomaticDimension : 0.001;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -182,11 +167,16 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 
 	id<TKSTableSectionVMProtocol> section = [self.sectionVMs objectAtIndex:indexPath.section];
-	if ([section isKindOfClass:[TKSInputSectionVM class]])
-	{
-		TKSInputSectionVM *sectionMapVM = (TKSInputSectionVM *)section;
-		[sectionMapVM didSelectCellVMAtIndexPath:indexPath];
-	}
+	[section didSelectCellVMAtIndexPath:indexPath];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+	[[RACScheduler mainThreadScheduler]
+		schedule:^{
+			self.inputVM.fromSearchVM.active = NO;
+			self.inputVM.toSearchVM.active = NO;
+		}];
 }
 
 @end

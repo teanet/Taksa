@@ -8,6 +8,7 @@
 @property (nonatomic, copy, readonly) NSString *headerTitleLeft;
 @property (nonatomic, copy, readonly) NSString *headerTitleRight;
 
+- (void)didSelectCellVMAtIndexPath:(NSIndexPath *)indexPath;
 - (void)clearSection;
 
 @end

@@ -1,6 +1,7 @@
 #import "TKSInputHeaderView.h"
 
 #import "TKSInputView.h"
+#import "UIColor+DGSCustomColor.h"
 
 @interface TKSInputHeaderView ()
 
@@ -16,10 +17,11 @@
 	if (self == nil) return nil;
 
 	_inputView = [[TKSInputView alloc] init];
+	self.contentView.backgroundColor = [UIColor dgs_colorWithString:@"F4F4F4"];
 	[self.contentView addSubview:_inputView];
 
 	[_inputView mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.edges.equalTo(self.contentView);
+		make.edges.equalTo(self.contentView).with.priorityHigh();
 	}];
 
 	return self;

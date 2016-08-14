@@ -70,9 +70,9 @@
 + (NSString *)optimalTitleForDistance:(NSNumber *)distanceNumber time:(NSNumber *)timeNumber
 {
 
-	return [NSString stringWithFormat:@"%.1fкм, %ld минуты",
-		[distanceNumber doubleValue]/1000.0,
-		timeNumber.integerValue];
+	return distanceNumber.doubleValue > 10.0
+		? [NSString stringWithFormat:@"%.0f км, %ld минуты", [distanceNumber doubleValue]/1000.0, timeNumber.integerValue]
+		: [NSString stringWithFormat:@"%.1f км, %ld минуты", [distanceNumber doubleValue]/1000.0, timeNumber.integerValue];
 }
 
 + (NSString *)elseTitleForSectionDictionary:(NSDictionary *)sectionDictionary
@@ -81,11 +81,42 @@
 {
 	NSArray *operators = sectionDictionary[@"results"];
 	NSString *titleLeft = [NSString stringWithFormat:@"%ld предложений", operators.count];
-	NSString *titleRight = [NSString stringWithFormat:@"%.1fкм, %ld минуты",
-		[distanceNumber doubleValue]/1000.0,
-		timeNumber.integerValue];
+	NSString *titleRight = [NSString stringWithFormat:@"%@, %ld %@",
+		[self distanceStringForDistance:[distanceNumber doubleValue]/1000.0],
+		timeNumber.integerValue,
+		[self minutesStringForMinutes:timeNumber.integerValue]];
 
 	return [NSString stringWithFormat:@"%@|%@",titleLeft, titleRight];
+}
+
++ (NSString *)minutesStringForMinutes:(NSInteger)minutes
+{
+	if (minutes > 10 && minutes < 20) return @"минут";
+
+	NSInteger minute = minutes % 10;
+	static NSArray<NSString *> *minuteStrings;
+	minuteStrings = @[
+		@"минут",
+		@"минута",
+		@"минуты",
+		@"минуты",
+		@"минуты",
+		@"минут",
+		@"минут",
+		@"минут",
+		@"минут",
+		@"минут",
+		@"минут"
+	];
+
+	return minuteStrings[minute];
+}
+
++ (NSString *)distanceStringForDistance:(double)distance
+{
+	return distance > 10.0
+		? [NSString stringWithFormat:@"%.0f км", distance]
+		: [NSString stringWithFormat:@"%.1f км", distance];
 }
 
 @end

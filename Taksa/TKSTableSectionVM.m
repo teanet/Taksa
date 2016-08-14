@@ -19,4 +19,8 @@
 {
 }
 
+- (void)clearSection
+{
+}
+
 @end

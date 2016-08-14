@@ -45,10 +45,22 @@
 	_tableView.tableFooterView = [[UIView alloc] init];
 	_tableView.backgroundColor = [UIColor clearColor];
 	_tableView.showsVerticalScrollIndicator = NO;
+	_tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 16.0, 0.0);
 	[self.view addSubview:_tableView];
 
+	UIView *statusBarView = [[UIView alloc] init];
+	statusBarView.backgroundColor = [UIColor dgs_colorWithString:@"F4F4F4"];
+	[self.view addSubview:statusBarView];
+
+	[statusBarView mas_makeConstraints:^(MASConstraintMaker *make) {
+		make.top.equalTo(self.view);
+		make.leading.equalTo(self.view);
+		make.trailing.equalTo(self.view);
+		make.height.equalTo(@20.0);
+	}];
+
 	[_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.edges.equalTo(self.view);
+		make.edges.equalTo(self.view).with.insets(UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0));
 	}];
 
 	[self.viewModel registerTableView:_tableView];

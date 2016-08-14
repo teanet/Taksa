@@ -3,8 +3,6 @@
 
 @interface TKSTaxiProcessor : NSObject
 
-- (void)processTaxiRow:(TKSTaxiRow *)taxiRow
-		   fromSuggest:(TKSSuggest *)fromSuggest
-			 toSuggest:(TKSSuggest *)toSuggest;
+- (void)processTaxiRow:(TKSTaxiRow *)taxiRow;
 
 @end

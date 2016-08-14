@@ -62,4 +62,30 @@
 	_cellVMs = @[];
 }
 
+- (void)didSelectCellVMAtIndexPath:(NSIndexPath *)indexPath
+{
+	TKSBaseVM *cellVM = [self.cellVMs objectAtIndex:indexPath.row];
+
+	if ([cellVM isKindOfClass:[TKSTaxiSuggestCellVM class]] ||
+		[cellVM isKindOfClass:[TKSTaxiDefaultCellVM class]])
+	{
+		TKSTaxiSuggestCellVM *suggestCellVM = (TKSTaxiSuggestCellVM *)cellVM;
+		[self trackTaxiRow:suggestCellVM.taxiRow];
+		
+		[[TKSDataProvider sharedProvider].taxiProcessor processTaxiRow:suggestCellVM.taxiRow];
+	}
+}
+
+- (void)trackTaxiRow:(TKSTaxiRow *)taxiRow
+{
+	if (!taxiRow) return;
+
+	NSDictionary *body = @{
+		@"search_id" : taxiRow.searchId,
+		@"operator_id" : taxiRow.id,
+	};
+
+	[[TKSDataProvider sharedProvider] sendAnalyticsForType:@"taxi-select" body:body];
+}
+
 @end
