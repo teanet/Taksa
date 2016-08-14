@@ -35,6 +35,10 @@
 		30726CD51D6052A000B03101 /* TKSSuggestCellVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 30726CD41D6052A000B03101 /* TKSSuggestCellVM.m */; };
 		30BE43E21D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 30BE43E11D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m */; };
 		30BE43E61D3FFED80084A9DC /* TKSTaxiHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 30BE43E51D3FFED80084A9DC /* TKSTaxiHeaderView.m */; };
+		30C794CC1D6077DE00A2462F /* TKSResultsSectionVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 30C794CB1D6077DE00A2462F /* TKSResultsSectionVM.m */; };
+		30C794D11D607BBD00A2462F /* TKSTaxiSuggestCellVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 30C794D01D607BBD00A2462F /* TKSTaxiSuggestCellVM.m */; };
+		30C794D41D60806300A2462F /* TKSTaxiResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 30C794D31D60806300A2462F /* TKSTaxiResults.m */; };
+		30C794D71D608DF900A2462F /* TKSTaxiDefaultCellVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 30C794D61D608DF900A2462F /* TKSTaxiDefaultCellVM.m */; };
 		30E217331D58EBC400B696AC /* TKSSearchTaxiVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E217321D58EBC400B696AC /* TKSSearchTaxiVC.m */; };
 		30E217361D58EBD600B696AC /* TKSSearchTaxiVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E217351D58EBD600B696AC /* TKSSearchTaxiVM.m */; };
 		30E2173C1D58EC3800B696AC /* TKSBaseVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E2173B1D58EC3800B696AC /* TKSBaseVM.m */; };
@@ -122,6 +126,14 @@
 		30BE43E11D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTableViewHeaderFooterView.m; sourceTree = "<group>"; };
 		30BE43E41D3FFED80084A9DC /* TKSTaxiHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiHeaderView.h; sourceTree = "<group>"; };
 		30BE43E51D3FFED80084A9DC /* TKSTaxiHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTaxiHeaderView.m; sourceTree = "<group>"; };
+		30C794CA1D6077DE00A2462F /* TKSResultsSectionVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSResultsSectionVM.h; sourceTree = "<group>"; };
+		30C794CB1D6077DE00A2462F /* TKSResultsSectionVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSResultsSectionVM.m; sourceTree = "<group>"; };
+		30C794CF1D607BBD00A2462F /* TKSTaxiSuggestCellVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiSuggestCellVM.h; sourceTree = "<group>"; };
+		30C794D01D607BBD00A2462F /* TKSTaxiSuggestCellVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTaxiSuggestCellVM.m; sourceTree = "<group>"; };
+		30C794D21D60806300A2462F /* TKSTaxiResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiResults.h; sourceTree = "<group>"; };
+		30C794D31D60806300A2462F /* TKSTaxiResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTaxiResults.m; sourceTree = "<group>"; };
+		30C794D51D608DF900A2462F /* TKSTaxiDefaultCellVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiDefaultCellVM.h; sourceTree = "<group>"; };
+		30C794D61D608DF900A2462F /* TKSTaxiDefaultCellVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTaxiDefaultCellVM.m; sourceTree = "<group>"; };
 		30E217311D58EBC400B696AC /* TKSSearchTaxiVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSSearchTaxiVC.h; sourceTree = "<group>"; };
 		30E217321D58EBC400B696AC /* TKSSearchTaxiVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSSearchTaxiVC.m; sourceTree = "<group>"; };
 		30E217341D58EBD600B696AC /* TKSSearchTaxiVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSSearchTaxiVM.h; sourceTree = "<group>"; };
@@ -298,10 +310,6 @@
 		302D8FFD1D36733400195DB3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				73489BF61CD647AB00B218CB /* TKSTaxiSuggestCell.h */,
-				73489BF71CD647AB00B218CB /* TKSTaxiSuggestCell.m */,
-				73489BF91CD64E4900B218CB /* TKSTaxiDefaultCell.h */,
-				73489BFA1CD64E4900B218CB /* TKSTaxiDefaultCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -393,6 +401,21 @@
 			name = Header;
 			sourceTree = "<group>";
 		};
+		30C794CD1D6078C600A2462F /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				73489BF61CD647AB00B218CB /* TKSTaxiSuggestCell.h */,
+				73489BF71CD647AB00B218CB /* TKSTaxiSuggestCell.m */,
+				73489BF91CD64E4900B218CB /* TKSTaxiDefaultCell.h */,
+				73489BFA1CD64E4900B218CB /* TKSTaxiDefaultCell.m */,
+				30C794D51D608DF900A2462F /* TKSTaxiDefaultCellVM.h */,
+				30C794D61D608DF900A2462F /* TKSTaxiDefaultCellVM.m */,
+				30C794CF1D607BBD00A2462F /* TKSTaxiSuggestCellVM.h */,
+				30C794D01D607BBD00A2462F /* TKSTaxiSuggestCellVM.m */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
 		30E2172F1D58E9E800B696AC /* SearchTaxi */ = {
 			isa = PBXGroup;
 			children = (
@@ -430,6 +453,11 @@
 		30E217391D58EBF800B696AC /* Results */ = {
 			isa = PBXGroup;
 			children = (
+				30C794CD1D6078C600A2462F /* Cells */,
+				30C794CA1D6077DE00A2462F /* TKSResultsSectionVM.h */,
+				30C794CB1D6077DE00A2462F /* TKSResultsSectionVM.m */,
+				30C794D21D60806300A2462F /* TKSTaxiResults.h */,
+				30C794D31D60806300A2462F /* TKSTaxiResults.m */,
 			);
 			name = Results;
 			sourceTree = "<group>";
@@ -706,6 +734,7 @@
 				73489C161CD6562000B218CB /* TKSAPIController+TKSModels.m in Sources */,
 				30BE43E21D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m in Sources */,
 				302F91481D36750C00194EB8 /* TKSSuggestListVC.m in Sources */,
+				30C794D11D607BBD00A2462F /* TKSTaxiSuggestCellVM.m in Sources */,
 				302F97581D3677F200194EB8 /* TKSSuggestCell.m in Sources */,
 				302FA0BF1D3A21C300194EB8 /* TKSRootVC.m in Sources */,
 				302FA0CC1D3A23FE00194EB8 /* DGSErrorBannerVM.m in Sources */,
@@ -746,14 +775,17 @@
 				73BB126A1CCCA1D400E07190 /* TKSInputView.m in Sources */,
 				73BB12661CCBC6AE00E07190 /* TKSOrderVC.m in Sources */,
 				73489BF31CD6217400B218CB /* TKSSearchVM.m in Sources */,
+				30C794D41D60806300A2462F /* TKSTaxiResults.m in Sources */,
 				30E217331D58EBC400B696AC /* TKSSearchTaxiVC.m in Sources */,
 				305D5C601CE894AD005CE5D8 /* NSDateFormatter+TKSTaxiProvider.m in Sources */,
 				302F9A831D36AE1800194EB8 /* TKSHistoryListVM.m in Sources */,
 				73BB0F7F1CCBBB6500E07190 /* AppDelegate.m in Sources */,
 				30E217361D58EBD600B696AC /* TKSSearchTaxiVM.m in Sources */,
+				30C794D71D608DF900A2462F /* TKSTaxiDefaultCellVM.m in Sources */,
 				73BB0F7C1CCBBB6500E07190 /* main.m in Sources */,
 				30726CD51D6052A000B03101 /* TKSSuggestCellVM.m in Sources */,
 				73489BE41CD613AF00B218CB /* TKSTaxiListVM.m in Sources */,
+				30C794CC1D6077DE00A2462F /* TKSResultsSectionVM.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

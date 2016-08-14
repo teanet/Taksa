@@ -3,15 +3,19 @@
 #import "TKSSuggestCell.h"
 #import "TKSInputHeaderView.h"
 #import "TKSInputSectionVM.h"
+#import "TKSTaxiSuggestCell.h"
+#import "TKSTaxiDefaultCell.h"
+#import "TKSResultsSectionVM.h"
 
 #import "TKSDataProvider.h"
+#import "TKSTaxiResults.h"
 
 @interface TKSSearchTaxiVM () <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong, readonly) TKSInputVM *inputVM;
+@property (nonatomic, strong, readonly) TKSTaxiResults *taxiResults;
 @property (nonatomic, copy, readonly) NSArray<id<TKSTableSectionVMProtocol>> *sectionVMs;
 @property (nonatomic, strong, readonly) RACSignal *shouldReloadTableSignal;
-@property (nonatomic, assign) BOOL tableScrollEnabled;
 
 @end
 
@@ -23,7 +27,7 @@
 	if (self == nil) return nil;
 
 	_inputVM = inputVM ?: [[TKSInputVM alloc] init];
-	_tableScrollEnabled = YES;
+	_taxiResults = [[TKSTaxiResults alloc] init];
 
 	[self createSections];
 
@@ -35,16 +39,18 @@
 	@weakify(self);
 
 	TKSInputSectionVM *inputSectionVM = [[TKSInputSectionVM alloc] initWithModel:self.inputVM];
+	TKSResultsSectionVM *resultsSectionVM = [[TKSResultsSectionVM alloc] initWithModel:self.taxiResults];
 
 	[inputSectionVM.shouldSearchTaxiSignal
 		subscribeNext:^(RACTuple *tuple) {
 			@strongify(self);
 
-			[self fetchTaxiFromSuggest:tuple.first toSuggest:tuple.second];
+			[self.taxiResults fetchTaxiResultsFromSuggest:tuple.first toSuggest:tuple.second];
 		}];
 
 	_sectionVMs = @[
 		inputSectionVM,
+		resultsSectionVM,
 	];
 
 	NSArray<RACSignal *> *shouldReloadTableSignals = [_sectionVMs.rac_sequence
@@ -59,32 +65,21 @@
 {
 	tableView.delegate = self;
 	tableView.dataSource = self;
+	tableView.estimatedRowHeight = 200.0;
 
 	[tableView registerClass:[TKSInputHeaderView class]
 		forHeaderFooterViewReuseIdentifier:NSStringFromClass([TKSInputSectionVM class])];
 	[tableView registerClass:[TKSSuggestCell class]
 		forCellReuseIdentifier:NSStringFromClass([TKSSuggestCellVM class])];
-
-	[[[RACObserve(self, tableScrollEnabled)
-		ignore:nil]
-		deliverOnMainThread]
-		subscribeNext:^(NSNumber *scrollEnabled) {
-			tableView.scrollEnabled = scrollEnabled.boolValue;
-		}];
+	[tableView registerClass:[TKSTaxiSuggestCell class]
+		forCellReuseIdentifier:NSStringFromClass([TKSTaxiSuggestCellVM class])];
+	[tableView registerClass:[TKSTaxiDefaultCell class]
+		forCellReuseIdentifier:NSStringFromClass([TKSTaxiDefaultCellVM class])];
 
 	[[self.shouldReloadTableSignal
 		deliverOnMainThread]
 		subscribeNext:^(id _) {
 			[tableView reloadData];
-		}];
-}
-
-- (void)fetchTaxiFromSuggest:(TKSSuggest *)fromSuggest toSuggest:(TKSSuggest *)toSuggest
-{
-	[[[[TKSDataProvider sharedProvider] fetchTaxiListFromObject:fromSuggest toObject:toSuggest]
-		delay:1.0]
-		subscribeNext:^(NSArray<TKSTaxiSection *> *taxiList) {
-			NSLog(@">>> %@", taxiList);
 		}];
 }
 
@@ -131,7 +126,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	return 136.0;
+	return section == 0 ? 136.0 : 0.0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

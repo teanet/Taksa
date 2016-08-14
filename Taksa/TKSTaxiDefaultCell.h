@@ -1,7 +1,6 @@
-#import "TKSTaxiRow.h"
+#import "TKSTableViewCell.h"
 
-@interface TKSTaxiDefaultCell : UITableViewCell
+#import "TKSTaxiDefaultCellVM.h"
 
-@property (nonatomic, strong) TKSTaxiRow *taxiRow;
-
+@interface TKSTaxiDefaultCell : TKSTableViewCell <TKSTaxiDefaultCellVM *>
 @end

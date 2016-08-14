@@ -84,14 +84,16 @@
 	return self;
 }
 
-- (void)setTaxiRow:(TKSTaxiRow *)taxiRow
+- (void)setViewModel:(id)viewModel
 {
-	self.nameLabel.text	= taxiRow.title;
-	self.descriptionLabel.text = taxiRow.summary;
-	self.priceLabel.text = [taxiRow.price stringByAppendingString:@" ₽"];
-	self.iconView.backgroundColor = taxiRow.color;
-	self.letterLabel.text = [taxiRow.title substringWithRange:NSMakeRange(0, 1)];
-	self.letterLabel.textColor = taxiRow.textColor;
+	[super setViewModel:viewModel];
+
+	self.nameLabel.text	= self.viewModel.taxiRow.title;
+	self.descriptionLabel.text = self.viewModel.taxiRow.summary;
+	self.priceLabel.text = [self.viewModel.taxiRow.price stringByAppendingString:@" ₽"];
+	self.iconView.backgroundColor = self.viewModel.taxiRow.color;
+	self.letterLabel.text = [self.viewModel.taxiRow.title substringWithRange:NSMakeRange(0, 1)];
+	self.letterLabel.textColor = self.viewModel.taxiRow.textColor;
 }
 
 @end
