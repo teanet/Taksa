@@ -8,6 +8,8 @@
 @property (nonatomic, copy, readonly) NSString *headerTitleLeft;
 @property (nonatomic, copy, readonly) NSString *headerTitleRight;
 
+- (void)clearSection;
+
 @end
 
 @interface TKSTableSectionVM<ModelClass> : TKSBaseVM

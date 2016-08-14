@@ -10,7 +10,7 @@
 	_model = model;
 
 	_shouldReloadTableSignal = [[self rac_signalForSelector:@checkselector0(self, reloadSection)]
-		mapReplace:[RACUnit defaultUnit]];
+		mapReplace:self];
 
 	return self;
 }

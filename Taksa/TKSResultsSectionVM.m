@@ -2,6 +2,7 @@
 
 #import "TKSTaxiSuggestCellVM.h"
 #import "TKSTaxiDefaultCellVM.h"
+#import "TKSTaxiHeaderCellVM.h"
 #import "TKSDataProvider.h"
 
 @implementation TKSResultsSectionVM
@@ -39,7 +40,9 @@
 			return [[TKSTaxiDefaultCellVM alloc] initWithTaxiRow:taxiRow];
 		}].array;
 
-	_cellVMs = [suggestCells arrayByAddingObjectsFromArray:listCells];
+	TKSTaxiHeaderCellVM *headerCellVM = [[TKSTaxiHeaderCellVM alloc] initWithTaxiSection:taxiList.lastObject];
+	_cellVMs = [suggestCells arrayByAddingObject:headerCellVM];
+	_cellVMs = [_cellVMs arrayByAddingObjectsFromArray:listCells];
 
 	[self reloadSection];
 }
@@ -52,6 +55,11 @@
 - (NSString *)headerTitleRight
 {
 	return @"";
+}
+
+- (void)clearSection
+{
+	_cellVMs = @[];
 }
 
 @end

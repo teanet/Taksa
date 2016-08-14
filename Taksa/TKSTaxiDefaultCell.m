@@ -21,31 +21,38 @@
 
 	self.selectionStyle = UITableViewCellSelectionStyleNone;
 
+	UIView *container = [[UIView alloc] init];
+	[self.contentView addSubview:container];
+
 	_iconView = [[UIImageView alloc] init];
 	_iconView.layer.cornerRadius = 16.0;
-	[self.contentView addSubview:_iconView];
+	[container addSubview:_iconView];
 
 	_letterLabel = [[UILabel alloc] init];
 	_letterLabel.font = [UIFont dgs_regularFontOfSize:16.0];
-	[self.contentView addSubview:_letterLabel];
+	[container addSubview:_letterLabel];
 
 	_nameLabel = [[UILabel alloc] init];
 	_nameLabel.font = [UIFont dgs_regularFontOfSize:14.0];
-	[self.contentView addSubview:_nameLabel];
+	[container addSubview:_nameLabel];
 
 	_priceLabel = [[UILabel alloc] init];
 	_priceLabel.textAlignment = NSTextAlignmentRight;
 	_priceLabel.font = [UIFont dgs_regularFontOfSize:14.0];
-	[self.contentView addSubview:_priceLabel];
+	[container addSubview:_priceLabel];
 
 	_descriptionLabel = [[UILabel alloc] init];
 	_descriptionLabel.font = [UIFont dgs_regularFontOfSize:14.0];
 	_descriptionLabel.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
-	[self.contentView addSubview:_descriptionLabel];
+	[container addSubview:_descriptionLabel];
+
+	[container mas_makeConstraints:^(MASConstraintMaker *make) {
+		make.edges.equalTo(self.contentView);
+	}];
 
 	[_iconView mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.leading.equalTo(self.contentView).with.offset(8.0);
-		make.top.equalTo(self.contentView).with.offset(8.0);
+		make.leading.equalTo(container).with.offset(8.0);
+		make.top.equalTo(container).with.offset(8.0);
 		make.width.equalTo(@32.0);
 		make.height.equalTo(@32.0);
 	}];
@@ -60,15 +67,15 @@
 	}];
 
 	[_priceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.trailing.equalTo(self.contentView).with.offset(-8.0);
+		make.trailing.equalTo(container).with.offset(-8.0);
 		make.centerY.equalTo(_iconView);
 	}];
 
 	[_descriptionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.top.equalTo(_nameLabel.mas_bottom).with.offset(4.0);
-		make.bottom.equalTo(self.contentView).with.offset(-4.0).with.priorityHigh();
+		make.bottom.equalTo(container).with.offset(-4.0).with.priorityHigh();
 		make.leading.equalTo(_nameLabel);
-		make.trailing.equalTo(self.contentView).with.offset(-10.0);
+		make.trailing.equalTo(container).with.offset(-10.0);
 	}];
 
 	return self;

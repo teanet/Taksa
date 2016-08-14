@@ -174,6 +174,11 @@
 		}].array;
 }
 
+- (void)clearSection
+{
+	_cellVMs = @[];
+}
+
 - (NSString *)headerTitleLeft
 {
 	return @"";

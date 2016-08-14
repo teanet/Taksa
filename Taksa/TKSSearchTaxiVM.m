@@ -5,10 +5,17 @@
 #import "TKSInputSectionVM.h"
 #import "TKSTaxiSuggestCell.h"
 #import "TKSTaxiDefaultCell.h"
+#import "TKSTaxiHeaderCell.h"
 #import "TKSResultsSectionVM.h"
 
 #import "TKSDataProvider.h"
 #import "TKSTaxiResults.h"
+
+typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
+	TKSSearchTaxiModeSuggest,
+	TKSSearchTaxiModeSearching,
+	TKSSearchTaxiModeResults
+};
 
 @interface TKSSearchTaxiVM () <UITableViewDelegate, UITableViewDataSource>
 
@@ -16,6 +23,8 @@
 @property (nonatomic, strong, readonly) TKSTaxiResults *taxiResults;
 @property (nonatomic, copy, readonly) NSArray<id<TKSTableSectionVMProtocol>> *sectionVMs;
 @property (nonatomic, strong, readonly) RACSignal *shouldReloadTableSignal;
+@property (nonatomic, assign) TKSSearchTaxiMode mode;
+//@property (nonatomic, copy, readonly) NSDictionary *cellHeightsForModes;
 
 @end
 
@@ -28,6 +37,22 @@
 
 	_inputVM = inputVM ?: [[TKSInputVM alloc] init];
 	_taxiResults = [[TKSTaxiResults alloc] init];
+	_mode = TKSSearchTaxiModeSuggest;
+
+//	_cellHeightsForModes = @{
+//		@(TKSSearchTaxiModeResults) : @{
+//			NSStringFromClass([TKSInputSectionVM class]) : @0.0,
+//			NSStringFromClass([TKSResultsSectionVM class]) : @(UITableViewAutomaticDimension),
+//		},
+//		@(TKSSearchTaxiModeSuggest) : @{
+//			NSStringFromClass([TKSInputSectionVM class]) : @(UITableViewAutomaticDimension),
+//			NSStringFromClass([TKSResultsSectionVM class]) : @0.0,
+//		},
+//		@(TKSSearchTaxiModeSearching) : @{
+//			NSStringFromClass([TKSInputSectionVM class]) : @0.0,
+//			NSStringFromClass([TKSResultsSectionVM class]) : @0.0,
+//		},
+//	};
 
 	[self createSections];
 
@@ -63,6 +88,8 @@
 
 - (void)registerTableView:(UITableView *)tableView
 {
+	@weakify(self);
+
 	tableView.delegate = self;
 	tableView.dataSource = self;
 	tableView.estimatedRowHeight = 200.0;
@@ -75,11 +102,32 @@
 		forCellReuseIdentifier:NSStringFromClass([TKSTaxiSuggestCellVM class])];
 	[tableView registerClass:[TKSTaxiDefaultCell class]
 		forCellReuseIdentifier:NSStringFromClass([TKSTaxiDefaultCellVM class])];
+	[tableView registerClass:[TKSTaxiHeaderCell class]
+		forCellReuseIdentifier:NSStringFromClass([TKSTaxiHeaderCellVM class])];
 
 	[[self.shouldReloadTableSignal
 		deliverOnMainThread]
-		subscribeNext:^(id _) {
-			[tableView reloadData];
+		subscribeNext:^(TKSTableSectionVM *section) {
+			@strongify(self);
+
+			if ([section isKindOfClass:[TKSInputSectionVM class]])
+			{
+				self.mode = TKSSearchTaxiModeSuggest;
+			}
+			else
+			{
+				self.mode = TKSSearchTaxiModeResults;
+			}
+
+			[self.sectionVMs enumerateObjectsUsingBlock:^(id<TKSTableSectionVMProtocol> s, NSUInteger _, BOOL *__) {
+				if (![section isEqual:s])
+				{
+					[s clearSection];
+				}
+			}];
+
+			NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.sectionVMs.count)];
+			[tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
 		}];
 }
 
