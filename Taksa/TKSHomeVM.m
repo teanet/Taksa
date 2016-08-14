@@ -1,6 +1,6 @@
 #import "TKSHomeVM.h"
 
-#import "TKSOrderVM.h"
+#import "TKSSearchTaxiVM.h"
 #import "TKSDataProvider.h"
 
 @interface TKSHomeVM ()
@@ -33,10 +33,10 @@
 	}];
 
 	_searchAddressSignal = [[self rac_signalForSelector:@checkselector0(self, searchAddress)]
-		map:^TKSOrderVM *(id _) {
+		map:^TKSSearchTaxiVM *(id _) {
 			@strongify(self);
 
-			return [[TKSOrderVM alloc] initWithInputVM:self.inputVM];
+			return [[TKSSearchTaxiVM alloc] initWithInputVM:self.inputVM];
 		}];
 
 	[[RACObserve([TKSDataProvider sharedProvider], currentRegion)

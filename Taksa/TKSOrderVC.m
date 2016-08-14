@@ -84,7 +84,7 @@
 		make.bottom.equalTo(self.view);
 	}];
 	
-	_inputView = [[TKSInputView alloc] initWithVM:self.viewModel.inputVM];
+//	_inputView = [[TKSInputView alloc] initWithVM:self.viewModel.inputVM];
 	[self.view addSubview:_inputView];
 	[_inputView mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.top.mas_equalTo(statusBarView.mas_bottom);

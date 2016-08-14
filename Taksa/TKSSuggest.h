@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, TKSHintStyle) {
 
 @property (nonatomic, copy, readonly) NSString *id;
 @property (nonatomic, copy, readonly) NSString *text;
+@property (nonatomic, copy, readonly) NSString *comment;
 @property (nonatomic, copy, readonly) NSAttributedString *attributedText;
 @property (nonatomic, copy, readonly) NSArray<TKSHintItem *> *hintItems;
 @property (nonatomic, copy, readonly) NSString *hintTypeDescription;

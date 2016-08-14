@@ -11,13 +11,12 @@
 
 @implementation TKSTextField
 
-- (instancetype)initWithVM:(TKSSearchVM *)searchVM
+- (instancetype)init
 {
 	self = [super init];
 	if (self == nil) return nil;
-	@weakify(self);
 
-	_searchVM = searchVM;
+	@weakify(self);
 
 	self.backgroundColor = [UIColor whiteColor];
 	self.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -38,16 +37,10 @@
 	self.leftView = leftView;
 	self.leftViewMode = UITextFieldViewModeAlways;
 
-	_letterLabel.text = searchVM.letter;
-	self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:searchVM.placeHolder attributes:@{
-		NSForegroundColorAttributeName: [UIColor colorWithWhite:0.0 alpha:0.3],
-		NSFontAttributeName: [UIFont systemFontOfSize:14.0]
-	}];
-
 	_locationButton = [[UIButton alloc] init];
 	[_locationButton setImage:[UIImage imageNamed:@"locationButton"] forState:UIControlStateNormal];
 	[_locationButton addTarget:self.searchVM
-						action:@checkselector0(self.searchVM, didTapLocationButton)
+						action:@checkselector0(self, didTapLocationButton)
 			  forControlEvents:UIControlEventTouchUpInside];
 	[_locationButton sizeToFit];
 	self.rightViewMode = UITextFieldViewModeAlways;
@@ -59,11 +52,11 @@
 			self.searchVM.text = text;
 		}];
 
-	RACSignal *activeSignal = [RACObserve(searchVM, active) distinctUntilChanged];
-	RACSignal *textSignal = [RACObserve(self.searchVM, text) distinctUntilChanged];
+	RACSignal *activeSignal = [RACObserve(self, searchVM.active) distinctUntilChanged];
+	RACSignal *textSignal = [RACObserve(self, searchVM.text) distinctUntilChanged];
 
 	RAC(self, text) = textSignal;
-	RAC(self.locationButton, enabled) = RACObserve(self.searchVM, active);
+	RAC(self.locationButton, enabled) = [RACObserve(self, searchVM.active) ignore:nil];
 	[[textSignal
 		deliverOnMainThread]
 		subscribeNext:^(NSString *text) {
@@ -99,6 +92,22 @@
 		: 0.3;
 	self.searchVM.highlightedOnStart = NO;
 	self.alpha = alpha;
+}
+
+- (void)setSearchVM:(TKSSearchVM *)searchVM
+{
+	_searchVM = searchVM;
+
+	self.letterLabel.text = searchVM.letter;
+	self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:searchVM.placeHolder attributes:@{
+		NSForegroundColorAttributeName: [UIColor colorWithWhite:0.0 alpha:0.3],
+		NSFontAttributeName: [UIFont systemFontOfSize:14.0]
+	}];
+}
+
+- (void)didTapLocationButton
+{
+	[self.searchVM didTapLocationButton];
 }
 
 @end

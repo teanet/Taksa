@@ -19,7 +19,6 @@
 	if (self == nil) return nil;
 
 	_iconImageView = [[UIImageView alloc] init];
-	_iconImageView.image = [UIImage imageNamed:@"suggestIcon"];
 	[self.contentView addSubview:_iconImageView];
 
 	_textContainer = [[UIView alloc] init];
@@ -78,8 +77,9 @@
 {
 	[super setViewModel:viewModel];
 
-	self.titleLabel.attributedText = self.viewModel.attributedText;
-	self.subtitleLabel.text = self.viewModel.hintTypeDescription;
+	self.titleLabel.attributedText = self.viewModel.attributedTitleText;
+	self.subtitleLabel.text = self.viewModel.subtitleText;
+	self.iconImageView.image = self.viewModel.iconImage;
 }
 
 @end

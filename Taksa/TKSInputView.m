@@ -14,22 +14,28 @@
 
 @implementation TKSInputView
 
-- (instancetype)initWithVM:(TKSInputVM *)inputVM
+- (instancetype)init
 {
 	self = [super initWithFrame:CGRectZero];
 	if (self == nil) return nil;
-
-	_inputVM = inputVM;
 	
-	_fromTF = [[TKSTextField alloc] initWithVM:inputVM.fromSearchVM];
+	_fromTF = [[TKSTextField alloc] init];
 	_fromTF.delegate = self;
 	[self addSubview:_fromTF];
 
-	_toTF = [[TKSTextField alloc] initWithVM:inputVM.toSearchVM];
+	_toTF = [[TKSTextField alloc] init];
 	_toTF.delegate = self;
 	[self addSubview:_toTF];
 
 	return self;
+}
+
+- (void)setViewModel:(TKSInputVM *)viewModel
+{
+	_viewModel = viewModel;
+
+	self.fromTF.searchVM = viewModel.fromSearchVM;
+	self.toTF.searchVM = viewModel.toSearchVM;
 }
 
 + (BOOL)requiresConstraintBasedLayout
@@ -65,19 +71,19 @@
 {
 	if ([textField isEqual:self.fromTF])
 	{
-		self.inputVM.currentSearchVM = self.inputVM.fromSearchVM;
+		self.viewModel.currentSearchVM = self.viewModel.fromSearchVM;
 	}
 	else if ([textField isEqual:self.toTF])
 	{
-		self.inputVM.currentSearchVM = self.inputVM.toSearchVM;
+		self.viewModel.currentSearchVM = self.viewModel.toSearchVM;
 	}
 
-	self.inputVM.currentSearchVM.active = YES;
+	self.viewModel.currentSearchVM.active = YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-	[self.inputVM shouldStartSearchByReturn];
+	[self.viewModel shouldStartSearchByReturn];
 
 	return YES;
 }

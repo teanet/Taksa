@@ -1,17 +1,23 @@
 #import "TKSHomeVC.h"
 
 #import "TKSSelectCityVC.h"
-#import "TKSOrderVC.h"
+//#import "TKSOrderVC.h"
+#import "TKSSearchTaxiVC.h"
 #import "TKSInputView.h"
 #import "TKSNavigationControllerDelegate.h"
 #import "UIColor+DGSCustomColor.h"
+
+@interface TKSHomeVC ()
+
+@property (nonatomic, strong, readonly) UIButton *selectCityButton;
+
+@end
 
 @implementation TKSHomeVC
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	@weakify(self);
 
 	self.view.backgroundColor = [UIColor dgs_colorWithString:@"F4F4F4"];
 	[self setEdgesForExtendedLayout:UIRectEdgeNone];
@@ -49,7 +55,8 @@
 		make.trailing.equalTo(self.view).with.offset(-20.0);
 	}];
 
-	_inputView = [[TKSInputView alloc] initWithVM:self.viewModel.inputVM];
+	_inputView = [[TKSInputView alloc] init];
+	_inputView.viewModel = self.viewModel.inputVM;
 	[self.view addSubview:_inputView];
 	[_inputView mas_makeConstraints:^(MASConstraintMaker *make) {
 		if ([UIScreen mainScreen].bounds.size.height == 480.0)
@@ -73,24 +80,37 @@
 		make.trailing.equalTo(self.view);
 	}];
 
-	UIButton *selectCity = [[UIButton alloc] init];
-	[selectCity setTitle:@"Определяю город..." forState:UIControlStateNormal];
-	[selectCity setTitleColor:[[UIColor dgs_colorWithString:@"333333"] colorWithAlphaComponent:0.87] forState:UIControlStateNormal];
-	[selectCity addTarget:self.viewModel action:@checkselector0(self.viewModel, selectCity) forControlEvents:UIControlEventTouchUpInside];
-	[centerView addSubview:selectCity];
-	[selectCity mas_makeConstraints:^(MASConstraintMaker *make) {
+	_selectCityButton = [[UIButton alloc] init];
+	[_selectCityButton setTitle:@"Определяю город..." forState:UIControlStateNormal];
+	[_selectCityButton setTitleColor:[[UIColor dgs_colorWithString:@"333333"] colorWithAlphaComponent:0.87]
+							forState:UIControlStateNormal];
+	[_selectCityButton addTarget:self.viewModel
+						  action:@checkselector0(self.viewModel, selectCity)
+				forControlEvents:UIControlEventTouchUpInside];
+	[centerView addSubview:_selectCityButton];
+	[_selectCityButton mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.height.equalTo(centerView);
 		make.center.equalTo(centerView);
 	}];
+
+	[self setNeedsStatusBarAppearanceUpdate];
+
+	[self setupReactiveStuff];
+}
+
+- (void)setupReactiveStuff
+{
+	@weakify(self);
+
 	[RACObserve(self.viewModel, selectCityButtonTitle) subscribeNext:^(NSString *title) {
-		[selectCity setTitle:title forState:UIControlStateNormal];
+		[self.selectCityButton setTitle:title forState:UIControlStateNormal];
 	}];
 
-	[self.viewModel.searchAddressSignal subscribeNext:^(TKSOrderVM *orderVM) {
+	[self.viewModel.searchAddressSignal subscribeNext:^(TKSSearchTaxiVM *searchTaxiVM) {
 		@strongify(self);
 
-		TKSOrderVC *orderVC = [[TKSOrderVC alloc] initWithVM:orderVM];
-		[self.navigationController setViewControllers:@[ orderVC ] animated:YES];
+		TKSSearchTaxiVC *searchTaxiVC = [[TKSSearchTaxiVC alloc] initWithVM:searchTaxiVM];
+		[self.navigationController setViewControllers:@[ searchTaxiVC ] animated:YES];
 	}];
 
 	[self.viewModel.selectCitySignal subscribeNext:^(TKSSelectCityVM *selectCityVM) {
@@ -106,8 +126,6 @@
 		TKSSelectCityVC *selectCityVC = [[TKSSelectCityVC alloc] initWithVM:selectCityVM];
 		[self presentViewController:[[UINavigationController alloc] initWithRootViewController:selectCityVC] animated:YES completion:nil];
 	}];
-
-	[self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle

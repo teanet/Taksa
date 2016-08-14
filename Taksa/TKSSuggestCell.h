@@ -1,6 +1,6 @@
 #import "TKSTableViewCell.h"
 
-#import "TKSSuggest.h"
+#import "TKSSuggestCellVM.h"
 
-@interface TKSSuggestCell : TKSTableViewCell <TKSSuggest *>
+@interface TKSSuggestCell : TKSTableViewCell <TKSSuggestCellVM *>
 @end

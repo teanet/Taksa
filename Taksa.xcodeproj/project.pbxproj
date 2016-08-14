@@ -12,6 +12,9 @@
 		300275AF1CD8A30E00232840 /* TKSDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 300275AE1CD8A30E00232840 /* TKSDataProvider.m */; };
 		300275B21CD8A90700232840 /* TKSLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 300275B11CD8A90700232840 /* TKSLocationManager.m */; };
 		300E8EA31D3B6F7400F99606 /* TKSTaxiProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 300E8EA21D3B6F7400F99606 /* TKSTaxiProcessor.m */; };
+		301C8C981D5B964F00AAD378 /* TKSTableSectionVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 301C8C971D5B964F00AAD378 /* TKSTableSectionVM.m */; };
+		301C8C9C1D5B984600AAD378 /* TKSInputSectionVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 301C8C9B1D5B984600AAD378 /* TKSInputSectionVM.m */; };
+		301C8C9F1D5B994100AAD378 /* TKSInputHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 301C8C9E1D5B994100AAD378 /* TKSInputHeaderView.m */; };
 		302F91481D36750C00194EB8 /* TKSSuggestListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 302F91471D36750C00194EB8 /* TKSSuggestListVC.m */; };
 		302F97551D36779E00194EB8 /* TKSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 302F97541D36779E00194EB8 /* TKSTableViewCell.m */; };
 		302F97581D3677F200194EB8 /* TKSSuggestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 302F97571D3677F200194EB8 /* TKSSuggestCell.m */; };
@@ -29,10 +32,11 @@
 		305D5C561CE8850C005CE5D8 /* testGroupeSuggest.json in Resources */ = {isa = PBXBuildFile; fileRef = 305D5C541CE8850C005CE5D8 /* testGroupeSuggest.json */; };
 		305D5C601CE894AD005CE5D8 /* NSDateFormatter+TKSTaxiProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 305D5C5F1CE894AD005CE5D8 /* NSDateFormatter+TKSTaxiProvider.m */; };
 		305F689F1D2BEA9600A7B1A8 /* TKSPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 305F689E1D2BEA9600A7B1A8 /* TKSPreferences.m */; };
+		30726CD51D6052A000B03101 /* TKSSuggestCellVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 30726CD41D6052A000B03101 /* TKSSuggestCellVM.m */; };
 		30BE43E21D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 30BE43E11D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m */; };
 		30BE43E61D3FFED80084A9DC /* TKSTaxiHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 30BE43E51D3FFED80084A9DC /* TKSTaxiHeaderView.m */; };
-		30E217331D58EBC400B696AC /* TKSGetTaxiVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E217321D58EBC400B696AC /* TKSGetTaxiVC.m */; };
-		30E217361D58EBD600B696AC /* TKSGetTaxiVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E217351D58EBD600B696AC /* TKSGetTaxiVM.m */; };
+		30E217331D58EBC400B696AC /* TKSSearchTaxiVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E217321D58EBC400B696AC /* TKSSearchTaxiVC.m */; };
+		30E217361D58EBD600B696AC /* TKSSearchTaxiVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E217351D58EBD600B696AC /* TKSSearchTaxiVM.m */; };
 		30E2173C1D58EC3800B696AC /* TKSBaseVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E2173B1D58EC3800B696AC /* TKSBaseVM.m */; };
 		730F64351CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F64341CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m */; };
 		730F64381CD8A18F00A34A33 /* TKSTransitionRootToOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F64371CD8A18F00A34A33 /* TKSTransitionRootToOrder.m */; };
@@ -75,6 +79,12 @@
 		300275B11CD8A90700232840 /* TKSLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSLocationManager.m; sourceTree = "<group>"; };
 		300E8EA11D3B6F7400F99606 /* TKSTaxiProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiProcessor.h; sourceTree = "<group>"; };
 		300E8EA21D3B6F7400F99606 /* TKSTaxiProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTaxiProcessor.m; sourceTree = "<group>"; };
+		301C8C961D5B964F00AAD378 /* TKSTableSectionVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTableSectionVM.h; sourceTree = "<group>"; };
+		301C8C971D5B964F00AAD378 /* TKSTableSectionVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTableSectionVM.m; sourceTree = "<group>"; };
+		301C8C9A1D5B984600AAD378 /* TKSInputSectionVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSInputSectionVM.h; sourceTree = "<group>"; };
+		301C8C9B1D5B984600AAD378 /* TKSInputSectionVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSInputSectionVM.m; sourceTree = "<group>"; };
+		301C8C9D1D5B994100AAD378 /* TKSInputHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSInputHeaderView.h; sourceTree = "<group>"; };
+		301C8C9E1D5B994100AAD378 /* TKSInputHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSInputHeaderView.m; sourceTree = "<group>"; };
 		302F91461D36750C00194EB8 /* TKSSuggestListVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSSuggestListVC.h; sourceTree = "<group>"; };
 		302F91471D36750C00194EB8 /* TKSSuggestListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSSuggestListVC.m; sourceTree = "<group>"; };
 		302F97531D36779E00194EB8 /* TKSTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTableViewCell.h; sourceTree = "<group>"; };
@@ -106,14 +116,16 @@
 		305D5C5F1CE894AD005CE5D8 /* NSDateFormatter+TKSTaxiProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+TKSTaxiProvider.m"; sourceTree = "<group>"; };
 		305F689D1D2BEA9600A7B1A8 /* TKSPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSPreferences.h; sourceTree = "<group>"; };
 		305F689E1D2BEA9600A7B1A8 /* TKSPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSPreferences.m; sourceTree = "<group>"; };
+		30726CD31D6052A000B03101 /* TKSSuggestCellVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSSuggestCellVM.h; sourceTree = "<group>"; };
+		30726CD41D6052A000B03101 /* TKSSuggestCellVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSSuggestCellVM.m; sourceTree = "<group>"; };
 		30BE43E01D3FFE860084A9DC /* TKSTableViewHeaderFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTableViewHeaderFooterView.h; sourceTree = "<group>"; };
 		30BE43E11D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTableViewHeaderFooterView.m; sourceTree = "<group>"; };
 		30BE43E41D3FFED80084A9DC /* TKSTaxiHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiHeaderView.h; sourceTree = "<group>"; };
 		30BE43E51D3FFED80084A9DC /* TKSTaxiHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTaxiHeaderView.m; sourceTree = "<group>"; };
-		30E217311D58EBC400B696AC /* TKSGetTaxiVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSGetTaxiVC.h; sourceTree = "<group>"; };
-		30E217321D58EBC400B696AC /* TKSGetTaxiVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSGetTaxiVC.m; sourceTree = "<group>"; };
-		30E217341D58EBD600B696AC /* TKSGetTaxiVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSGetTaxiVM.h; sourceTree = "<group>"; };
-		30E217351D58EBD600B696AC /* TKSGetTaxiVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSGetTaxiVM.m; sourceTree = "<group>"; };
+		30E217311D58EBC400B696AC /* TKSSearchTaxiVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSSearchTaxiVC.h; sourceTree = "<group>"; };
+		30E217321D58EBC400B696AC /* TKSSearchTaxiVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSSearchTaxiVC.m; sourceTree = "<group>"; };
+		30E217341D58EBD600B696AC /* TKSSearchTaxiVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSSearchTaxiVM.h; sourceTree = "<group>"; };
+		30E217351D58EBD600B696AC /* TKSSearchTaxiVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSSearchTaxiVM.m; sourceTree = "<group>"; };
 		30E2173A1D58EC3800B696AC /* TKSBaseVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSBaseVM.h; sourceTree = "<group>"; };
 		30E2173B1D58EC3800B696AC /* TKSBaseVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSBaseVM.m; sourceTree = "<group>"; };
 		470208B2B914298C29990303 /* Pods-Taksa.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Taksa.release.xcconfig"; path = "Pods/Target Support Files/Pods-Taksa/Pods-Taksa.release.xcconfig"; sourceTree = "<group>"; };
@@ -200,10 +212,22 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		301C8C991D5B982400AAD378 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				73BB12681CCCA1D400E07190 /* TKSInputView.h */,
+				73BB12691CCCA1D400E07190 /* TKSInputView.m */,
+				73BB126B1CCCA62A00E07190 /* TKSInputVM.h */,
+				73BB126C1CCCA62A00E07190 /* TKSInputVM.m */,
+				301C8C9D1D5B994100AAD378 /* TKSInputHeaderView.h */,
+				301C8C9E1D5B994100AAD378 /* TKSInputHeaderView.m */,
+			);
+			name = Header;
+			sourceTree = "<group>";
+		};
 		302D8FF71D36722D00195DB3 /* Suggester */ = {
 			isa = PBXGroup;
 			children = (
-				302F91491D36760300194EB8 /* Cell */,
 				73489BE51CD6155700B218CB /* TKSSuggestListVM.h */,
 				73489BE61CD6155700B218CB /* TKSSuggestListVM.m */,
 				302F91461D36750C00194EB8 /* TKSSuggestListVC.h */,
@@ -263,14 +287,10 @@
 		302D8FFC1D3672FC00195DB3 /* Order */ = {
 			isa = PBXGroup;
 			children = (
-				73BB12681CCCA1D400E07190 /* TKSInputView.h */,
-				73BB12691CCCA1D400E07190 /* TKSInputView.m */,
 				73BB12641CCBC6AE00E07190 /* TKSOrderVC.h */,
 				73BB12651CCBC6AE00E07190 /* TKSOrderVC.m */,
 				734895E21CD5FE6800B218CB /* TKSOrderVM.h */,
 				734895E31CD5FE6800B218CB /* TKSOrderVM.m */,
-				73BB126B1CCCA62A00E07190 /* TKSInputVM.h */,
-				73BB126C1CCCA62A00E07190 /* TKSInputVM.m */,
 			);
 			name = Order;
 			sourceTree = "<group>";
@@ -295,15 +315,6 @@
 				730F643D1CD8D9FA00A34A33 /* TKSHomeVM.m */,
 			);
 			name = Home;
-			sourceTree = "<group>";
-		};
-		302F91491D36760300194EB8 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				302F97561D3677F200194EB8 /* TKSSuggestCell.h */,
-				302F97571D3677F200194EB8 /* TKSSuggestCell.m */,
-			);
-			name = Cell;
 			sourceTree = "<group>";
 		};
 		302F9A7D1D36840600194EB8 /* History */ = {
@@ -362,6 +373,17 @@
 			name = json;
 			sourceTree = "<group>";
 		};
+		30726CD21D6051EB00B03101 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				302F97561D3677F200194EB8 /* TKSSuggestCell.h */,
+				302F97571D3677F200194EB8 /* TKSSuggestCell.m */,
+				30726CD31D6052A000B03101 /* TKSSuggestCellVM.h */,
+				30726CD41D6052A000B03101 /* TKSSuggestCellVM.m */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
 		30BE43E31D3FFEC60084A9DC /* Header */ = {
 			isa = PBXGroup;
 			children = (
@@ -371,16 +393,18 @@
 			name = Header;
 			sourceTree = "<group>";
 		};
-		30E2172F1D58E9E800B696AC /* GetTaxi */ = {
+		30E2172F1D58E9E800B696AC /* SearchTaxi */ = {
 			isa = PBXGroup;
 			children = (
 				30E217301D58EBA500B696AC /* Sections */,
-				30E217341D58EBD600B696AC /* TKSGetTaxiVM.h */,
-				30E217351D58EBD600B696AC /* TKSGetTaxiVM.m */,
-				30E217311D58EBC400B696AC /* TKSGetTaxiVC.h */,
-				30E217321D58EBC400B696AC /* TKSGetTaxiVC.m */,
+				30E217341D58EBD600B696AC /* TKSSearchTaxiVM.h */,
+				30E217351D58EBD600B696AC /* TKSSearchTaxiVM.m */,
+				30E217311D58EBC400B696AC /* TKSSearchTaxiVC.h */,
+				30E217321D58EBC400B696AC /* TKSSearchTaxiVC.m */,
+				301C8C961D5B964F00AAD378 /* TKSTableSectionVM.h */,
+				301C8C971D5B964F00AAD378 /* TKSTableSectionVM.m */,
 			);
-			name = GetTaxi;
+			name = SearchTaxi;
 			sourceTree = "<group>";
 		};
 		30E217301D58EBA500B696AC /* Sections */ = {
@@ -395,6 +419,10 @@
 		30E217371D58EBE600B696AC /* Input */ = {
 			isa = PBXGroup;
 			children = (
+				30726CD21D6051EB00B03101 /* Cells */,
+				301C8C991D5B982400AAD378 /* Header */,
+				301C8C9A1D5B984600AAD378 /* TKSInputSectionVM.h */,
+				301C8C9B1D5B984600AAD378 /* TKSInputSectionVM.m */,
 			);
 			name = Input;
 			sourceTree = "<group>";
@@ -447,7 +475,7 @@
 		73489BF41CD6477500B218CB /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				30E2172F1D58E9E800B696AC /* GetTaxi */,
+				30E2172F1D58E9E800B696AC /* SearchTaxi */,
 				302FA0BC1D3A21A700194EB8 /* Root */,
 				302F9A7D1D36840600194EB8 /* History */,
 				302D8FF91D36727300195DB3 /* Common */,
@@ -706,21 +734,25 @@
 				730F64351CD8A0E800A34A33 /* TKSNavigationControllerDelegate.m in Sources */,
 				302FA0C21D3A21D100194EB8 /* TKSRootVM.m in Sources */,
 				302F9A7C1D367D1600194EB8 /* UIViewController+DGSAdditions.m in Sources */,
+				301C8C9F1D5B994100AAD378 /* TKSInputHeaderView.m in Sources */,
 				730F64481CD8FAC400A34A33 /* TKSBaseVC.m in Sources */,
 				300E8EA31D3B6F7400F99606 /* TKSTaxiProcessor.m in Sources */,
 				734898E21CD60D3600B218CB /* TKSTaxiSection.m in Sources */,
 				730F64381CD8A18F00A34A33 /* TKSTransitionRootToOrder.m in Sources */,
+				301C8C981D5B964F00AAD378 /* TKSTableSectionVM.m in Sources */,
 				730F643B1CD8B1F400A34A33 /* TKSTextField.m in Sources */,
+				301C8C9C1D5B984600AAD378 /* TKSInputSectionVM.m in Sources */,
 				73489BF81CD647AB00B218CB /* TKSTaxiSuggestCell.m in Sources */,
 				73BB126A1CCCA1D400E07190 /* TKSInputView.m in Sources */,
 				73BB12661CCBC6AE00E07190 /* TKSOrderVC.m in Sources */,
 				73489BF31CD6217400B218CB /* TKSSearchVM.m in Sources */,
-				30E217331D58EBC400B696AC /* TKSGetTaxiVC.m in Sources */,
+				30E217331D58EBC400B696AC /* TKSSearchTaxiVC.m in Sources */,
 				305D5C601CE894AD005CE5D8 /* NSDateFormatter+TKSTaxiProvider.m in Sources */,
 				302F9A831D36AE1800194EB8 /* TKSHistoryListVM.m in Sources */,
 				73BB0F7F1CCBBB6500E07190 /* AppDelegate.m in Sources */,
-				30E217361D58EBD600B696AC /* TKSGetTaxiVM.m in Sources */,
+				30E217361D58EBD600B696AC /* TKSSearchTaxiVM.m in Sources */,
 				73BB0F7C1CCBBB6500E07190 /* main.m in Sources */,
+				30726CD51D6052A000B03101 /* TKSSuggestCellVM.m in Sources */,
 				73489BE41CD613AF00B218CB /* TKSTaxiListVM.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
