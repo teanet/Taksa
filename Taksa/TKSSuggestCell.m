@@ -18,6 +18,8 @@
 	self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier];
 	if (self == nil) return nil;
 
+	self.selectionStyle = UITableViewCellSelectionStyleNone;
+
 	_iconImageView = [[UIImageView alloc] init];
 	[self.contentView addSubview:_iconImageView];
 
@@ -26,30 +28,44 @@
 
 	_titleLabel = [[UILabel alloc] init];
 	_titleLabel.font = [UIFont systemFontOfSize:14.0];
+	_titleLabel.lineBreakMode = NSLineBreakByClipping;
 	[_textContainer addSubview:_titleLabel];
 
 	_subtitleLabel = [[UILabel alloc] init];
 	_subtitleLabel.font = [UIFont systemFontOfSize:14.0];
 	_subtitleLabel.textColor = [UIColor lightGrayColor];
+	_subtitleLabel.lineBreakMode = NSLineBreakByClipping;
 	[_textContainer addSubview:_subtitleLabel];
 
 	UIView *separatorView = [[UIView alloc] init];
 	separatorView.backgroundColor = [UIColor dgs_colorWithString:@"F4F4F4"];
 	[self.contentView addSubview:separatorView];
 
+	UIView *fadeImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fadeView"]];
+	[self.contentView addSubview:fadeImageView];
+
+	UIView *minimalContentHeightView = [[UIView alloc] init];
+	[self.contentView addSubview:minimalContentHeightView];
+
 	[_iconImageView setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh
 													forAxis:UILayoutConstraintAxisHorizontal];
 	[_iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.leading.equalTo(self.contentView).with.offset(16.0);
 		make.centerY.equalTo(self.contentView);
-		make.size.mas_equalTo(CGSizeMake(24.0, 24.0));
+		make.size.mas_equalTo(CGSizeMake(16.0, 16.0));
 	}];
 
 	[_textContainer setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
 													forAxis:UILayoutConstraintAxisHorizontal];
 	[_textContainer mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.leading.equalTo(_iconImageView.mas_trailing).with.offset(16.0);
-		make.trailing.equalTo(self.contentView);
+		make.centerY.equalTo(self.contentView);
+		make.trailing.equalTo(self.contentView).with.offset(-12.0);
+		make.height.lessThanOrEqualTo(self.contentView).with.offset(-24.0);
+	}];
+
+	[fadeImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+		make.trailing.equalTo(self.contentView).with.offset(-12.0);
 		make.centerY.equalTo(self.contentView);
 	}];
 
@@ -73,6 +89,11 @@
 		make.trailing.equalTo(self.contentView);
 		make.leading.equalTo(self.contentView);
 		make.height.equalTo(@(1.0 / [UIScreen mainScreen].scale));
+	}];
+
+	[minimalContentHeightView mas_makeConstraints:^(MASConstraintMaker *make) {
+		make.height.greaterThanOrEqualTo(@64.0);
+		make.edges.equalTo(self.contentView);
 	}];
 
 	return self;

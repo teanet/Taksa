@@ -5,6 +5,8 @@
 #import "TKSTaxiHeaderCellVM.h"
 #import "TKSDataProvider.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 @implementation TKSResultsSectionVM
 
 @synthesize cellVMs = _cellVMs;
@@ -18,7 +20,10 @@
 
 	_cellVMs = @[];
 
-	[RACObserve(self.model, taxiSections)
+	[[RACObserve(self.model, taxiSections)
+		filter:^BOOL(NSArray *results) {
+			return results.count > 0;
+		}]
 		subscribeNext:^(NSArray<TKSTaxiSection *> *taxiList) {
 			@strongify(self);
 
@@ -86,6 +91,8 @@
 	};
 
 	[[TKSDataProvider sharedProvider] sendAnalyticsForType:@"taxi-select" body:body];
+
+	[Answers logContentViewWithName:@"taxi-select" contentType:taxiRow.searchId contentId:taxiRow.id customAttributes:body];
 }
 
 @end

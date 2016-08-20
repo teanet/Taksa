@@ -23,5 +23,6 @@
 
 - (void)searchAddress;
 - (void)selectCity;
+- (void)reportError;
 
 @end

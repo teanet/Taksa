@@ -26,12 +26,15 @@
 {
 	@weakify(self);
 
-	[[[[TKSDataProvider sharedProvider] fetchTaxiListFromObject:fromSuggest toObject:toSuggest]
-		delay:1.0]
+	[[[TKSDataProvider sharedProvider] fetchTaxiListFromObject:fromSuggest toObject:toSuggest]
 		subscribeNext:^(NSArray<TKSTaxiSection *> *taxiList) {
 			@strongify(self);
 
 			self.taxiSections = taxiList.count > 0 ? taxiList : @[];
+		} error:^(NSError *error) {
+			@strongify(self);
+
+			self.taxiSections = @[];
 		}];
 }
 

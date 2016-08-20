@@ -31,7 +31,7 @@
 	_letterLabel.backgroundColor = [UIColor dgs_colorWithString:@"F1DC00"];
 	_letterLabel.textAlignment = NSTextAlignmentCenter;
 	_letterLabel.textColor = [UIColor dgs_colorWithString:@"333333"];
-	UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 50.0, 44.0)];
+	UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 56.0, 44.0)];
 	[leftView addSubview:_letterLabel];
 	_letterLabel.center = leftView.center;
 	self.leftView = leftView;
@@ -52,8 +52,8 @@
 			self.searchVM.text = text;
 		}];
 
-	RACSignal *activeSignal = [RACObserve(self, searchVM.active) distinctUntilChanged];
-	RACSignal *textSignal = [RACObserve(self, searchVM.text) distinctUntilChanged];
+	RACSignal *activeSignal = [[RACObserve(self, searchVM.active) ignore:nil] distinctUntilChanged];
+	RACSignal *textSignal = [[RACObserve(self, searchVM.text) ignore:nil] distinctUntilChanged];
 
 	RAC(self, text) = textSignal;
 	RAC(self.locationButton, enabled) = [RACObserve(self, searchVM.active) ignore:nil];
@@ -82,6 +82,19 @@
 			[self swithToHighlighted:active.boolValue];
 		}];
 
+	[[[RACObserve(self, searchVM)
+		ignore:nil]
+		deliverOnMainThread]
+		subscribeNext:^(TKSSearchVM *searchVM) {
+			@strongify(self);
+
+			self.letterLabel.text = searchVM.letter;
+			self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:searchVM.placeHolder attributes:@{
+				NSForegroundColorAttributeName: [UIColor colorWithWhite:0.0 alpha:0.3],
+				NSFontAttributeName: [UIFont systemFontOfSize:14.0]
+			}];
+		}];
+
 	return self;
 }
 
@@ -92,17 +105,6 @@
 		: 0.3;
 	self.searchVM.highlightedOnStart = NO;
 	self.alpha = alpha;
-}
-
-- (void)setSearchVM:(TKSSearchVM *)searchVM
-{
-	_searchVM = searchVM;
-
-	self.letterLabel.text = searchVM.letter;
-	self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:searchVM.placeHolder attributes:@{
-		NSForegroundColorAttributeName: [UIColor colorWithWhite:0.0 alpha:0.3],
-		NSFontAttributeName: [UIFont systemFontOfSize:14.0]
-	}];
 }
 
 - (void)didTapLocationButton

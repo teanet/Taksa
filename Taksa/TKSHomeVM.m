@@ -3,6 +3,9 @@
 #import "TKSSearchTaxiVM.h"
 #import "TKSDataProvider.h"
 
+#import "DGSMailSender.h"
+#import "UIWindow+SIUtils.h"
+
 @interface TKSHomeVM ()
 
 @property (nonatomic, copy, readwrite) NSString *selectCityButtonTitle;
@@ -63,6 +66,28 @@
 
 - (void)selectCity
 {
+}
+
+- (void)reportError
+{
+	UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.currentViewController;
+
+	if ([DGSMailSender canSendMail])
+	{
+		NSString *contactEmail = @"taxi@2gis.ru";
+
+		[DGSMailSender sendMailTo:@[contactEmail]
+						  subject:@"Разработчикам Таксы"
+					  messageBody:@""
+					   isBodyHtml:NO
+					  attachments:nil
+				   rootController:topViewController
+				completionHandler:nil];
+	}
+	else
+	{
+		[DGSMailSender showNoMailAlert];
+	}
 }
 
 @end

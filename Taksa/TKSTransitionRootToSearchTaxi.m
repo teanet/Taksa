@@ -1,15 +1,15 @@
-#import "TKSTransitionRootToOrder.h"
+#import "TKSTransitionRootToSearchTaxi.h"
 
 #import "TKSHomeVC.h"
-#import "TKSOrderVC.h"
 #import "TKSInputView.h"
+#import "TKSSearchTaxiVC.h"
 
-@implementation TKSTransitionRootToOrder
+@implementation TKSTransitionRootToSearchTaxi
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext
 {
 	TKSHomeVC *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-	TKSOrderVC *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+	TKSSearchTaxiVC *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
 
 	UIView *containerView = [transitionContext containerView];
 	NSTimeInterval duration = [self transitionDuration:transitionContext];
@@ -18,9 +18,7 @@
 	inputView.frame = [fromViewController.view convertRect:fromViewController.inputView.frame toView:containerView];
 
 	fromViewController.inputView.hidden = YES;
-	toViewController.inputView.hidden = YES;
-
-	// Get a snapshot of the image view
+	toViewController.tableView.hidden = YES;
 
 	// Setup the initial view states
 	toViewController.view.frame = [transitionContext finalFrameForViewController:toViewController];
@@ -29,29 +27,36 @@
 	[containerView addSubview:fromViewController.view];
 	[containerView addSubview:inputView];
 
-	[UIView animateWithDuration:duration animations:^{
+	CGRect frame = inputView.frame;
+	frame.origin.y = 36.0;
 
-		fromViewController.view.alpha = 0.0;
-		inputView.frame = [toViewController.view convertRect:toViewController.inputView.frame toView:containerView];
+	[UIView animateWithDuration:duration
+						  delay:0.0
+		 usingSpringWithDamping:0.7
+		  initialSpringVelocity:0.5
+						options:UIViewAnimationOptionCurveEaseOut
+					 animations:^{
 
-	} completion:^(BOOL finished) {
+						 fromViewController.view.alpha = 0.0;
+						 inputView.frame = frame;
 
-		[inputView removeFromSuperview];
-		fromViewController.inputView.hidden = NO;
-		toViewController.inputView.hidden = NO;
+					 } completion:^(BOOL finished) {
+						 [inputView removeFromSuperview];
+						 fromViewController.inputView.hidden = NO;
+						 toViewController.tableView.hidden = NO;
 
-		// Clean up
-		fromViewController.view.alpha = 1.0;
-		fromViewController.view.hidden = NO;
+						 // Clean up
+						 fromViewController.view.alpha = 1.0;
+						 fromViewController.view.hidden = NO;
 
-		// Declare that we've finished
-		[transitionContext completeTransition:!transitionContext.transitionWasCancelled];
-	}];
+						 // Declare that we've finished
+						 [transitionContext completeTransition:!transitionContext.transitionWasCancelled];
+					 }];
 }
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
 {
-	return 0.3;
+	return 0.5;
 }
 
 @end

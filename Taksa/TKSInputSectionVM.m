@@ -3,6 +3,8 @@
 #import "TKSDataProvider.h"
 #import "TKSSuggestCellVM.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 @interface TKSInputSectionVM ()
 
 @property (nonatomic, copy, readwrite) NSArray<TKSSuggestCellVM *> *cellVMs;
@@ -221,6 +223,8 @@
 
 	NSString *aType = [analyticsType stringByAppendingString:@"-select"];
 	[[TKSDataProvider sharedProvider] sendAnalyticsForType:aType body:body];
+
+	[Answers logContentViewWithName:analyticsType contentType:type contentId:qString customAttributes:body];
 }
 
 @end

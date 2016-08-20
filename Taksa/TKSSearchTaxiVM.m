@@ -11,11 +11,8 @@
 #import "TKSDataProvider.h"
 #import "TKSTaxiResults.h"
 
-typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
-	TKSSearchTaxiModeSuggest,
-	TKSSearchTaxiModeSearching,
-	TKSSearchTaxiModeResults
-};
+#import "DGSMailSender.h"
+#import "UIWindow+SIUtils.h"
 
 @interface TKSSearchTaxiVM () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate>
 
@@ -23,7 +20,7 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 @property (nonatomic, strong, readonly) TKSTaxiResults *taxiResults;
 @property (nonatomic, copy, readonly) NSArray<id<TKSTableSectionVMProtocol>> *sectionVMs;
 @property (nonatomic, strong, readonly) RACSignal *shouldReloadTableSignal;
-@property (nonatomic, assign) TKSSearchTaxiMode mode;
+@property (nonatomic, assign, readwrite) TKSSearchTaxiMode mode;
 
 @end
 
@@ -39,8 +36,25 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 	_mode = TKSSearchTaxiModeSuggest;
 
 	[self createSections];
+	[self setupReactiveStuff];
 
 	return self;
+}
+
+- (void)setupReactiveStuff
+{
+	@weakify(self);
+
+	[[[RACObserve(self.taxiResults, taxiSections)
+		ignore:nil]
+		filter:^BOOL(NSArray *results) {
+			return results.count == 0;
+		}]
+		subscribeNext:^(id _) {
+			@strongify(self);
+
+			self.mode = TKSSearchTaxiModeError;
+		}];
 }
 
 - (void)createSections
@@ -50,11 +64,17 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 	TKSInputSectionVM *inputSectionVM = [[TKSInputSectionVM alloc] initWithModel:self.inputVM];
 	TKSResultsSectionVM *resultsSectionVM = [[TKSResultsSectionVM alloc] initWithModel:self.taxiResults];
 
-	[inputSectionVM.shouldSearchTaxiSignal
+	RACSignal *manualReloadTableSignal = [self rac_signalForSelector:@checkselector0(self, reloadTable)];
+
+	[[inputSectionVM.shouldSearchTaxiSignal
+		deliverOnMainThread]
 		subscribeNext:^(RACTuple *tuple) {
 			@strongify(self);
 
+			[self hideKeyboard];
+			self.mode = TKSSearchTaxiModeSearching;
 			[self.taxiResults fetchTaxiResultsFromSuggest:tuple.first toSuggest:tuple.second];
+			[self reloadTable];
 		}];
 
 	_sectionVMs = @[
@@ -67,7 +87,7 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 			return sectionVM.shouldReloadTableSignal;
 		}].array;
 
-	_shouldReloadTableSignal = [RACSignal merge:shouldReloadTableSignals];
+	_shouldReloadTableSignal = [[RACSignal merge:shouldReloadTableSignals] merge:manualReloadTableSignal];
 }
 
 - (void)registerTableView:(UITableView *)tableView
@@ -99,7 +119,7 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 			{
 				self.mode = TKSSearchTaxiModeSuggest;
 			}
-			else
+			else if ([section isKindOfClass:[TKSResultsSectionVM class]])
 			{
 				self.mode = TKSSearchTaxiModeResults;
 			}
@@ -172,11 +192,44 @@ typedef NS_ENUM (NSInteger, TKSSearchTaxiMode) {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+	if (!self.shouldHideKeyboardOnScroll) return;
+
+	[self hideKeyboard];
+}
+
+- (void)hideKeyboard
+{
 	[[RACScheduler mainThreadScheduler]
 		schedule:^{
 			self.inputVM.fromSearchVM.active = NO;
 			self.inputVM.toSearchVM.active = NO;
 		}];
+}
+
+- (void)reportError
+{
+	UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.currentViewController;
+
+	if ([DGSMailSender canSendMail])
+	{
+		NSString *contactEmail = @"taxi@2gis.ru";
+
+		[DGSMailSender sendMailTo:@[contactEmail]
+						  subject:@"Разработчикам Таксы"
+					  messageBody:@""
+					   isBodyHtml:NO
+					  attachments:nil
+				   rootController:topViewController
+				completionHandler:nil];
+	}
+	else
+	{
+		[DGSMailSender showNoMailAlert];
+	}
+}
+
+- (void)reloadTable
+{
 }
 
 @end
