@@ -62,10 +62,13 @@
 	[self.view addSubview:grayStatusBarView];
 
 	// Report Error Button
-
-	UIColor *mailColor = [UIColor dgs_colorWithString:@"FFC815"];
-	NSDictionary *mailAttrs = @{ NSForegroundColorAttributeName : mailColor };
-	NSDictionary *textAttrs = @{ NSForegroundColorAttributeName : [[UIColor blackColor] colorWithAlphaComponent:0.5] };
+	
+	UIColor *textColor = [UIColor dgs_colorWithString:@"CFCFCF"];
+	NSDictionary *textAttrs = @{ NSForegroundColorAttributeName : textColor };
+	NSDictionary *mailAttrs = @{
+								NSForegroundColorAttributeName : textColor,
+								NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)
+								};
 
 	NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"Для пожеланий и ошибок: "
 																				attributes:textAttrs];

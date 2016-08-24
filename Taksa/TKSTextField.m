@@ -6,6 +6,8 @@
 
 @property (nonatomic, strong, readonly) UILabel *letterLabel;
 @property (nonatomic, strong, readonly) UIButton *locationButton;
+@property (nonatomic, assign) BOOL enabledButton;
+
 
 @end
 
@@ -31,6 +33,7 @@
 	_letterLabel.backgroundColor = [UIColor dgs_colorWithString:@"F1DC00"];
 	_letterLabel.textAlignment = NSTextAlignmentCenter;
 	_letterLabel.textColor = [UIColor dgs_colorWithString:@"333333"];
+	_letterLabel.font = [UIFont boldSystemFontOfSize:16.0];
 	UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 56.0, 44.0)];
 	[leftView addSubview:_letterLabel];
 	_letterLabel.center = leftView.center;
@@ -56,13 +59,24 @@
 	RACSignal *textSignal = [[RACObserve(self, searchVM.text) ignore:nil] distinctUntilChanged];
 
 	RAC(self, text) = textSignal;
-	RAC(self.locationButton, enabled) = [RACObserve(self, searchVM.active) ignore:nil];
+	RAC(self.locationButton, enabled) = [RACObserve(self, enabledButton) ignore:nil];
+
 	[[textSignal
 		deliverOnMainThread]
 		subscribeNext:^(NSString *text) {
 			@strongify(self);
 
-			self.rightView = text.length >0 ? nil : self.locationButton;
+			self.rightView = text.length > 0 ? nil : self.locationButton;
+		}];
+
+	[[textSignal
+		filter:^BOOL(NSString *text) {
+			return text.length > 0;
+		}]
+		subscribeNext:^(id x) {
+			@strongify(self);
+
+			[self swithToHighlighted:YES];
 		}];
 
 	[[activeSignal
@@ -103,6 +117,7 @@
 	CGFloat alpha = highlighted || self.text.length || self.searchVM.highlightedOnStart > 0
 		? 1.0
 		: 0.3;
+	self.enabledButton = self.searchVM.highlightedOnStart || highlighted;
 	self.searchVM.highlightedOnStart = NO;
 	self.alpha = alpha;
 }

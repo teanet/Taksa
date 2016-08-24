@@ -14,11 +14,16 @@
 
 	_toSearchVM = [[TKSSearchVM alloc] init];
 	_toSearchVM.placeHolder = @"Введите адрес";
-	_toSearchVM.letter = @"B";
+	_toSearchVM.letter = @"Б";
 
-	_didBecomeEditingSignal = [[RACObserve(self, currentSearchVM)
+	_didBecomeEditingSignal = [[[RACSignal merge:@[
+			_fromSearchVM.didSelectLocationSuggestSignal,
+			_toSearchVM.didSelectLocationSuggestSignal,
+			RACObserve(self, currentSearchVM)
+		]]
 		ignore:nil]
 		mapReplace:nil];
+
 
 	_didPressReturnButtonSignal = [[self rac_signalForSelector:@checkselector0(self, shouldStartSearchByReturn)]
 		mapReplace:[RACUnit defaultUnit]];

@@ -9,7 +9,7 @@
 #define CURRENT_VERSION ([[NSBundle bundleForClass:self.class] objectForInfoDictionaryKey:@"CFBundleShortVersionString"])
 #define CURRENT_BUILD ([[NSBundle bundleForClass:self.class] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey])
 
-static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa/api/1.0/";
+static NSString *const kTKSTaksaBaseURLString = @"http://taksa.steelhoss.xyz/taksa/api/1.0/";
 
 @interface TKSAPIController ()
 

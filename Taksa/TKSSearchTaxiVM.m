@@ -45,8 +45,9 @@
 {
 	@weakify(self);
 
-	[[[RACObserve(self.taxiResults, taxiSections)
+	[[[[RACObserve(self.taxiResults, taxiSections)
 		ignore:nil]
+		skip:1]
 		filter:^BOOL(NSArray *results) {
 			return results.count == 0;
 		}]
