@@ -8,7 +8,6 @@
 @property (nonatomic, strong, readonly) UIButton *locationButton;
 @property (nonatomic, assign) BOOL enabledButton;
 
-
 @end
 
 @implementation TKSTextField
@@ -125,6 +124,12 @@
 - (void)didTapLocationButton
 {
 	[self.searchVM didTapLocationButton];
+}
+
+- (CGRect)clearButtonRectForBounds:(CGRect)bounds
+{
+	CGRect originalRect = [super clearButtonRectForBounds:bounds];
+	return CGRectOffset(originalRect, -9.0, 0.0); //shift the button to the left
 }
 
 @end

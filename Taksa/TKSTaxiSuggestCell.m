@@ -75,7 +75,7 @@
 	}];
 
 	[_descriptionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.top.equalTo(_iconView.mas_bottom).with.offset(4.0);
+		make.top.equalTo(_iconView.mas_bottom).with.offset(12.0);
 		make.bottom.equalTo(contentView).with.offset(-16.0);
 		make.leading.equalTo(_iconView);
 		make.trailing.equalTo(contentView).with.offset(-16.0);
