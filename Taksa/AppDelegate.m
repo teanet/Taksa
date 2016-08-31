@@ -11,9 +11,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	[[Fabric sharedSDK] setDebug: YES];
 	[Fabric with:@[CrashlyticsKit]];
-//	[Fabric with:@[[Crashlytics class]]];
 
 	[SSKeychain setAccessibilityType:kSecAttrAccessibleAlwaysThisDeviceOnly];
 
