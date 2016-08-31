@@ -1,16 +1,20 @@
 #import "TKSAPIController.h"
 
 #import <AFNetworking/AFNetworking.h>
-#import <UIDevice_Hardware/UIDevice-Hardware.h>
+#import <UIDevice-Hardware/UIDevice-Hardware.h>
+
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 #define CURRENT_VERSION ([[NSBundle bundleForClass:self.class] objectForInfoDictionaryKey:@"CFBundleShortVersionString"])
 #define CURRENT_BUILD ([[NSBundle bundleForClass:self.class] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey])
 
-static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa/api/1.0/";
+static NSString *const kTKSTaksaBaseURLString = @"http://taksa.steelhoss.xyz/taksa/api/1.0/";
 
 @interface TKSAPIController ()
 
 @property (nonatomic, strong) AFHTTPRequestOperationManager *requestManager;
+@property (nonatomic, assign) NSInteger activityCounter;
 
 @end
 
@@ -54,14 +58,25 @@ static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa
 
 	[_requestManager.requestSerializer setValue:@"application/json; charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
 
+	[self logUserWithId:userId];
+
 	return self;
 }
+
+- (void) logUserWithId:(NSString *)id
+{
+	[CrashlyticsKit setUserIdentifier:id];
+}
+
 
 // MARK: TKSAPIController+Private
 - (RACSignal *)GET:(NSString *)method params:(NSDictionary *)params
 {
 	@weakify(self);
-	return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+
+	[self incrementActivity];
+
+	return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
 		@strongify(self);
 
 		id successBlock = ^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -75,7 +90,12 @@ static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa
 			@strongify(self);
 
 			NSLog(@"<TKSAPIController> REQUEST ERROR: %@", error);
-			[self didOccurError:error];
+
+			if (error.code != 3840)
+			{
+				[self didOccurError:error];
+			}
+
 			[subscriber sendError:error];
 		};
 
@@ -84,6 +104,9 @@ static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa
 		return [RACDisposable disposableWithBlock:^{
 			[operation cancel];
 		}];
+	}]
+	finally:^{
+		[self decrementActivity];
 	}];
 }
 
@@ -91,7 +114,9 @@ static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa
 {
 	@weakify(self);
 
-	return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+	[self incrementActivity];
+
+	return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
 		@strongify(self);
 
 		id successBlock = ^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -117,11 +142,40 @@ static NSString *const kTKSTaksaBaseURLString = @"http://api.steelhoss.xyz/taksa
 		return [RACDisposable disposableWithBlock:^{
 			[op cancel];
 		}];
+	}]
+	finally:^{
+		@strongify(self);
+
+		[self decrementActivity];
 	}];
 }
 
 - (void)didOccurError:(NSError *)error
 {
+}
+
+// User Activity
+
+- (void)incrementActivity
+{
+	@synchronized (self)
+	{
+		self.activityCounter++;
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+	}
+}
+
+- (void)decrementActivity
+{
+	@synchronized (self)
+	{
+		self.activityCounter--;
+		if (self.activityCounter <= 0)
+		{
+			self.activityCounter = 0;
+			[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+		}
+	}
 }
 
 @end

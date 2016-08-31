@@ -8,17 +8,22 @@
 	if (self == nil) return nil;
 
 	_fromSearchVM = [[TKSSearchVM alloc] init];
-	_fromSearchVM.placeHolder = @"Адрес, или название фирмы";
+	_fromSearchVM.placeHolder = @"Введите адрес";
 	_fromSearchVM.letter = @"A";
 	_fromSearchVM.highlightedOnStart = YES;
 
 	_toSearchVM = [[TKSSearchVM alloc] init];
-	_toSearchVM.placeHolder = @"Адрес, или название фирмы";
-	_toSearchVM.letter = @"B";
+	_toSearchVM.placeHolder = @"Введите адрес";
+	_toSearchVM.letter = @"Б";
 
-	_didBecomeEditingSignal = [[RACObserve(self, currentSearchVM)
+	_didBecomeEditingSignal = [[[RACSignal merge:@[
+			_fromSearchVM.didSelectLocationSuggestSignal,
+			_toSearchVM.didSelectLocationSuggestSignal,
+			RACObserve(self, currentSearchVM)
+		]]
 		ignore:nil]
 		mapReplace:nil];
+
 
 	_didPressReturnButtonSignal = [[self rac_signalForSelector:@checkselector0(self, shouldStartSearchByReturn)]
 		mapReplace:[RACUnit defaultUnit]];

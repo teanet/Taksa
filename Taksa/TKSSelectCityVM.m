@@ -3,6 +3,8 @@
 #import "TKSDataProvider.h"
 #import "TKSRegionCell.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 @implementation TKSSelectCityVM
 
 - (instancetype)init
@@ -74,6 +76,11 @@
 		@"region_id" : [TKSDataProvider sharedProvider].currentRegion.id,
 	};
 	[[TKSDataProvider sharedProvider] sendAnalyticsForType:@"city-select" body:body];
+
+	[Answers logContentViewWithName:@"city-select"
+						contentType:[TKSDataProvider sharedProvider].currentRegion.title
+						  contentId:[TKSDataProvider sharedProvider].currentRegion.id
+				   customAttributes:body];
 }
 
 @end

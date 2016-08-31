@@ -1,0 +1,2 @@
+@interface SLRTableView : UITableView
+@end

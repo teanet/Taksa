@@ -14,22 +14,28 @@
 
 @implementation TKSInputView
 
-- (instancetype)initWithVM:(TKSInputVM *)inputVM
+- (instancetype)init
 {
 	self = [super initWithFrame:CGRectZero];
 	if (self == nil) return nil;
-
-	_inputVM = inputVM;
 	
-	_fromTF = [[TKSTextField alloc] initWithVM:inputVM.fromSearchVM];
+	_fromTF = [[TKSTextField alloc] init];
 	_fromTF.delegate = self;
 	[self addSubview:_fromTF];
 
-	_toTF = [[TKSTextField alloc] initWithVM:inputVM.toSearchVM];
+	_toTF = [[TKSTextField alloc] init];
 	_toTF.delegate = self;
 	[self addSubview:_toTF];
 
 	return self;
+}
+
+- (void)setViewModel:(TKSInputVM *)viewModel
+{
+	_viewModel = viewModel;
+
+	self.fromTF.searchVM = viewModel.fromSearchVM;
+	self.toTF.searchVM = viewModel.toSearchVM;
 }
 
 + (BOOL)requiresConstraintBasedLayout
@@ -42,20 +48,21 @@
 	if (!self.costraintsCreated)
 	{
 		[self.fromTF mas_makeConstraints:^(MASConstraintMaker *make) {
-			make.top.equalTo(self).with.offset(16.0);
-			make.leading.equalTo(self).with.offset(16.0);
-			make.trailing.equalTo(self).with.offset(-16.0);
+			make.top.equalTo(self);
+			make.leading.equalTo(self);
+			make.trailing.equalTo(self);
 			make.height.equalTo(@48.0);
 		}];
 		[self.toTF mas_makeConstraints:^(MASConstraintMaker *make) {
 			make.top.equalTo(self.fromTF.mas_bottom).with.offset(8.0);
-			make.leading.equalTo(self).with.offset(16.0);
-			make.trailing.equalTo(self).with.offset(-16.0);
+			make.leading.equalTo(self);
+			make.trailing.equalTo(self);
 			make.height.equalTo(@48.0);
 			make.bottom.equalTo(self).with.offset(-16.0);
 		}];
 		self.costraintsCreated = YES;
 	}
+	
 	[super updateConstraints];
 }
 
@@ -65,19 +72,19 @@
 {
 	if ([textField isEqual:self.fromTF])
 	{
-		self.inputVM.currentSearchVM = self.inputVM.fromSearchVM;
+		self.viewModel.currentSearchVM = self.viewModel.fromSearchVM;
 	}
 	else if ([textField isEqual:self.toTF])
 	{
-		self.inputVM.currentSearchVM = self.inputVM.toSearchVM;
+		self.viewModel.currentSearchVM = self.viewModel.toSearchVM;
 	}
 
-	self.inputVM.currentSearchVM.active = YES;
+	self.viewModel.currentSearchVM.active = YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-	[self.inputVM shouldStartSearchByReturn];
+	[self.viewModel shouldStartSearchByReturn];
 
 	return YES;
 }

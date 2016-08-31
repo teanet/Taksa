@@ -1,8 +1,8 @@
 #import "TKSNavigationControllerDelegate.h"
 
-#import "TKSTransitionRootToOrder.h"
+#import "TKSSearchTaxiVC.h"
 #import "TKSHomeVC.h"
-#import "TKSOrderVC.h"
+#import "TKSTransitionRootToSearchTaxi.h"
 
 @implementation TKSNavigationControllerDelegate
 {
@@ -35,10 +35,11 @@
 												 toViewController:(UIViewController *)toVC
 {
 	if ([fromVC isKindOfClass:[TKSHomeVC class]] &&
-		[toVC isKindOfClass:[TKSOrderVC class]])
+		[toVC isKindOfClass:[TKSSearchTaxiVC class]])
 	{
-		return [[TKSTransitionRootToOrder alloc] init];
+		return [[TKSTransitionRootToSearchTaxi alloc] init];
 	}
+
 	return nil;
 }
 

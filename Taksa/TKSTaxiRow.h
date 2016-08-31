@@ -10,9 +10,11 @@ typedef NS_ENUM(NSInteger, TKSTaxiModelType) {
 @property (nonatomic, assign, readonly) TKSTaxiModelType type;
 @property (nonatomic, copy, readonly) NSString *id;
 @property (nonatomic, copy, readonly) NSString *title;
+@property (nonatomic, copy, readonly) NSString *shortTitle;
 @property (nonatomic, copy, readonly) NSString *summary;
 @property (nonatomic, copy, readonly) NSString *site;
 @property (nonatomic, copy, readonly) NSString *siteUrlString;
+@property (nonatomic, copy, readonly) NSString *appUrlString;
 @property (nonatomic, copy, readonly) NSString *phoneText;
 @property (nonatomic, copy, readonly) NSString *phoneValue;
 @property (nonatomic, strong, readonly) UIColor *color;

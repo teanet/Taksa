@@ -67,7 +67,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	TKSTaxiSuggestCell *cell = [tableView dequeueReusableCellWithIdentifier:indexPath.section == 0 ? @"cell" : @"defaultCell"];
-	cell.taxiRow = self.data[indexPath.section].rows[indexPath.row];
+//	cell.taxiRow = self.data[indexPath.section].rows[indexPath.row];
 	return cell;
 }
 

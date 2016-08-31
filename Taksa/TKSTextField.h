@@ -2,8 +2,6 @@
 
 @interface TKSTextField : UITextField
 
-@property (nonatomic, strong, readonly) TKSSearchVM *searchVM;
-
-- (instancetype)initWithVM:(TKSSearchVM *)searchVM;
+@property (nonatomic, strong) TKSSearchVM *searchVM;
 
 @end

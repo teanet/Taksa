@@ -1,7 +1,10 @@
 #import "TKSHomeVM.h"
 
-#import "TKSOrderVM.h"
+#import "TKSSearchTaxiVM.h"
 #import "TKSDataProvider.h"
+
+#import "DGSMailSender.h"
+#import "UIWindow+SIUtils.h"
 
 @interface TKSHomeVM ()
 
@@ -33,10 +36,10 @@
 	}];
 
 	_searchAddressSignal = [[self rac_signalForSelector:@checkselector0(self, searchAddress)]
-		map:^TKSOrderVM *(id _) {
+		map:^TKSSearchTaxiVM *(id _) {
 			@strongify(self);
 
-			return [[TKSOrderVM alloc] initWithInputVM:self.inputVM];
+			return [[TKSSearchTaxiVM alloc] initWithInputVM:self.inputVM];
 		}];
 
 	[[RACObserve([TKSDataProvider sharedProvider], currentRegion)
@@ -63,6 +66,28 @@
 
 - (void)selectCity
 {
+}
+
+- (void)reportError
+{
+	UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.currentViewController;
+
+	if ([DGSMailSender canSendMail])
+	{
+		NSString *contactEmail = @"taxi@2gis.ru";
+
+		[DGSMailSender sendMailTo:@[contactEmail]
+						  subject:@"Разработчикам Таксы"
+					  messageBody:@""
+					   isBodyHtml:NO
+					  attachments:nil
+				   rootController:topViewController
+				completionHandler:nil];
+	}
+	else
+	{
+		[DGSMailSender showNoMailAlert];
+	}
 }
 
 @end

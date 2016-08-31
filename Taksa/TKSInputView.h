@@ -1,11 +1,9 @@
-@class TKSTextField;
-
 #import "TKSInputVM.h"
+
+@class TKSTextField;
 
 @interface TKSInputView : UIControl
 
-@property (nonatomic, strong, readonly) TKSInputVM *inputVM;
-
-- (instancetype)initWithVM:(TKSInputVM *)inputVM;
+@property (nonatomic, strong) TKSInputVM *viewModel;
 
 @end

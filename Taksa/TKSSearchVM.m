@@ -30,7 +30,7 @@
 		throttle:0.3]
 		mapReplace:nil];
 
-	RACSignal *searchQuerySignal = [[RACObserve(self, text)
+	RACSignal *searchQuerySignal = [[[RACObserve(self, text)
 		filter:^BOOL(NSString *text) {
 			if (![text isEqualToString:self.dbObject.text])
 			{
@@ -38,16 +38,25 @@
 			}
 			return text.length > 1;
 		}]
-		throttle:0.3];
+		throttle:0.3]
+		distinctUntilChanged];
 
-	RACSignal *suggestListFillSignal = [[[searchQuerySignal
-		distinctUntilChanged]
+	RACSignal *activeSignal = [[[RACObserve(self, active) ignore:nil]
+		ignore:@NO]
+		map:^NSString *(id _) {
+			@strongify(self);
+
+			return self.text;
+		}];
+
+	RACSignal *suggestListFillSignal = [[[[RACSignal merge:@[searchQuerySignal, activeSignal]]
 		filter:^BOOL(NSString *inputText) {
-			return ![inputText isEqualToString:self.dbObject.text];
+			return ![inputText isEqualToString:self.dbObject.text] && [TKSDataProvider sharedProvider].currentRegion;
 		}]
 		flattenMap:^RACStream *(NSString *inputText) {
 			return [[TKSDataProvider sharedProvider] fetchSuggestsForSearchString:inputText];
-		}];
+		}]
+		catchTo:[RACSignal return:@[]]];
 
 	[[RACSignal merge:@[suggestListClearSignal, suggestListFillSignal]]
 		subscribeNext:^(NSArray<TKSSuggest *> *suggests) {

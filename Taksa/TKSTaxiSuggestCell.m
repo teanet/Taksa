@@ -35,7 +35,7 @@
 
 	_priceLabel = [[UILabel alloc] init];
 	_priceLabel.textAlignment = NSTextAlignmentRight;
-	_priceLabel.font = [UIFont dgs_regularFontOfSize:24.0];
+	_priceLabel.font = [UIFont dgs_boldFontOfSize:24.0];
 	[contentView addSubview:_priceLabel];
 
 	_descriptionLabel = [[UILabel alloc] init];
@@ -49,12 +49,12 @@
 	[contentView addSubview:_letterLabel];
 
 	[contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.edges.equalTo(self.contentView).with.insets(UIEdgeInsetsMake(8.0, 8.0, 8.0, 8.0));
+		make.edges.equalTo(self.contentView);
 	}];
 
 	[_iconView mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.leading.equalTo(contentView).with.offset(12.0);
-		make.top.equalTo(contentView).with.offset(10.0);
+		make.leading.equalTo(contentView).with.offset(16.0);
+		make.top.equalTo(contentView).with.offset(16.0);
 		make.width.equalTo(@48.0);
 		make.height.equalTo(@48.0);
 	}];
@@ -70,28 +70,30 @@
 	}];
 
 	[_priceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.trailing.equalTo(contentView).with.offset(-8.0);
+		make.trailing.equalTo(contentView).with.offset(-16.0);
 		make.centerY.equalTo(_iconView);
 	}];
 
 	[_descriptionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.top.equalTo(_iconView.mas_bottom).with.offset(4.0);
-		make.bottom.equalTo(contentView).with.offset(-4.0);
+		make.top.equalTo(_iconView.mas_bottom).with.offset(12.0);
+		make.bottom.equalTo(contentView).with.offset(-16.0);
 		make.leading.equalTo(_iconView);
-		make.trailing.equalTo(contentView).with.offset(-10.0);
+		make.trailing.equalTo(contentView).with.offset(-16.0);
 	}];
 
 	return self;
 }
 
-- (void)setTaxiRow:(TKSTaxiRow *)taxiRow
+- (void)setViewModel:(id)viewModel
 {
-	self.nameLabel.text	= taxiRow.title;
-	self.descriptionLabel.text = taxiRow.summary;
-	self.priceLabel.text = [taxiRow.price stringByAppendingString:@" ₽"];
-	self.iconView.backgroundColor = taxiRow.color;
-	self.letterLabel.text = [taxiRow.title substringWithRange:NSMakeRange(0, 1)];
-	self.letterLabel.textColor = taxiRow.textColor;
+	[super setViewModel:viewModel];
+
+	self.nameLabel.text	= self.viewModel.taxiRow.title;
+	self.descriptionLabel.text = self.viewModel.taxiRow.summary;
+	self.priceLabel.text = [self.viewModel.taxiRow.price stringByAppendingString:@" ₽"];
+	self.iconView.backgroundColor = self.viewModel.taxiRow.color;
+	self.letterLabel.text = [self.viewModel.taxiRow.title substringWithRange:NSMakeRange(0, 1)];
+	self.letterLabel.textColor = self.viewModel.taxiRow.textColor;
 }
 
 @end

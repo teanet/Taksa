@@ -63,6 +63,7 @@
 
 	_hintTypeDescription = dictionary[@"type_text"];
 	_hintLabel = dictionary[@"type"];
+	_comment = dictionary[@"comment"];
 
 	return self;
 }
@@ -107,6 +108,5 @@
 		@"type": self.hintLabel,
 	};
 }
-
 
 @end

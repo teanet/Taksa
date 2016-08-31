@@ -37,7 +37,6 @@
 
 	NSDictionary *operatorDictionary = dictionary[@"operator"];
 	_title = operatorDictionary[@"title"];
-//	_summary = dictionary[@"summary"];
 	_summary = [summary copy];
 
 	NSNumber *idNumber = operatorDictionary[@"id"];
@@ -66,6 +65,15 @@
 
 	NSNumber *priceNumber = dictionary[@"price"];
 	_price = [priceNumber stringValue];
+
+	_shortTitle = operatorDictionary[@"short_title"];
+
+	// Так по-козьему будем уверены, что там не NSNull
+	_appUrlString = operatorDictionary[@"url"];
+	if (![_appUrlString isKindOfClass:[NSString class]])
+	{
+		_appUrlString = nil;
+	}
 
 	return self;
 }

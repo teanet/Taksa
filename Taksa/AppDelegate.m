@@ -1,14 +1,18 @@
 #import "AppDelegate.h"
 
 #import "TKSRootVC.h"
-#import "UIColor+DGSCustomColor.h"
+#import "DGSUIKitMainThreadGuard.h"
 
 #import <SSKeychain/SSKeychain.h>
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	[Fabric with:@[CrashlyticsKit]];
+
 	[SSKeychain setAccessibilityType:kSecAttrAccessibleAlwaysThisDeviceOnly];
 
 	[self configureAppearance];
@@ -24,6 +28,13 @@
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	self.window.rootViewController = rootVC;
 	[self.window makeKeyAndVisible];
+}
+
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+	DGSSetupUIKitMainThreadGuard();
+
+	return YES;
 }
 
 - (void)configureAppearance
