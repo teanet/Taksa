@@ -38,7 +38,6 @@
 		309C80291D6859970085ADEA /* DGSMailSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 309C80281D6859970085ADEA /* DGSMailSender.m */; };
 		309C802C1D685A3A0085ADEA /* UIWindow+SIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 309C802B1D685A3A0085ADEA /* UIWindow+SIUtils.m */; };
 		30BE43E21D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 30BE43E11D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m */; };
-		30BE43E61D3FFED80084A9DC /* TKSTaxiHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 30BE43E51D3FFED80084A9DC /* TKSTaxiHeaderView.m */; };
 		30C794CC1D6077DE00A2462F /* TKSResultsSectionVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 30C794CB1D6077DE00A2462F /* TKSResultsSectionVM.m */; };
 		30C794D11D607BBD00A2462F /* TKSTaxiSuggestCellVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 30C794D01D607BBD00A2462F /* TKSTaxiSuggestCellVM.m */; };
 		30C794D41D60806300A2462F /* TKSTaxiResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 30C794D31D60806300A2462F /* TKSTaxiResults.m */; };
@@ -56,7 +55,6 @@
 		730F64481CD8FAC400A34A33 /* TKSBaseVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 730F64471CD8FAC400A34A33 /* TKSBaseVC.m */; };
 		734898E21CD60D3600B218CB /* TKSTaxiSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 734898E11CD60D3600B218CB /* TKSTaxiSection.m */; };
 		734898E51CD60D7A00B218CB /* TKSTaxiRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 734898E41CD60D7A00B218CB /* TKSTaxiRow.m */; };
-		73489BE41CD613AF00B218CB /* TKSTaxiListVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 73489BE31CD613AF00B218CB /* TKSTaxiListVM.m */; };
 		73489BE71CD6155700B218CB /* TKSSuggestListVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 73489BE61CD6155700B218CB /* TKSSuggestListVM.m */; };
 		73489BF01CD61F2700B218CB /* TKSSuggest.m in Sources */ = {isa = PBXBuildFile; fileRef = 73489BEF1CD61F2700B218CB /* TKSSuggest.m */; };
 		73489BF31CD6217400B218CB /* TKSSearchVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 73489BF21CD6217400B218CB /* TKSSearchVM.m */; };
@@ -138,8 +136,6 @@
 		309C802B1D685A3A0085ADEA /* UIWindow+SIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+SIUtils.m"; sourceTree = "<group>"; };
 		30BE43E01D3FFE860084A9DC /* TKSTableViewHeaderFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTableViewHeaderFooterView.h; sourceTree = "<group>"; };
 		30BE43E11D3FFE860084A9DC /* TKSTableViewHeaderFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTableViewHeaderFooterView.m; sourceTree = "<group>"; };
-		30BE43E41D3FFED80084A9DC /* TKSTaxiHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiHeaderView.h; sourceTree = "<group>"; };
-		30BE43E51D3FFED80084A9DC /* TKSTaxiHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTaxiHeaderView.m; sourceTree = "<group>"; };
 		30C794CA1D6077DE00A2462F /* TKSResultsSectionVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSResultsSectionVM.h; sourceTree = "<group>"; };
 		30C794CB1D6077DE00A2462F /* TKSResultsSectionVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSResultsSectionVM.m; sourceTree = "<group>"; };
 		30C794CF1D607BBD00A2462F /* TKSTaxiSuggestCellVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiSuggestCellVM.h; sourceTree = "<group>"; };
@@ -175,8 +171,6 @@
 		734898E11CD60D3600B218CB /* TKSTaxiSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTaxiSection.m; sourceTree = "<group>"; };
 		734898E31CD60D7A00B218CB /* TKSTaxiRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiRow.h; sourceTree = "<group>"; };
 		734898E41CD60D7A00B218CB /* TKSTaxiRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTaxiRow.m; sourceTree = "<group>"; };
-		73489BE21CD613AF00B218CB /* TKSTaxiListVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiListVM.h; sourceTree = "<group>"; };
-		73489BE31CD613AF00B218CB /* TKSTaxiListVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTaxiListVM.m; sourceTree = "<group>"; };
 		73489BE51CD6155700B218CB /* TKSSuggestListVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSSuggestListVM.h; sourceTree = "<group>"; };
 		73489BE61CD6155700B218CB /* TKSSuggestListVM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSSuggestListVM.m; sourceTree = "<group>"; };
 		73489BED1CD61F2700B218CB /* TKSSerializableProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSSerializableProtocol.h; sourceTree = "<group>"; };
@@ -308,13 +302,6 @@
 			name = Cell;
 			sourceTree = "<group>";
 		};
-		302D8FFD1D36733400195DB3 /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Cells;
-			sourceTree = "<group>";
-		};
 		302D8FFE1D36737C00195DB3 /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -391,15 +378,6 @@
 				30726CD41D6052A000B03101 /* TKSSuggestCellVM.m */,
 			);
 			name = Cells;
-			sourceTree = "<group>";
-		};
-		30BE43E31D3FFEC60084A9DC /* Header */ = {
-			isa = PBXGroup;
-			children = (
-				30BE43E41D3FFED80084A9DC /* TKSTaxiHeaderView.h */,
-				30BE43E51D3FFED80084A9DC /* TKSTaxiHeaderView.m */,
-			);
-			name = Header;
 			sourceTree = "<group>";
 		};
 		30C794CD1D6078C600A2462F /* Cells */ = {
@@ -480,17 +458,6 @@
 			name = Transitions;
 			sourceTree = "<group>";
 		};
-		734898E61CD60E6500B218CB /* TaxiList */ = {
-			isa = PBXGroup;
-			children = (
-				30BE43E31D3FFEC60084A9DC /* Header */,
-				302D8FFD1D36733400195DB3 /* Cells */,
-				73489BE21CD613AF00B218CB /* TKSTaxiListVM.h */,
-				73489BE31CD613AF00B218CB /* TKSTaxiListVM.m */,
-			);
-			name = TaxiList;
-			sourceTree = "<group>";
-		};
 		73489BE81CD6181E00B218CB /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -516,7 +483,6 @@
 				302D8FF91D36727300195DB3 /* Common */,
 				302D8FFE1D36737C00195DB3 /* Home */,
 				302D8FF71D36722D00195DB3 /* Suggester */,
-				734898E61CD60E6500B218CB /* TaxiList */,
 				302D8FF81D36725B00195DB3 /* SelectRegion */,
 			);
 			name = Views;
@@ -782,7 +748,6 @@
 				30C794DA1D609E8300A2462F /* TKSTaxiHeaderCell.m in Sources */,
 				73BB12631CCBC3BE00E07190 /* TKSSelectCityVC.m in Sources */,
 				734898E51CD60D7A00B218CB /* TKSTaxiRow.m in Sources */,
-				30BE43E61D3FFED80084A9DC /* TKSTaxiHeaderView.m in Sources */,
 				73489C0E1CD655B200B218CB /* UIColor+DGSCustomColor.m in Sources */,
 				73489BFB1CD64E4900B218CB /* TKSTaxiDefaultCell.m in Sources */,
 				73489C081CD6556600B218CB /* UIFont+DGSCustomFont.m in Sources */,
@@ -812,7 +777,6 @@
 				73BB0F7C1CCBBB6500E07190 /* main.m in Sources */,
 				30C794DD1D609EA500A2462F /* TKSTaxiHeaderCellVM.m in Sources */,
 				30726CD51D6052A000B03101 /* TKSSuggestCellVM.m in Sources */,
-				73489BE41CD613AF00B218CB /* TKSTaxiListVM.m in Sources */,
 				309C80261D6858200085ADEA /* SLRTableView.m in Sources */,
 				30C794CC1D6077DE00A2462F /* TKSResultsSectionVM.m in Sources */,
 				309C802C1D685A3A0085ADEA /* UIWindow+SIUtils.m in Sources */,

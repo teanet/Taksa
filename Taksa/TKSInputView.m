@@ -30,6 +30,12 @@
 	return self;
 }
 
+- (void)dealloc
+{
+	self.fromTF.delegate = nil;
+	self.toTF.delegate = nil;
+}
+
 - (void)setViewModel:(TKSInputVM *)viewModel
 {
 	_viewModel = viewModel;
@@ -72,14 +78,24 @@
 {
 	if ([textField isEqual:self.fromTF])
 	{
-		self.viewModel.currentSearchVM = self.viewModel.fromSearchVM;
+		[self setCurrentSearchVM:self.viewModel.fromSearchVM];
 	}
 	else if ([textField isEqual:self.toTF])
 	{
-		self.viewModel.currentSearchVM = self.viewModel.toSearchVM;
+		[self setCurrentSearchVM:self.viewModel.toSearchVM];
+	}
+}
+
+- (void)setCurrentSearchVM:(TKSSearchVM *)currentSearchVM
+{
+	if (!currentSearchVM.active)
+	{
+		currentSearchVM.active = YES;
 	}
 
-	self.viewModel.currentSearchVM.active = YES;
+	if (currentSearchVM == self.viewModel.currentSearchVM) return;
+
+	self.viewModel.currentSearchVM = currentSearchVM;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

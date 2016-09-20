@@ -23,7 +23,7 @@
 	_text = @"";
 	_processingRequest = NO;
 
-	RACSignal *suggestListClearSignal = [[[RACObserve(self, text)
+	RACSignal *suggestListClearSignal = [[[[RACObserve(self, text) distinctUntilChanged]
 		filter:^BOOL(NSString *text) {
 			return text.length <= 1;
 		}]
