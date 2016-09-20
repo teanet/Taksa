@@ -19,7 +19,7 @@
 	_didBecomeEditingSignal = [[[RACSignal merge:@[
 			_fromSearchVM.didSelectLocationSuggestSignal,
 			_toSearchVM.didSelectLocationSuggestSignal,
-			RACObserve(self, currentSearchVM)
+			[RACObserve(self, currentSearchVM) distinctUntilChanged]
 		]]
 		ignore:nil]
 		mapReplace:nil];

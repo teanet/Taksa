@@ -78,12 +78,13 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 	@weakify(self);
 	[self.locationManager start];
 
-	return [[[[self.locationManager.locationSignal
+	return [[[[[self.locationManager.locationSignal
 		ignore:nil]
 		take:1]
 		flattenMap:^RACStream *(CLLocation *location) {
 			return [self.apiController fetchCurrentRegionWithLocation:location];
 		}]
+		ignore:nil]
 		doNext:^(TKSRegion *region) {
 			@strongify(self);
 

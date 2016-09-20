@@ -47,7 +47,8 @@
 	[_locationButton sizeToFit];
 	self.rightViewMode = UITextFieldViewModeAlways;
 
-	[self.rac_textSignal
+	[[self.rac_textSignal
+		distinctUntilChanged]
 		subscribeNext:^(NSString *text) {
 			@strongify(self);
 

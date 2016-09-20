@@ -10,6 +10,7 @@
 #define CURRENT_BUILD ([[NSBundle bundleForClass:self.class] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey])
 
 static NSString *const kTKSTaksaBaseURLString = @"http://taksa.steelhoss.xyz/taksa/api/1.0/";
+// @"http://10.154.18.171:8080/taksa/api/1.0/"; //
 
 @interface TKSAPIController ()
 
@@ -63,11 +64,10 @@ static NSString *const kTKSTaksaBaseURLString = @"http://taksa.steelhoss.xyz/tak
 	return self;
 }
 
-- (void) logUserWithId:(NSString *)id
+- (void)logUserWithId:(NSString *)id
 {
 	[CrashlyticsKit setUserIdentifier:id];
 }
-
 
 // MARK: TKSAPIController+Private
 - (RACSignal *)GET:(NSString *)method params:(NSDictionary *)params

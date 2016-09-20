@@ -49,7 +49,7 @@
 	_tableView.tableFooterView = [[UIView alloc] init];
 	_tableView.backgroundColor = [UIColor clearColor];
 	_tableView.showsVerticalScrollIndicator = NO;
-	_tableView.contentInset = UIEdgeInsetsMake(20.0, 0.0, 36.0, 0.0);
+	_tableView.contentInset = UIEdgeInsetsMake(20.0, 0.0, 162.0, 0.0);
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	[self.view addSubview:_tableView];
 
@@ -62,15 +62,30 @@
 	[self.view addSubview:grayStatusBarView];
 
 	// Report Error Button
-	
+
 	UIColor *textColor = [UIColor dgs_colorWithString:@"CFCFCF"];
-	NSDictionary *textAttrs = @{ NSForegroundColorAttributeName : textColor };
+	NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+	paragraphStyle.lineSpacing = 5.0;
+	NSDictionary *textAttrs = @{
+								NSForegroundColorAttributeName : textColor,
+								NSParagraphStyleAttributeName : paragraphStyle
+								};
 	NSDictionary *mailAttrs = @{
 								NSForegroundColorAttributeName : textColor,
-								NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)
+								NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle),
 								};
 
-	NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"Для пожеланий и ошибок: "
+	UILabel *disclaimerLabel = [[UILabel alloc] init];
+	NSString *disclaimer = @"Перед поездкой уточните цену\nу перевозчика. Такса рассчитывает\nеё по публичным тарифам на сайтах\nслужб. Для пожеланий и ошибок:";
+	NSAttributedString *attDisclaimer = [[NSAttributedString alloc] initWithString:disclaimer
+																		attributes:textAttrs];
+	disclaimerLabel.attributedText = attDisclaimer;
+	disclaimerLabel.font = [UIFont systemFontOfSize:12.0];
+	disclaimerLabel.numberOfLines = 0;
+	disclaimerLabel.textAlignment = NSTextAlignmentCenter;
+
+
+	NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@""
 																				attributes:textAttrs];
 	NSAttributedString *mailStr = [[NSAttributedString alloc] initWithString:@"taxi@2gis.ru" attributes:mailAttrs];
 	[attrStr appendAttributedString:mailStr];
@@ -84,9 +99,17 @@
 						   action:@checkselector0(self.viewModel, reportError)
 				 forControlEvents:UIControlEventTouchUpInside];
 	[self.view insertSubview:reportErrorButton belowSubview:self.tableView];
+	[self.view insertSubview:disclaimerLabel belowSubview:reportErrorButton];
 	[reportErrorButton mas_makeConstraints:^(MASConstraintMaker *make) {
 		make.height.equalTo(@32.0);
-		make.leading.bottom.trailing.equalTo(self.view);
+		make.centerX.equalTo(self.view);
+		make.bottom.equalTo(self.view).offset(-32.0);
+		make.width.equalTo(_tableView);
+	}];
+
+	[disclaimerLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+		make.centerX.equalTo(reportErrorButton);
+		make.bottom.equalTo(reportErrorButton.mas_top).offset(4.0);
 	}];
 
 	[statusBarView mas_makeConstraints:^(MASConstraintMaker *make) {
