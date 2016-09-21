@@ -17,6 +17,7 @@
 	if (self == nil) return nil;
 
 	self.contentView.backgroundColor = [UIColor dgs_colorWithString:@"F4F4F4"];
+	self.selectionStyle = UITableViewCellSelectionStyleNone;
 
 	_leftLabel = [self newLabel];
 	[self.contentView addSubview:_leftLabel];
