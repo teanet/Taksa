@@ -55,24 +55,35 @@
 														   distance:distanceNumber
 															   time:timeNumber];
 
-	TKSTaxiSection *optimalSection = [[TKSTaxiSection alloc] initWithDictionary:optimalSectionDictionary
-																	   searchId:searchId
-																		  title:optimalTitle
-																		   type:TKSTaxiModelTypeSuggest];
+	NSMutableArray *sections = [NSMutableArray array];
+	if ([optimalSectionDictionary isKindOfClass:[NSDictionary class]])
+	{
+		TKSTaxiSection *optimalSection = [[TKSTaxiSection alloc] initWithDictionary:optimalSectionDictionary
+																		   searchId:searchId
+																			  title:optimalTitle
+																			   type:TKSTaxiModelTypeSuggest];
+		[sections addObject:optimalSection];
+	}
 
-	TKSTaxiSection *elseSection = [[TKSTaxiSection alloc] initWithDictionary:elseSectionDictionary
-																	searchId:searchId
-																	   title:elseTitle
-																		type:TKSTaxiModelTypeDefault];
-	return @[optimalSection, elseSection];
+	if ([elseSectionDictionary isKindOfClass:[NSDictionary class]])
+	{
+		TKSTaxiSection *elseSection = [[TKSTaxiSection alloc] initWithDictionary:elseSectionDictionary
+																		searchId:searchId
+																		   title:elseTitle
+																			type:TKSTaxiModelTypeDefault];
+		[sections addObject:elseSection];
+	}
+
+
+	return [sections copy];
 }
 
 + (NSString *)optimalTitleForDistance:(NSNumber *)distanceNumber time:(NSNumber *)timeNumber
 {
 
 	return distanceNumber.doubleValue > 10.0
-		? [NSString stringWithFormat:@"%.0f км, %ld минуты", [distanceNumber doubleValue]/1000.0, timeNumber.integerValue]
-		: [NSString stringWithFormat:@"%.1f км, %ld минуты", [distanceNumber doubleValue]/1000.0, timeNumber.integerValue];
+		? [NSString stringWithFormat:@"%.0f км, %ld минуты", [distanceNumber doubleValue]/1000.0, (long)timeNumber.integerValue]
+		: [NSString stringWithFormat:@"%.1f км, %ld минуты", [distanceNumber doubleValue]/1000.0, (long)timeNumber.integerValue];
 }
 
 + (NSString *)elseTitleForSectionDictionary:(NSDictionary *)sectionDictionary
@@ -80,10 +91,10 @@
 									   time:(NSNumber *)timeNumber
 {
 	NSArray *operators = sectionDictionary[@"results"];
-	NSString *titleLeft = [NSString stringWithFormat:@"%ld предложений", operators.count];
+	NSString *titleLeft = [NSString stringWithFormat:@"%ld предложений", (long)operators.count];
 	NSString *titleRight = [NSString stringWithFormat:@"%@, %ld %@",
 		[self distanceStringForDistance:[distanceNumber doubleValue]/1000.0],
-		timeNumber.integerValue,
+		(long)timeNumber.integerValue,
 		[self minutesStringForMinutes:timeNumber.integerValue]];
 
 	return [NSString stringWithFormat:@"%@|%@",titleLeft, titleRight];

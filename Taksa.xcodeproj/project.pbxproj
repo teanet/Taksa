@@ -589,12 +589,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 73BB0F8E1CCBBB6500E07190 /* Build configuration list for PBXNativeTarget "Taksa" */;
 			buildPhases = (
-				4033ACC03D3922D31C9A67F8 /* 📦 Check Pods Manifest.lock */,
+				4033ACC03D3922D31C9A67F8 /* [CP] Check Pods Manifest.lock */,
 				73BB0F731CCBBB6500E07190 /* Sources */,
 				73BB0F741CCBBB6500E07190 /* Frameworks */,
 				73BB0F751CCBBB6500E07190 /* Resources */,
-				68AFD6243B6FE277798C543B /* 📦 Embed Pods Frameworks */,
-				8A2627F0D7AAF8E0FFFBB2F7 /* 📦 Copy Pods Resources */,
+				68AFD6243B6FE277798C543B /* [CP] Embed Pods Frameworks */,
+				8A2627F0D7AAF8E0FFFBB2F7 /* [CP] Copy Pods Resources */,
 				309C802D1D686AFA0085ADEA /* ShellScript */,
 			);
 			buildRules = (
@@ -668,29 +668,29 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" 1ea87b52b1d0946ed506dcc3bd5b586f422bf03a 24581047190989dd3b32483cd77da4a030cb7d2ed58171c008823f918c327652";
 		};
-		4033ACC03D3922D31C9A67F8 /* 📦 Check Pods Manifest.lock */ = {
+		4033ACC03D3922D31C9A67F8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		68AFD6243B6FE277798C543B /* 📦 Embed Pods Frameworks */ = {
+		68AFD6243B6FE277798C543B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -698,14 +698,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Taksa/Pods-Taksa-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8A2627F0D7AAF8E0FFFBB2F7 /* 📦 Copy Pods Resources */ = {
+		8A2627F0D7AAF8E0FFFBB2F7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

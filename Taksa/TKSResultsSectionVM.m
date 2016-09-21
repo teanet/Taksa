@@ -35,10 +35,15 @@
 
 - (void)loadResultsForTaxiList:(NSArray<TKSTaxiSection *> *)taxiList
 {
-	NSArray<TKSBaseVM *> *suggestCells = [taxiList.firstObject.rows.rac_sequence
-		map:^TKSTaxiSuggestCellVM *(TKSTaxiRow *taxiRow) {
-			return [[TKSTaxiSuggestCellVM alloc] initWithTaxiRow:taxiRow];
-		}].array;
+	NSArray<TKSBaseVM *> *suggestCells = @[];
+
+	if (taxiList.count > 1)
+	{
+		suggestCells = [taxiList.firstObject.rows.rac_sequence
+			map:^TKSTaxiSuggestCellVM *(TKSTaxiRow *taxiRow) {
+				return [[TKSTaxiSuggestCellVM alloc] initWithTaxiRow:taxiRow];
+			}].array;
+	}
 
 	NSArray<TKSBaseVM *> *listCells = [taxiList.lastObject.rows.rac_sequence
 		map:^TKSTaxiDefaultCellVM *(TKSTaxiRow *taxiRow) {
