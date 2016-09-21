@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addSuggestToHistory:(TKSSuggest *)suggest;
 - (NSArray<TKSSuggest *> *)historyList;
 
+- (void)setPushToken:(NSData *)pushToken;
+
 @end
 
 NS_ASSUME_NONNULL_END

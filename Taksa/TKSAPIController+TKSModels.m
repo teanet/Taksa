@@ -149,4 +149,32 @@
 	return [self POST:q params:bodyDictionary];
 }
 
+// Push Notifications
+
+- (void)setPushToken:(NSData *)pushToken
+{
+	NSString *tokenString = [self stringWithDeviceToken:pushToken];
+	NSLog(@"tokenString>>> %@", tokenString);
+	NSDictionary *params = @{
+		@"token": tokenString,
+		@"type": @"ios",
+	};
+	[[self POST:@"user/set-push-token" params:params]
+		subscribeNext:^(id x) {
+			NSLog(@">>> %@", @"Token has been set.");
+		}];
+}
+
+- (NSString *)stringWithDeviceToken:(NSData *)deviceToken
+{
+	const char *data = [deviceToken bytes];
+	NSMutableString *token = [NSMutableString string];
+
+	for (int i = 0; i < [deviceToken length]; i++) {
+		[token appendFormat:@"%02.2hhX", data[i]];
+	}
+	
+	return [token copy];
+}
+
 @end
