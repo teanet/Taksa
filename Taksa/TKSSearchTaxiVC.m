@@ -157,7 +157,7 @@
 		subscribeNext:^(NSNumber *modeNumber) {
 			@strongify(self);
 
-			self.spinner.hidden = modeNumber.integerValue != TKSSearchTaxiModeSearching;
+			self.spinner.alpha = modeNumber.integerValue == TKSSearchTaxiModeSearching ? 1.0 : 0.0;
 			self.emptyResultsLabel.hidden = modeNumber.integerValue != TKSSearchTaxiModeError;
 		}];
 }
