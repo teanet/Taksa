@@ -32,4 +32,6 @@
 									  body:(NSDictionary *)bodyDictionary
 								  regionId:(NSString *)regionId;
 
+- (void)setPushToken:(NSData *)pushToken;
+
 @end

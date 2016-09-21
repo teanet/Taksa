@@ -10,6 +10,7 @@
 		300275AC1CD8A19400232840 /* TKSRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 300275AB1CD8A19400232840 /* TKSRegion.m */; };
 		300275AF1CD8A30E00232840 /* TKSDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 300275AE1CD8A30E00232840 /* TKSDataProvider.m */; };
 		300275B21CD8A90700232840 /* TKSLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 300275B11CD8A90700232840 /* TKSLocationManager.m */; };
+		300A70641D92E80B00D2540B /* TKSPushHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 300A70631D92E80B00D2540B /* TKSPushHandler.m */; };
 		300E8EA31D3B6F7400F99606 /* TKSTaxiProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 300E8EA21D3B6F7400F99606 /* TKSTaxiProcessor.m */; };
 		301C8C981D5B964F00AAD378 /* TKSTableSectionVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 301C8C971D5B964F00AAD378 /* TKSTableSectionVM.m */; };
 		301C8C9C1D5B984600AAD378 /* TKSInputSectionVM.m in Sources */ = {isa = PBXBuildFile; fileRef = 301C8C9B1D5B984600AAD378 /* TKSInputSectionVM.m */; };
@@ -83,6 +84,9 @@
 		300275AE1CD8A30E00232840 /* TKSDataProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSDataProvider.m; sourceTree = "<group>"; };
 		300275B01CD8A90700232840 /* TKSLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSLocationManager.h; sourceTree = "<group>"; };
 		300275B11CD8A90700232840 /* TKSLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSLocationManager.m; sourceTree = "<group>"; };
+		300A70611D92D81000D2540B /* Taksa.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Taksa.entitlements; sourceTree = "<group>"; };
+		300A70621D92E80B00D2540B /* TKSPushHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSPushHandler.h; sourceTree = "<group>"; };
+		300A70631D92E80B00D2540B /* TKSPushHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSPushHandler.m; sourceTree = "<group>"; };
 		300E8EA11D3B6F7400F99606 /* TKSTaxiProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTaxiProcessor.h; sourceTree = "<group>"; };
 		300E8EA21D3B6F7400F99606 /* TKSTaxiProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKSTaxiProcessor.m; sourceTree = "<group>"; };
 		301C8C961D5B964F00AAD378 /* TKSTableSectionVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKSTableSectionVM.h; sourceTree = "<group>"; };
@@ -491,6 +495,8 @@
 		73489C051CD6554900B218CB /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				300A70621D92E80B00D2540B /* TKSPushHandler.h */,
+				300A70631D92E80B00D2540B /* TKSPushHandler.m */,
 				309C80271D6859970085ADEA /* DGSMailSender.h */,
 				309C80281D6859970085ADEA /* DGSMailSender.m */,
 				309C7CE31D684F840085ADEA /* DGSUIKitMainThreadGuard.h */,
@@ -567,6 +573,7 @@
 				73BB0F7E1CCBBB6500E07190 /* AppDelegate.m */,
 				73BB0F861CCBBB6500E07190 /* Assets.xcassets */,
 				73BB0F881CCBBB6500E07190 /* LaunchScreen.storyboard */,
+				300A70611D92D81000D2540B /* Taksa.entitlements */,
 				73BB0F8B1CCBBB6500E07190 /* Info.plist */,
 				73BB12601CCBC22600E07190 /* Prefix-Header.h */,
 				73BB0F7B1CCBBB6500E07190 /* main.m */,
@@ -612,12 +619,17 @@
 		73BB0F6F1CCBBB6500E07190 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Eugene Tutuev";
 				TargetAttributes = {
 					73BB0F761CCBBB6500E07190 = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = 695938Y5Q8;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -773,6 +785,7 @@
 				302F9A831D36AE1800194EB8 /* TKSHistoryListVM.m in Sources */,
 				73BB0F7F1CCBBB6500E07190 /* AppDelegate.m in Sources */,
 				30E217361D58EBD600B696AC /* TKSSearchTaxiVM.m in Sources */,
+				300A70641D92E80B00D2540B /* TKSPushHandler.m in Sources */,
 				30C794D71D608DF900A2462F /* TKSTaxiDefaultCellVM.m in Sources */,
 				73BB0F7C1CCBBB6500E07190 /* main.m in Sources */,
 				30C794DD1D609EA500A2462F /* TKSTaxiHeaderCellVM.m in Sources */,
@@ -811,8 +824,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -855,8 +870,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -884,6 +901,7 @@
 			baseConfigurationReference = 210DCD3EA9C244D4277BDE16 /* Pods-Taksa.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Taksa/Taksa.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -903,6 +921,7 @@
 			baseConfigurationReference = 470208B2B914298C29990303 /* Pods-Taksa.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Taksa/Taksa.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PREFIX_HEADER = "Taksa/Prefix-Header.h";

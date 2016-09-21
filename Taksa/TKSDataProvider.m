@@ -119,4 +119,9 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 	return self.apiController.didOccurNetworkErrorSignal;
 }
 
+- (void)setPushToken:(NSData *)pushToken
+{
+	[self.apiController setPushToken:pushToken];
+}
+
 @end
