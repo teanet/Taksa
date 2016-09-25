@@ -21,6 +21,7 @@
 	_shouldSearchTaxiSignal = [self rac_signalForSelector:@checkselector(self, searchTaxiFromSuggest:, toSuggest:)];
 
 	[self setupSuggesterAndHistory];
+	[self setupReturnButton];
 
 	return self;
 }
@@ -76,6 +77,61 @@
 
 			[self switchToNextTextFiledIfNeeded];
 			[self startSearchIfNeeded];
+		}];
+}
+
+- (void)setupReturnButton
+{
+	@weakify(self);
+
+	[self.model.didPressReturnButtonSignal
+		subscribeNext:^(id _) {
+			@strongify(self);
+
+			[self tryToSearchTaxiByReturnButton];
+		}];
+}
+
+- (void)tryToSearchTaxiByReturnButton
+{
+	@weakify(self);
+
+	RACSignal *fromSignal = self.model.fromSearchVM.dbObject != nil
+		? [RACSignal return:self.model.fromSearchVM.dbObject]
+		: [self fetchSingleSuggestForSearchVM:self.model.fromSearchVM];
+
+	RACSignal *toSignal = self.model.toSearchVM.dbObject != nil
+		? [RACSignal return:self.model.toSearchVM.dbObject]
+		: [self fetchSingleSuggestForSearchVM:self.model.toSearchVM];
+
+	[[fromSignal
+		flattenMap:^RACStream *(TKSSuggest *suggest) {
+			return toSignal;
+		}]
+		subscribeNext:^(id _) {
+			@strongify(self);
+
+			[self startSearchIfNeeded];
+		}];
+}
+
+- (RACSignal *)fetchSingleSuggestForSearchVM:(TKSSearchVM *)searchVM
+{
+	 return [[[TKSDataProvider sharedProvider] fetchSuggestsForSearchString:searchVM.text]
+		map:^id(NSArray<TKSSuggest *> *suggests) {
+			__block TKSSuggest *suggest = nil;
+
+			[suggests enumerateObjectsUsingBlock:^(TKSSuggest *s, NSUInteger idx, BOOL *stop) {
+				BOOL isSuggestStreet = [s.hintLabel isEqualToString:@"street"];
+				if (!isSuggestStreet) {
+					suggest = s;
+					*stop = YES;
+				}
+			}];
+
+			searchVM.dbObject = suggest;
+			searchVM.text = suggest.text;
+			return suggest;
 		}];
 }
 

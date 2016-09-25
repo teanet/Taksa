@@ -904,7 +904,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Taksa/Taksa.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 695938Y5Q8;
 				GCC_PREFIX_HEADER = "Taksa/Prefix-Header.h";
@@ -913,8 +913,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ru.doublegis.taksa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7c3ef491-21c3-431f-8fc0-f9f0357a00c6";
-				PROVISIONING_PROFILE_SPECIFIER = "taks adhoc";
+				PROVISIONING_PROFILE = "389e45b1-26af-4d69-b1fe-675983faddb0";
+				PROVISIONING_PROFILE_SPECIFIER = "Taksa Development";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
