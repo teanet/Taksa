@@ -58,7 +58,18 @@ static NSString *const kTaxiProvidersName = @"taxiProviders.json";
 		flattenMap:^RACStream *(CLLocation *location) {
 			@strongify(self);
 
-			return [self.apiController fetchSuggestForLocation:location regionId:self.currentRegion.id];
+			RACSignal *returnSignal = [RACSignal return:nil];
+
+			// Не мог воспроизвести баг перед релизом, поэтому такой адок
+			if ([self.currentRegion isKindOfClass:[TKSRegion class]] &&
+				[self.currentRegion.id isKindOfClass:[NSString class]]) {
+				if (self.currentRegion.id.length > 0)
+				{
+					returnSignal = [self.apiController fetchSuggestForLocation:location regionId:self.currentRegion.id];
+				}
+			}
+
+			return returnSignal;
 		}];
 }
 

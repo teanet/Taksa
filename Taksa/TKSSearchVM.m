@@ -86,6 +86,7 @@
 		if (!self.processingRequest)
 		{
 			self.processingRequest = YES;
+			
 			[[TKSDataProvider sharedProvider].fetchSuggestForLocation
 				subscribeNext:^(NSArray<TKSSuggest *> *suggests) {
 					@strongify(self);
